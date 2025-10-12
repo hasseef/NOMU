@@ -4,27 +4,37 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>نمو NOMU — منصة الطفولة المبكرة</title>
-<meta name="description" content="منصة نمو NOMU — نموذج أحادي الملف مع RBAC و i18n ولوحات وأدوات وإحالات وسوق رعاية. نسخة ألوان فاتحة محسّنة للجوال."/>
-
+<meta name="description" content="منصة نمو — نموذج أحادي الملف مع RBAC و i18n ولوحات وأدوات وإحالات وسوق رعاية. يدعم الوضعين الفاتح/الداكن ويعمل على الجوال."/>
 <style>
-  /* ============ Design Tokens (Light Brand) ============ */
+  /* ================= Design Tokens (Light) ================= */
   :root{
     --bg:#F6F9FC; --card:#FFFFFF; --muted:#F0F4F8; --border:#E2E8F0;
     --text:#1F2937; --sub:#64748B;
     --pri:#2BB673; --pri-700:#1F9A60;
     --sec:#4DABF5; --acc:#FFD166; --danger:#EF4444; --ok:#22C55E;
     --radius:18px; --pad:16px; --gap:12px; --gap-lg:18px;
-    --font:system-ui,"Segoe UI",Tahoma,Arial; --mono:ui-monospace,Consolas,monaco,monospace;
-    --shadow:0 6px 18px rgba(16, 24, 40, .08);
-    --focus: 0 0 0 3px rgba(77,171,245,.35);
+    --font:system-ui,"Segoe UI",Tahoma,Arial;
+    --shadow:0 6px 18px rgba(16,24,40,.08);
+    --focus:0 0 0 3px rgba(77,171,245,.35);
   }
+  /* ================= Design Tokens (Dark) ================= */
+  html[data-theme="dark"]{
+    --bg:#0b1220; --card:#101826; --muted:#0f172a; --border:#1e293b;
+    --text:#e6edf7; --sub:#94a3b8;
+    --pri:#49d08a; --pri-700:#2bb673;
+    --sec:#4DABF5; --acc:#FFD166; --danger:#ff6b6b; --ok:#22c55e;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --focus:0 0 0 3px rgba(77,171,245,.35);
+  }
+
   *{box-sizing:border-box}
   html,body{height:100%}
   body{margin:0;background:var(--bg);color:var(--text);font:15.5px/1.65 var(--font)}
   a{color:#0ea5e9;text-decoration:none}
+
   .app{display:grid;grid-template-rows:auto 1fr}
-  /* ============ Header ============ */
-  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);backdrop-filter:saturate(120%) blur(8px);border-bottom:1px solid var(--border)}
+  /* ================= Header ================= */
+  header{position:sticky;top:0;z-index:50;background:color-mix(in oklab, var(--card) 92%, transparent);backdrop-filter:saturate(120%) blur(8px);border-bottom:1px solid var(--border)}
   .topbar{max-width:1200px;margin:auto;padding:10px var(--pad);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
   .logos-left{display:flex;align-items:center;gap:10px;justify-content:flex-start}
   .logoBox{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--muted);border:1px solid var(--border);overflow:hidden}
@@ -34,11 +44,12 @@
   .brand-name{font-weight:800;letter-spacing:.2px}
   .brand-svg{width:120px;height:34px}
   .search{display:flex;align-items:center;justify-content:center}
-  .search input{width:min(420px,62vw);background:#fff;border:1px solid var(--border);color:var(--text);padding:10px 36px 10px 12px;border-radius:12px;box-shadow:var(--shadow)}
+  .search input{width:min(420px,62vw);background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 36px 10px 12px;border-radius:12px;box-shadow:var(--shadow)}
   .search input:focus{outline:none;box-shadow:var(--focus)}
-  .search .ico{position:relative;inset-inline-start:-30px;color:#94a3b8}
+  .search .ico{position:relative;inset-inline-start:-30px;color:var(--sub)}
+  .modeBtn{border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 10px;border-radius:12px;cursor:pointer}
 
-  /* ============ Layout ============ */
+  /* ================= Layout ================= */
   .main{max-width:1200px;margin:20px auto;display:grid;grid-template-columns:260px 1fr;gap:var(--gap-lg);padding:0 var(--pad)}
   nav.side{position:sticky;top:76px;height:fit-content}
   .side-inner{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:8px}
@@ -47,7 +58,9 @@
   .link{display:flex;align-items:center;gap:10px;border-radius:12px;padding:10px 12px;color:var(--text);border:1px solid transparent}
   .link:hover{background:var(--muted);border-color:var(--border)}
   .link.active{background:linear-gradient(180deg,rgba(43,182,115,.09),rgba(43,182,115,.03));border-color:#cfe8db}
+  html[data-theme="dark"] .link.active{background:linear-gradient(180deg,rgba(73,208,138,.11),rgba(73,208,138,.04));border-color:#244c3a}
   .link[hidden]{display:none}
+
   .content{display:grid;gap:var(--gap-lg)}
   .cards{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gap)}
   .card{grid-column:span 4;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:var(--pad);box-shadow:var(--shadow)}
@@ -57,7 +70,7 @@
   .toolbar{display:flex;justify-content:space-between;align-items:center;margin:4px 2px 10px}
   .actions{display:flex;gap:8px;flex-wrap:wrap}
   button,.btn{background:var(--pri);color:#062e1e;border:none;padding:11px 14px;border-radius:12px;font-weight:800;cursor:pointer;box-shadow:var(--shadow)}
-  button.ghost{background:#fff;color:var(--text);border:1px solid var(--border)}
+  button.ghost{background:var(--card);color:var(--text);border:1px solid var(--border)}
   button.warn{background:var(--acc);color:#1b1100}
   button.danger{background:var(--danger);color:#fff}
   .tag{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:var(--muted);padding:6px 10px;border-radius:999px;color:var(--sub);font-size:12px}
@@ -69,7 +82,7 @@
   tbody td:first-child{border-inline-start:1px solid var(--border);border-start-start-radius:10px;border-end-start-radius:10px}
   tbody td:last-child{border-inline-end:1px solid var(--border);border-start-end-radius:10px;border-end-end-radius:10px}
 
-  input,select,textarea{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--border);background:#fff;color:var(--text)}
+  input,select,textarea{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text)}
   input:focus,select:focus,textarea:focus{outline:none;box-shadow:var(--focus)}
   label{font-size:13px;color:var(--sub)}
   .field{display:grid;gap:6px;margin:10px 0}
@@ -79,15 +92,16 @@
 
   .footer{margin:28px auto;max-width:1200px;color:var(--sub);text-align:center;padding:10px}
 
-  /* ============ Bottom Tabs (Mobile) ============ */
+  /* ================= Bottom Tabs (Mobile) ================= */
   .tabs{display:none}
-  .tabs{position:sticky;bottom:0;z-index:60;background:#fff;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(5,1fr)}
+  .tabs{position:sticky;bottom:0;z-index:60;background:var(--card);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(5,1fr)}
   .tab{padding:10px 6px;text-align:center;font-size:12.5px;color:#475569}
+  html[data-theme="dark"] .tab{color:#cbd5e1}
   .tab.active{color:var(--pri-700);font-weight:800}
   .tab button{all:unset;cursor:pointer;display:grid;gap:4px;place-items:center;width:100%}
   .tab svg{width:20px;height:20px}
 
-  /* ============ Responsive ============ */
+  /* ================= Responsive ================= */
   @media (max-width:960px){
     .main{grid-template-columns:1fr}
     nav.side{display:none}
@@ -101,7 +115,7 @@
     .logos-left{order:1;justify-content:center}
     .tabs{display:grid}
     .footer{padding-bottom:70px}
-    button,.btn{padding:13px 16px} /* أكبر للمس */
+    button,.btn{padding:13px 16px} /* لمس أسهل */
     input,select,textarea{padding:13px 14px}
   }
 </style>
@@ -109,10 +123,10 @@
 <body>
 <div class="app" id="app">
 
-  <!-- ======= Header ======= -->
+  <!-- ================= Header ================= -->
   <header>
     <div class="topbar" role="banner">
-      <!-- Left: Vision 2030 + Talbiyah (upload later) -->
+      <!-- Left: Vision 2030 + Talbiyah logos -->
       <div class="logos-left" aria-label="شعارات الشركاء">
         <div class="logoBox" title="رؤية 2030"><img id="logoVision" alt="شعار رؤية 2030"></div>
         <div class="logoBox" title="مبادرة تلبية"><img id="logoTalbiyah" alt="شعار مبادرة تلبية"></div>
@@ -124,17 +138,14 @@
         <span class="ico">🔎</span>
       </div>
 
-      <!-- Right: NOMU Brand -->
+      <!-- Right: NOMU Brand + Mode toggle -->
       <div class="brand-right">
+        <button class="modeBtn" id="modeBtn" title="تبديل الوضع">🌞/🌙</button>
         <span class="badge">Prototype</span>
         <div class="brand-name" id="brandName">نمو NOMU</div>
         <!-- Temporary NOMU SVG logo -->
         <svg class="brand-svg" viewBox="0 0 180 50" aria-label="NOMU logo">
-          <defs>
-            <linearGradient id="g1" x1="0" x2="1">
-              <stop offset="0" stop-color="#2BB673"/><stop offset="1" stop-color="#4DABf5"/>
-            </linearGradient>
-          </defs>
+          <defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#2BB673"/><stop offset="1" stop-color="#4DABf5"/></linearGradient></defs>
           <g fill="url(#g1)">
             <path d="M10 40 L10 12 L30 32 L30 12 L40 12 L40 40 L20 20 L20 40 Z"/>
             <circle cx="62" cy="18" r="6"/><rect x="55" y="24" width="14" height="16" rx="3"/>
@@ -146,7 +157,7 @@
     </div>
   </header>
 
-  <!-- ======= Main ======= -->
+  <!-- ================= Main ================= -->
   <main class="main" role="main">
     <!-- Sidebar -->
     <nav class="side" aria-label="أقسام المنصة">
@@ -183,14 +194,13 @@
     <div class="tab"><button onclick="goTab('/settings')">⚙️<span>الإعدادات</span></button></div>
   </div>
 
-  <footer class="footer">نمو — نسخة ألوان فاتحة محسّنة للجوال. يمكن رفع شعارات “رؤية 2030” و“تلبية” من الإعدادات.</footer>
+  <footer class="footer">نمو — يدعم الوضع الفاتح/الداكن + رفع شعاري “رؤية 2030” و“تلبية”.</footer>
 </div>
 
 <!-- Toasts -->
 <div id="toastRegion" role="status" aria-live="polite" style="position:fixed;inset-inline-start:16px;bottom:16px;display:grid;gap:8px;z-index:9999"></div>
 
-<!-- ========== Modals (login/consent/forms) ========== -->
-<!-- سنبقي نفس النوافذ من النسخة السابقة لكن بلغة مختصرة للحجم -->
+<!-- ========== Modals (login + upload logos) ========== -->
 <div class="modal" id="modal-login" role="dialog" aria-modal="true" style="display:none;position:fixed;inset:0;place-items:center;background:rgba(0,0,0,.4)">
   <div style="width:min(680px,94vw);background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:var(--shadow)">
     <h3>تسجيل الدخول</h3>
@@ -215,14 +225,27 @@
 </div>
 
 <script>
+/* ==================== Theme (Light/Dark) ==================== */
+(function initTheme(){
+  const saved = localStorage.getItem('nomu.theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+document.getElementById('modeBtn').addEventListener('click',()=>{
+  const html=document.documentElement;
+  const next = html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',next);
+  localStorage.setItem('nomu.theme',next);
+});
+
 /* ==================== State & RBAC ==================== */
 const $=(q,root=document)=>root.querySelector(q);
 const $$=(q,root=document)=>Array.from(root.querySelectorAll(q));
 const permsByRole={guest:['home:view','reports:view','market:view','referrals:view','settings:view'],family:['home:view','family:view','referrals:view','screening:create','settings:view'],health:['home:view','health:view','screening:create','referrals:create','reports:view','settings:view'],education:['home:view','education:view','iep:create','referrals:view','reports:view','settings:view'],nonprofit:['home:view','nonprofit:view','market:create','reports:view','settings:view'],csr:['home:view','csr:view','csr:create','market:view','reports:view','settings:view'],admin:['home:view','admin:view','family:view','health:view','education:view','nonprofit:view','csr:view','market:view','referrals:view','reports:view','settings:view']};
 const store={
   load(){ try{this.state=JSON.parse(localStorage.getItem('nomu-lite')||'{}')}catch{this.state={}}; this.state=Object.assign({
-    user:{role:'guest',region:'الرياض'},
-    logos:{vision:null,talbiyah:null,nomu:null},
+    user:{role:'guest',region:'الرياض'}, logos:{vision:null,talbiyah:null,nomu:null},
     households:[{id:'H-1',father:'محمد',mother:'سارة',region:'حائل',children:[{id:'C-501',name:'ليان',dob:'2021-03-10'},{id:'C-502',name:'تركي',dob:'2019-11-02'}]}],
     screenings:[{id:'S-9001',childId:'C-501',type:'نمو نمائي',date:'2025-09-20',result:'سليم',facility:'مركز صحي'}],
     referrals:[{id:'R-7001',from:'الصحة',to:'التعليم',childId:'C-502',priority:'عادية',status:'قيد المعالجة',created:'2025-09-25'}],
@@ -308,7 +331,7 @@ function viewReferrals(root){ if(!can('referrals:view')){ root.innerHTML=denyCar
 }
 function viewReports(root){ if(!can('reports:view')){ root.innerHTML=denyCard(); return }
   const totals={kids:store.state.households.reduce((a,h)=>a+h.children.length,0),scr:store.state.screenings.length,ref:store.state.referrals.length};
-  root.innerHTML = `<div class="toolbar"><h2>التقارير</h2><div class="actions"><button class="ghost" onclick="window.print()">طباعة</button><button onclick="exportCSVs()">تصدير CSV</button></div></div><div class="cards">${kpiCard('إجمالي الأطفال',fmt(totals.kids))}${kpiCard('الفحوص',fmt(totals.scr))}${kpiCard('الإحالات',fmt(totals.ref))}<div class="card wide"><b>نسخة JSON</b><pre style="white-space:pre-wrap;background:#fff;border:1px solid var(--border);padding:12px;border-radius:12px;direction:ltr">${escapeHtml(JSON.stringify(store.state,null,2))}</pre></div></div>`;
+  root.innerHTML = `<div class="toolbar"><h2>التقارير</h2><div class="actions"><button class="ghost" onclick="window.print()">طباعة</button><button onclick="exportCSVs()">تصدير CSV</button></div></div><div class="cards">${kpiCard('إجمالي الأطفال',fmt(totals.kids))}${kpiCard('الفحوص',fmt(totals.scr))}${kpiCard('الإحالات',fmt(totals.ref))}<div class="card wide"><b>نسخة JSON</b><pre style="white-space:pre-wrap;background:var(--card);border:1px solid var(--border);padding:12px;border-radius:12px;direction:ltr">${escapeHtml(JSON.stringify(store.state,null,2))}</pre></div></div>`;
 }
 function viewSettings(root){
   root.innerHTML = `<div class="toolbar"><h2>الإعدادات</h2></div>
@@ -346,12 +369,12 @@ function uploadLogos(){
   const setFile=(file,key,imgElId)=>{
     if(!file) return;
     const r=new FileReader();
-    r.onload=e=>{ store.state.logos[key]=e.target.result; store.save(); $('#'+imgElId).src=store.state.logos[key]; toast('تم تحديث الشعار') };
+    r.onload=e=>{ store.state.logos[key]=e.target.result; store.save(); if(imgElId) $('#'+imgElId).src=store.state.logos[key]; toast('تم تحديث الشعار') };
     r.readAsDataURL(file);
   };
   setFile($('#visionFile').files[0],'vision','logoVision');
   setFile($('#talbiyahFile').files[0],'talbiyah','logoTalbiyah');
-  setFile($('#nomuFile').files[0],'nomu',null); // في حال رغبت باستبدال SVG لاحقاً
+  setFile($('#nomuFile').files[0],'nomu',null); // إن رغبت باستبدال SVG لاحقًا
   closeModal('modal-logo');
 }
 function initLogos(){
