@@ -4,26 +4,24 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>نمو NOMU — نموذج أحادي الملف (index.html)</title>
-  <meta name="description" content="نمو NOMU — منصة وطنية للطفولة المبكرة. هذا نموذج تشغيلي أحادي الملف يستعرض الواجهات وسير الاستخدام والمكوّنات الأساسية دون خادم خلفي." />
+  <meta name="description" content="نمو NOMU — منصة وطنية للطفولة المبكرة. هذا نموذج تشغيلي أحادي الملف يستعرض الواجهات وسير الاستخدام والمكوّنات الأساسية مع نماذج موسّعة وخطاف تكامل API." />
   <style>
-    :root{
-      --bg:#0b1220;--card:#121a2b;--muted:#1a2440;--pri:#5ac8fa;--sec:#8ef6d0;--acc:#ffd166;--danger:#ff6b6b;--ok:#22c55e;--text:#e6edf7;--sub:#a7b0c3;--border:#263251;--shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:18px;--radius-sm:12px;--pad:18px;--gap:14px;--gap-lg:22px;--font:system-ui,"Segoe UI",Tahoma,Arial;--mono:ui-monospace,Consolas,monaco,monospace
-    }
+    :root{ --bg:#0b1220;--card:#121a2b;--muted:#1a2440;--pri:#5ac8fa;--sec:#8ef6d0;--acc:#ffd166;--danger:#ff6b6b;--ok:#22c55e;--text:#e6edf7;--sub:#a7b0c3;--border:#263251;--shadow:0 10px 30px rgba(0,0,0,.35);--radius:18px;--pad:18px;--gap:14px;--gap-lg:22px;--font:system-ui,"Segoe UI",Tahoma,Arial;--mono:ui-monospace,Consolas,monaco,monospace }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0;background:linear-gradient(180deg,#0b1220 0%,#0b1220 50%,#0e172a 100%);color:var(--text);font:15px/1.6 var(--font);}
+    body{margin:0;background:linear-gradient(180deg,#0b1220 0%,#0b1220 50%,#0e172a 100%);color:var(--text);font:15px/1.6 var(--font)}
     a{color:var(--pri);text-decoration:none}
     .app{display:grid;grid-template-rows:auto 1fr;min-height:100vh}
     header{position:sticky;top:0;z-index:50;background:rgba(11,18,32,.85);backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--border)}
     .topbar{display:flex;align-items:center;gap:12px;max-width:1200px;margin:auto;padding:10px var(--pad)}
-    .logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.5px}
-    .logo i{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--pri),var(--sec));display:inline-block}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
+    .logo svg{width:34px;height:34px}
+    .badge{display:inline-flex;align-items:center;gap:6px;background:var(--muted);border:1px solid var(--border);padding:6px 10px;border-radius:999px;color:var(--sub);font-size:12px}
     .search{margin-inline-start:auto;position:relative}
     .search input{width:320px;max-width:60vw;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 34px 10px 12px;border-radius:10px}
     .search svg{position:absolute;inset-inline-end:10px;top:50%;transform:translateY(-50%);opacity:.7}
     .user{display:flex;align-items:center;gap:10px}
-    .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#4158d0,#c850c0 60%,#ffcc70);}
+    .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#4158d0,#c850c0 60%,#ffcc70)}
 
     .main{max-width:1200px;margin:24px auto;display:grid;grid-template-columns:260px 1fr;gap:var(--gap-lg);padding:0 var(--pad)}
     nav{position:sticky;top:65px;height:fit-content}
@@ -68,7 +66,7 @@
 
     .modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.5);backdrop-filter:blur(2px)}
     .modal.open{display:grid}
-    .modal .box{width:min(520px,94vw);background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:var(--shadow)}
+    .modal .box{width:min(620px,94vw);background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:var(--shadow)}
 
     input,select,textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:#0f172a;color:var(--text)}
     label{font-size:13px;color:var(--sub)}
@@ -94,8 +92,10 @@
   <header>
     <div class="topbar" role="banner">
       <div class="logo" aria-label="NOMU">
-        <i aria-hidden="true"></i>
+        <!-- شعار قابل للاستبدال -->
+        <svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#5ac8fa"/><stop offset="1" stop-color="#8ef6d0"/></linearGradient></defs><rect x="4" y="4" width="56" height="56" rx="12" fill="url(#g)"/><path d="M18 40 L18 24 L28 34 L38 24 L38 40" fill="none" stroke="#0b1220" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span>نمو NOMU</span>
+        <span class="badge" title="نموذج">Prototype</span>
       </div>
       <nav class="actions" aria-label="التنقل السريع">
         <a class="btn" href="#/home">الرئيسية</a>
@@ -139,14 +139,14 @@
     <section class="content" id="view"></section>
   </main>
 
-  <footer class="footer">نمو — نموذج أحادي الملف لأغراض العرض فقط. البيانات تُخزَّن محليًا في متصفحك.</footer>
+  <footer class="footer">نمو — نموذج أحادي الملف لأغراض العرض فقط. البيانات تُخزَّن محليًا في متصفحك. يمكن تفعيل وضع API من الإعدادات.</footer>
 </div>
 
-<!-- Modals -->
+<!-- Modals: Login / Consent / Forms -->
 <div class="modal" id="modal-login" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
   <div class="box">
     <h3 id="loginTitle">تسجيل الدخول</h3>
-    <p class="help">اختر نوع الحساب لتجربة الواجهات. لا يوجد خادم — يستخدم LocalStorage.</p>
+    <p class="help">اختر نوع الحساب لتجربة الواجهات. لا يوجد خادم — يستخدم LocalStorage إلا إذا فعّلت وضع API.</p>
     <div class="grid two">
       <div class="field">
         <label>نوع المستخدم</label>
@@ -182,18 +182,10 @@
   <div class="box">
     <h3 id="consentTitle">الموافقة وإدارة الخصوصية (PDPL)</h3>
     <div class="grid two">
-      <div class="field">
-        <label><input type="checkbox" id="c1"> معالجة بيانات الأم خلال الحمل لأغراض المتابعة الصحية</label>
-      </div>
-      <div class="field">
-        <label><input type="checkbox" id="c2"> مشاركة تقارير الطفل النمائية مع وزارة التعليم</label>
-      </div>
-      <div class="field">
-        <label><input type="checkbox" id="c3"> مشاركة بيانات الدعم الاجتماعي مع الوزارة المختصة</label>
-      </div>
-      <div class="field">
-        <label><input type="checkbox" id="c4"> تلقي تنبيهات وتوصيات عبر البريد/الرسائل</label>
-      </div>
+      <div class="field"><label><input type="checkbox" id="c1"> معالجة بيانات الأم خلال الحمل لأغراض المتابعة الصحية</label></div>
+      <div class="field"><label><input type="checkbox" id="c2"> مشاركة تقارير الطفل النمائية مع وزارة التعليم</label></div>
+      <div class="field"><label><input type="checkbox" id="c3"> مشاركة بيانات الدعم الاجتماعي مع الوزارة المختصة</label></div>
+      <div class="field"><label><input type="checkbox" id="c4"> تلقي تنبيهات وتوصيات عبر البريد/الرسائل</label></div>
     </div>
     <div class="actions" style="margin-top:10px">
       <button onclick="saveConsent()">حفظ</button>
@@ -202,18 +194,107 @@
   </div>
 </div>
 
+<!-- نموذج فحص نمائي/صحي -->
+<div class="modal" id="modal-screening" role="dialog" aria-modal="true" aria-labelledby="screeningTitle">
+  <div class="box">
+    <h3 id="screeningTitle">تسجيل فحص</h3>
+    <div class="grid two">
+      <div class="field"><label>معرف الطفل</label><input id="f_sc_child" placeholder="C-501"></div>
+      <div class="field"><label>نوع الفحص</label><select id="f_sc_type"><option>نمو نمائي</option><option>سمع</option><option>نظر</option><option>نفسي</option></select></div>
+      <div class="field"><label>التاريخ</label><input id="f_sc_date" type="date"></div>
+      <div class="field"><label>النتيجة</label><input id="f_sc_result" placeholder="سليم / إحالة / متابعة"></div>
+      <div class="field"><label>المنشأة</label><input id="f_sc_facility" placeholder="مركز صحي - المنطقة"></div>
+    </div>
+    <div class="actions"><button onclick="submitScreening()">حفظ</button><button class="ghost" onclick="closeModal('modal-screening')">إلغاء</button></div>
+  </div>
+</div>
+
+<!-- نموذج إحالة -->
+<div class="modal" id="modal-referral" role="dialog" aria-modal="true" aria-labelledby="refTitle">
+  <div class="box">
+    <h3 id="refTitle">إنشاء إحالة</h3>
+    <div class="grid two">
+      <div class="field"><label>من</label><select id="f_ref_from"><option>الأسرة</option><option>الصحة</option><option>التعليم</option><option>جمعية</option></select></div>
+      <div class="field"><label>إلى</label><select id="f_ref_to"><option>الصحة</option><option>التعليم</option><option>جمعية</option></select></div>
+      <div class="field"><label>معرف الطفل</label><input id="f_ref_child" placeholder="C-501"></div>
+      <div class="field"><label>الأولوية</label><select id="f_ref_pri"><option>عادية</option><option>عاجلة</option></select></div>
+      <div class="field"><label>الحالة</label><select id="f_ref_status"><option>قيد المعالجة</option><option>مكتملة</option></select></div>
+      <div class="field"><label>التاريخ</label><input id="f_ref_date" type="date"></div>
+    </div>
+    <div class="actions"><button onclick="submitReferral()">حفظ</button><button class="ghost" onclick="closeModal('modal-referral')">إلغاء</button></div>
+  </div>
+</div>
+
+<!-- نموذج IEP -->
+<div class="modal" id="modal-iep" role="dialog" aria-modal="true" aria-labelledby="iepTitle">
+  <div class="box">
+    <h3 id="iepTitle">إنشاء خطة IEP</h3>
+    <div class="grid two">
+      <div class="field"><label>معرف الطفل</label><input id="f_iep_child" placeholder="C-502"></div>
+      <div class="field"><label>مراجعة</label><input id="f_iep_review" type="date"></div>
+      <div class="field" style="grid-column:1/-1"><label>الأهداف</label><textarea id="f_iep_goals" rows="3" placeholder="أهداف قابلة للقياس بزمن ومسؤولية"></textarea></div>
+    </div>
+    <div class="actions"><button onclick="submitIEP()">حفظ</button><button class="ghost" onclick="closeModal('modal-iep')">إلغاء</button></div>
+  </div>
+</div>
+
+<!-- نموذج مبادرة سوق الرعاية -->
+<div class="modal" id="modal-market" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="box">
+    <h3 id="mTitle">طرح مبادرة</h3>
+    <div class="grid two">
+      <div class="field"><label>العنوان</label><input id="f_m_title" placeholder="جلسات تدخل مبكر - الرياض"></div>
+      <div class="field"><label>الهدف (KPI)</label><input id="f_m_kpi" placeholder="100 طفل خلال 6 أشهر"></div>
+      <div class="field"><label>المبلغ المطلوب</label><input id="f_m_ask" type="number" min="0" step="1000" placeholder="100000"></div>
+      <div class="field"><label>الجهة المالكة</label><input id="f_m_owner" placeholder="جمعية نماء"></div>
+    </div>
+    <div class="actions"><button onclick="submitMarket()">حفظ</button><button class="ghost" onclick="closeModal('modal-market')">إلغاء</button></div>
+  </div>
+</div>
+
+<!-- نموذج مساهمة CSR -->
+<div class="modal" id="modal-csr" role="dialog" aria-modal="true" aria-labelledby="csrTitle">
+  <div class="box">
+    <h3 id="csrTitle">مساهمة CSR</h3>
+    <div class="grid two">
+      <div class="field"><label>معرف المبادرة</label><input id="f_csr_to" placeholder="M-1"></div>
+      <div class="field"><label>الشركة</label><input id="f_csr_company" placeholder="شركة الأفق"></div>
+      <div class="field"><label>المبلغ (ر.س)</label><input id="f_csr_amount" type="number" min="0" step="1000" placeholder="20000"></div>
+      <div class="field"><label>التاريخ</label><input id="f_csr_date" type="date"></div>
+    </div>
+    <div class="actions"><button onclick="submitCSR()">حفظ</button><button class="ghost" onclick="closeModal('modal-csr')">إلغاء</button></div>
+  </div>
+</div>
+
 <script>
 /* ==========================================================
-   NOMU — Single-File Prototype (No backend, LocalStorage only)
+   NOMU — Single-File Prototype (Enhanced)
    - Hash Router (views)
-   - In-memory store synced to localStorage
-   - Sample flows: screenings, referrals, IEP, CSR marketplace, KPIs
-   - NOTE: This is a demonstrator — replace with real APIs in production
+   - LocalStorage store + optional API bridge
+   - Forms via modals (no prompts)
+   - KPIs, Marketplace, Referrals, IEP
    ========================================================== */
 
 const $ = (q,root=document)=>root.querySelector(q)
 const $$ = (q,root=document)=>Array.from(root.querySelectorAll(q))
 
+/* ---------- API Bridge (disabled by default) ---------- */
+const api = {
+  enabled:false,
+  baseUrl:'https://api.example.com',
+  token:null,
+}
+async function apiFetch(path,opts={}){
+  if(!api.enabled){ throw new Error('API_DISABLED') }
+  const res = await fetch(api.baseUrl+path,{
+    headers:Object.assign({'Content-Type':'application/json', ...(api.token?{Authorization:'Bearer '+api.token}:{})}),
+    ...opts
+  })
+  if(!res.ok){ const t=await res.text(); throw new Error('API '+res.status+': '+t) }
+  return res.json()
+}
+
+/* ---------- Store ---------- */
 const store = {
   load(){
     try{const data=JSON.parse(localStorage.getItem('nomu')||'{}');this.state=Object.assign({
@@ -233,43 +314,21 @@ const store = {
 }
 store.load()
 
-/* -------- Utilities -------- */
+/* ---------- Utilities ---------- */
 function fmt(n){return new Intl.NumberFormat('ar-SA').format(n)}
 function today(){return new Date().toISOString().slice(0,10)}
-function toast(msg){
-  const t=document.createElement('div');
-  t.textContent=msg;Object.assign(t.style,{position:'fixed',bottom:'18px',left:'18px',background:'#111b',color:'#fff',padding:'10px 14px',borderRadius:'12px',backdropFilter:'blur(4px)',zIndex:9999});
-  document.body.appendChild(t);setTimeout(()=>t.remove(),2500)
-}
+function toast(msg){ const t=document.createElement('div'); t.textContent=msg; Object.assign(t.style,{position:'fixed',bottom:'18px',left:'18px',background:'#111b',color:'#fff',padding:'10px 14px',borderRadius:'12px',backdropFilter:'blur(4px)',zIndex:9999}); document.body.appendChild(t); setTimeout(()=>t.remove(),2500) }
+function escapeHtml(str){return str.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
 
-/* -------- Router -------- */
-const routes = {
-  '/home': viewHome,
-  '/family': viewFamily,
-  '/health': viewHealth,
-  '/education': viewEducation,
-  '/nonprofit': viewNonprofit,
-  '/csr': viewCSR,
-  '/admin': viewAdmin,
-  '/market': viewMarket,
-  '/referrals': viewReferrals,
-  '/reports': viewReports,
-  '/settings': viewSettings,
-}
-
-function router(){
-  const path = location.hash.replace('#','') || '/home'
-  $$('a.link').forEach(a=>a.classList.toggle('active',a.getAttribute('href')===`#${path}`))
-  const el = document.getElementById('view'); el.innerHTML=''
-  ;(routes[path]||view404)(el)
-}
+/* ---------- Router ---------- */
+const routes = { '/home': viewHome, '/family': viewFamily, '/health': viewHealth, '/education': viewEducation, '/nonprofit': viewNonprofit, '/csr': viewCSR, '/admin': viewAdmin, '/market': viewMarket, '/referrals': viewReferrals, '/reports': viewReports, '/settings': viewSettings }
+function router(){ const path = location.hash.replace('#','') || '/home'; $$('a.link').forEach(a=>a.classList.toggle('active',a.getAttribute('href')===`#${path}`)); const el = document.getElementById('view'); el.innerHTML=''; (routes[path]||view404)(el) }
 window.addEventListener('hashchange',router)
 
-/* -------- Views -------- */
-function kpiCard(title,value,delta){
-  return `<div class="card third"><span class="k">${title}</span><b class="v">${value}</b><small>${delta||''}</small></div>`
-}
+/* ---------- Cards helper ---------- */
+function kpiCard(title,value,delta){ return `<div class="card third"><span class="k">${title}</span><b class="v">${value}</b><small>${delta||''}</small></div>` }
 
+/* ---------- Views ---------- */
 function viewHome(root){
   const totalKids = store.state.households.reduce((a,h)=>a+h.children.length,0)
   const screened = store.state.screenings.length
@@ -304,13 +363,13 @@ function viewHome(root){
 function viewFamily(root){
   const h = store.state.households[0]
   root.innerHTML = `
-  <div class="toolbar"><h2>حساب الأسرة</h2><div class="actions"><button onclick="openScreening()">حجز/تسجيل فحص</button><button class="ghost" onclick="openReferral('family')">طلب إحالة</button></div></div>
+  <div class="toolbar"><h2>حساب الأسرة</h2><div class="actions"><button onclick="openModal('modal-screening')">حجز/تسجيل فحص</button><button class="ghost" onclick="openModal('modal-referral')">طلب إحالة</button></div></div>
   <div class="cards">
     ${kpiCard('الأطفال', h.children.length)}
     ${kpiCard('فحوص مكتملة', store.state.screenings.filter(s=>h.children.some(c=>c.id===s.childId)).length)}
     ${kpiCard('إحالات مرتبطة', store.state.referrals.filter(r=>h.children.some(c=>c.id===r.childId)).length)}
     <div class="card wide">
-      <b>أطفال الأسرة</b>
+      <div class="toolbar"><b>أطفال الأسرة</b><div class="actions"><button class="ghost" onclick="addChild()">إضافة طفل</button></div></div>
       ${tableKids(h.children)}
     </div>
     <div class="card half">
@@ -326,7 +385,7 @@ function viewFamily(root){
 
 function viewHealth(root){
   root.innerHTML = `
-  <div class="toolbar"><h2>وزارة الصحة</h2><div class="actions"><button onclick="openScreening()">تسجيل فحص</button><button class="ghost" onclick="openReferral('health')">إحالة للتعليم</button></div></div>
+  <div class="toolbar"><h2>وزارة الصحة</h2><div class="actions"><button onclick="openModal('modal-screening')">تسجيل فحص</button><button class="ghost" onclick="openModal('modal-referral')">إحالة للتعليم</button></div></div>
   <div class="cards">
     ${kpiCard('فحوص هذا الشهر', store.state.screenings.filter(s=>s.date.slice(0,7)===today().slice(0,7)).length)}
     ${kpiCard('متوسط زمن الانتظار (يوم)', 7)}
@@ -340,7 +399,7 @@ function viewHealth(root){
 
 function viewEducation(root){
   root.innerHTML = `
-  <div class="toolbar"><h2>وزارة التعليم</h2><div class="actions"><button onclick="openIEP()">إنشاء IEP</button></div></div>
+  <div class="toolbar"><h2>وزارة التعليم</h2><div class="actions"><button onclick="openModal('modal-iep')">إنشاء IEP</button></div></div>
   <div class="cards">
     ${kpiCard('تقارير الجاهزية الصادرة', 42)}
     ${kpiCard('خطط IEP نشطة', store.state.ieps.length)}
@@ -358,7 +417,7 @@ function viewEducation(root){
 
 function viewNonprofit(root){
   root.innerHTML = `
-  <div class="toolbar"><h2>الجمعيات</h2><div class="actions"><button onclick="openMarketItem()">طرح مبادرة</button></div></div>
+  <div class="toolbar"><h2>الجمعيات</h2><div class="actions"><button onclick="openModal('modal-market')">طرح مبادرة</button></div></div>
   <div class="cards">
     ${kpiCard('برامج فعّالة', 5)}
     ${kpiCard('المستفيدون', 120)}
@@ -372,7 +431,7 @@ function viewNonprofit(root){
 
 function viewCSR(root){
   root.innerHTML = `
-  <div class="toolbar"><h2>القطاع الخاص (CSR)</h2><div class="actions"><button onclick="openCSRContribution()">مساهمة جديدة</button></div></div>
+  <div class="toolbar"><h2>القطاع الخاص (CSR)</h2><div class="actions"><button onclick="openModal('modal-csr')">مساهمة جديدة</button></div></div>
   <div class="cards">
     ${kpiCard('إجمالي المساهمات (ر.س)', fmt(store.state.csr.reduce((a,c)=>a+c.amount,0)))}
     ${kpiCard('عدد الشركات', new Set(store.state.csr.map(c=>c.company)).size)}
@@ -412,184 +471,570 @@ function viewAdmin(root){
   </div>`
 }
 
-function viewMarket(root){
-  root.innerHTML = `
-  <div class="toolbar"><h2>سوق الرعاية</h2><div class="actions"><button onclick="openMarketItem()">مبادرة جديدة</button></div></div>
-  <div class="cards">
-    <div class="card wide">${tableMarketplace(store.state.marketplace,true)}</div>
-  </div>`
-}
+function viewMarket(root){ root.innerHTML = `<div class="toolbar"><h2>سوق الرعاية</h2><div class="actions"><button onclick=\"openModal('modal-market')\">مبادرة جديدة</button></div></div><div class=\"cards\"><div class=\"card wide\">${tableMarketplace(store.state.marketplace,true)}</div></div>` }
+function viewReferrals(root){ root.innerHTML = `<div class="toolbar"><h2>الإحالات</h2><div class="actions"><button onclick=\"openModal('modal-referral')\">إحالة جديدة</button></div></div><div class=\"cards\"><div class=\"card wide\">${tableReferrals(store.state.referrals,true)}</div></div>` }
+function viewReports(root){ const totals={kids:store.state.households.reduce((a,h)=>a+h.children.length,0), scr:store.state.screenings.length, ref:store.state.referrals.length}; root.innerHTML = `<div class="toolbar"><h2>التقارير</h2><div class="actions"><button class="ghost" onclick="window.print()">طباعة/حفظ PDF</button></div></div><div class="cards">${kpiCard('إجمالي الأطفال', fmt(totals.kids))}${kpiCard('الفحوص', fmt(totals.scr))}${kpiCard('الإحالات', fmt(totals.ref))}<div class="card wide" id="chart2"></div><div class="card wide"><b>سجل كامل</b><pre style="white-space:pre-wrap;background:#0f172a;border:1px solid var(--border);padding:12px;border-radius:12px;direction:ltr">${escapeHtml(JSON.stringify(store.state,null,2))}</pre></div></div>`; drawTrend($('#chart2'),'تمويل شهري (ر.س)',[20,30,15,60,40,80]) }
+function viewSettings(root){ root.innerHTML = `<div class="toolbar"><h2>الإعدادات</h2></div><div class="cards"><div class="card half"><b>إدارة الموافقات</b><p class="help">نفس عناصر نافذة الخصوصية.</p><div class="actions"><button onclick="openConsent()">فتح</button></div></div><div class="card half"><b>جلسة المستخدم</b><div class="actions"><button class="ghost" onclick="openLogin()">تبديل الدور</button><button class="danger" onclick="wipe()">مسح البيانات المحلية</button></div></div><div class="card wide"><b>وضع التكامل مع API</b><div class="grid two"><div class="field"><label><input type="checkbox" id="api_enabled"> تفعيل وضع API</label><div class="help">عند التفعيل، سيُحاول النموذج استدعاء REST بدلاً من LocalStorage.</div></div><div class="field"><label>Base URL</label><input id="api_base" placeholder="https://api.example.com" /></div><div class="field"><label>Token</label><input id="api_token" placeholder="Bearer ..." /></div></div><div class="actions"><button onclick="applyApiSettings()">حفظ إعدادات API</button></div></div></div>`; $('#api_enabled').checked=api.enabled; $('#api_base').value=api.baseUrl; $('#api_token').value=api.token||'' }
+function view404(root){ root.innerHTML = `<div class="empty"><b>الصفحة غير موجودة</b><div>المسار: ${location.hash}</div></div>` }
 
-function viewReferrals(root){
-  root.innerHTML = `
-  <div class="toolbar"><h2>الإحالات</h2><div class="actions"><button onclick="openReferral()">إحالة جديدة</button></div></div>
-  <div class="cards">
-    <div class="card wide">${tableReferrals(store.state.referrals,true)}</div>
-  </div>`
-}
+/* ---------- Tables / UI helpers ---------- */
+function tableKids(items){ return `<table><thead><tr><th>الرقم</th><th>الاسم</th><th>الميلاد</th></tr></thead><tbody>${items.map(c=>`<tr><td>${c.id}</td><td>${c.name}</td><td>${c.dob}</td></tr>`).join('')}</tbody></table>` }
+function tableScreenings(items){ return `<table><thead><tr><th>المعرف</th><th>الطفل</th><th>النوع</th><th>التاريخ</th><th>النتيجة</th><th>المنشأة</th></tr></thead><tbody>${items.map(s=>`<tr><td>${s.id}</td><td>${s.childId}</td><td>${s.type}</td><td>${s.date}</td><td>${s.result}</td><td>${s.facility}</td></tr>`).join('')}</tbody></table>` }
+function tableReferrals(items,actions){ return `<table><thead><tr><th>المعرف</th><th>من</th><th>إلى</th><th>الطفل</th><th>الأولوية</th><th>الحالة</th><th>التاريخ</th>${actions?'<th></th>':''}</tr></thead><tbody>${items.map(r=>`<tr><td>${r.id}</td><td>${r.from}</td><td>${r.to}</td><td>${r.childId}</td><td>${r.priority}</td><td>${r.status}</td><td>${r.created}</td>${actions?`<td><button class='ghost' onclick=\"updateReferral('${r.id}')\">تحديث</button></td>`:''}</tr>`).join('')}</tbody></table>` }
+function tableIEP(items){ return `<table><thead><tr><th>المعرف</th><th>الطفل</th><th>الأهداف</th><th>مراجعة</th></tr></thead><tbody>${items.map(i=>`<tr><td>${i.id}</td><td>${i.childId}</td><td>${i.goals}</td><td>${i.review}</td></tr>`).join('')}</tbody></table>` }
+function tableNPOs(items){ return `<table><thead><tr><th>المعرف</th><th>الاسم</th><th>المنطقة</th><th>برامج</th><th>مستفيدون</th></tr></thead><tbody>${items.map(n=>`<tr><td>${n.id||'-'}</td><td>${n.name}</td><td>${n.region}</td><td>${n.programs}</td><td>${n.beneficiaries}</td></tr>`).join('')}</tbody></table>` }
+function tableCSR(items){ return `<table><thead><tr><th>المعرف</th><th>الشركة</th><th>المبلغ</th><th>المبادرة</th><th>التاريخ</th></tr></thead><tbody>${items.map(c=>`<tr><td>${c.id}</td><td>${c.company}</td><td>${fmt(c.amount)}</td><td>${c.to}</td><td>${c.date}</td></tr>`).join('')}</tbody></table>` }
+function tableMarketplace(items,actions){ return `<table><thead><tr><th>المعرف</th><th>المبادرة</th><th>KPI</th><th>المطلوب</th><th>الممول</th><th>الجهة</th>${actions?'<th></th>':''}</tr></thead><tbody>${items.map(m=>`<tr><td>${m.id}</td><td>${m.title}</td><td>${m.kpi}</td><td>${fmt(m.ask)}</td><td>${fmt(m.funded)}</td><td>${m.owner}</td>${actions?`<td><button class='ghost' onclick=\"fund('${m.id}')\">تمويل</button></td>`:''}</tr>`).join('')}</tbody></table>` }
 
-function viewReports(root){
-  const totals={kids:store.state.households.reduce((a,h)=>a+h.children.length,0), scr:store.state.screenings.length, ref:store.state.referrals.length}
-  root.innerHTML = `
-  <div class="toolbar"><h2>التقارير</h2><div class="actions"><button class="ghost" onclick="window.print()">طباعة/حفظ PDF</button></div></div>
-  <div class="cards">
-    ${kpiCard('إجمالي الأطفال', fmt(totals.kids))}
-    ${kpiCard('الفحوص', fmt(totals.scr))}
-    ${kpiCard('الإحالات', fmt(totals.ref))}
-    <div class="card wide" id="chart2"></div>
-    <div class="card wide"><b>سجل كامل</b>
-      <pre style="white-space:pre-wrap;background:#0f172a;border:1px solid var(--border);padding:12px;border-radius:12px;direction:ltr">${escapeHtml(JSON.stringify(store.state,null,2))}</pre>
-    </div>
-  </div>`
-  drawTrend($('#chart2'),'تمويل شهري (ر.س)',[20,30,15,60,40,80])
-}
+/* ---------- Tiny chart (SVG) ---------- */
+function drawTrend(el,title,data){ const w=el.clientWidth||600,h=160,p=18;const min=Math.min(...data),max=Math.max(...data); const points=data.map((v,i)=>{ const x=p + (i*(w-2*p))/(data.length-1); const y=h-p - ((v-min)*(h-2*p))/(max-min||1); return `${x},${y}` }).join(' '); el.innerHTML = `<b>${title}</b><svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" role="img" aria-label="${title}"><polyline points="${points}" fill="none" stroke="${getComputedStyle(document.documentElement).getPropertyValue('--pri')}" stroke-width="3"/></svg>` }
 
-function viewSettings(root){
-  root.innerHTML = `
-  <div class="toolbar"><h2>الإعدادات</h2></div>
-  <div class="cards">
-    <div class="card half"><b>إدارة الموافقات</b><p class="help">نفس عناصر نافذة الخصوصية.</p><div class="actions"><button onclick="openConsent()">فتح</button></div></div>
-    <div class="card half"><b>جلسة المستخدم</b><div class="actions"><button class="ghost" onclick="openLogin()">تبديل الدور</button><button class="danger" onclick="wipe()">مسح البيانات المحلية</button></div></div>
-  </div>`
-}
-
-function view404(root){
-  root.innerHTML = `<div class="empty"><b>الصفحة غير موجودة</b><div>المسار: ${location.hash}</div></div>`
-}
-
-/* -------- Tables / UI helpers -------- */
-function tableKids(items){
-  return `<table><thead><tr><th>الرقم</th><th>الاسم</th><th>الميلاد</th></tr></thead><tbody>
-  ${items.map(c=>`<tr><td>${c.id}</td><td>${c.name}</td><td>${c.dob}</td></tr>`).join('')}
-  </tbody></table>`
-}
-function tableScreenings(items){
-  return `<table><thead><tr><th>المعرف</th><th>الطفل</th><th>النوع</th><th>التاريخ</th><th>النتيجة</th><th>المنشأة</th></tr></thead><tbody>
-  ${items.map(s=>`<tr><td>${s.id}</td><td>${s.childId}</td><td>${s.type}</td><td>${s.date}</td><td>${s.result}</td><td>${s.facility}</td></tr>`).join('')}
-  </tbody></table>`
-}
-function tableReferrals(items,actions){
-  return `<table><thead><tr><th>المعرف</th><th>من</th><th>إلى</th><th>الطفل</th><th>الأولوية</th><th>الحالة</th><th>التاريخ</th>${actions?'<th></th>':''}</tr></thead><tbody>
-  ${items.map(r=>`<tr><td>${r.id}</td><td>${r.from}</td><td>${r.to}</td><td>${r.childId}</td><td>${r.priority}</td><td>${r.status}</td><td>${r.created}</td>${actions?`<td><button class='ghost' onclick="updateReferral('${r.id}')">تحديث</button></td>`:''}</tr>`).join('')}
-  </tbody></table>`
-}
-function tableIEP(items){
-  return `<table><thead><tr><th>المعرف</th><th>الطفل</th><th>الأهداف</th><th>مراجعة</th></tr></thead><tbody>
-  ${items.map(i=>`<tr><td>${i.id}</td><td>${i.childId}</td><td>${i.goals}</td><td>${i.review}</td></tr>`).join('')}
-  </tbody></table>`
-}
-function tableNPOs(items){
-  return `<table><thead><tr><th>المعرف</th><th>الاسم</th><th>المنطقة</th><th>برامج</th><th>مستفيدون</th></tr></thead><tbody>
-  ${items.map(n=>`<tr><td>${n.id||'-'}</td><td>${n.name}</td><td>${n.region}</td><td>${n.programs}</td><td>${n.beneficiaries}</td></tr>`).join('')}
-  </tbody></table>`
-}
-function tableCSR(items){
-  return `<table><thead><tr><th>المعرف</th><th>الشركة</th><th>المبلغ</th><th>المبادرة</th><th>التاريخ</th></tr></thead><tbody>
-  ${items.map(c=>`<tr><td>${c.id}</td><td>${c.company}</td><td>${fmt(c.amount)}</td><td>${c.to}</td><td>${c.date}</td></tr>`).join('')}
-  </tbody></table>`
-}
-function tableMarketplace(items,actions){
-  return `<table><thead><tr><th>المعرف</th><th>المبادرة</th><th>KPI</th><th>المطلوب</th><th>الممول</th><th>الجهة</th>${actions?'<th></th>':''}</tr></thead><tbody>
-  ${items.map(m=>`<tr><td>${m.id}</td><td>${m.title}</td><td>${m.kpi}</td><td>${fmt(m.ask)}</td><td>${fmt(m.funded)}</td><td>${m.owner}</td>${actions?`<td><button class='ghost' onclick="fund('${m.id}')">تمويل</button></td>`:''}</tr>`).join('')}
-  </tbody></table>`
-}
-
-/* -------- Tiny chart (SVG) -------- */
-function drawTrend(el,title,data){
-  const w=el.clientWidth||600,h=160,p=18;const min=Math.min(...data),max=Math.max(...data)
-  const points=data.map((v,i)=>{
-    const x=p + (i*(w-2*p))/(data.length-1)
-    const y=h-p - ((v-min)*(h-2*p))/(max-min||1)
-    return `${x},${y}`
-  }).join(' ')
-  el.innerHTML = `<b>${title}</b><svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" role="img" aria-label="${title}">
-    <polyline points="${points}" fill="none" stroke="${getComputedStyle(document.documentElement).getPropertyValue('--pri')}" stroke-width="3"/>
-  </svg>`
-}
-
-/* -------- Modals logic -------- */
+/* ---------- Modals logic & Forms submit ---------- */
 function openLogin(){openModal('modal-login')}
-function openConsent(){
-  const c=store.state.consent;$('#c1').checked=c.c1;$('#c2').checked=c.c2;$('#c3').checked=c.c3;$('#c4').checked=c.c4;openModal('modal-consent')
-}
-function openScreening(){
-  const name=prompt('اسم الطفل أو المعرف (مثال C-501):','C-501'); if(!name) return
-  const type=prompt('نوع الفحص:','نمو نمائي'); if(!type) return
-  const id='S-'+Math.floor(Math.random()*1e5)
-  store.state.screenings.push({id,childId:name,type,date:today(),result:'—',facility:store.state.user.region+"/مركز صحي"})
-  store.save(); toast('تم تسجيل الفحص'); router()
-}
-function openReferral(from){
-  const child=prompt('معرف الطفل للإحالة:','C-501'); if(!child) return
-  const to=prompt('الجهة المحال إليها (الصحة/التعليم/جمعية):','التعليم'); if(!to) return
-  const id='R-'+Math.floor(Math.random()*1e5)
-  store.state.referrals.push({id,from:from||store.state.user.role,to,childId:child,priority:'عادية',status:'قيد المعالجة',created:today()})
-  store.save(); toast('تم إنشاء الإحالة'); router()
-}
-function updateReferral(id){
-  const r=store.state.referrals.find(x=>x.id===id); if(!r) return
-  const st=prompt('تحديث الحالة:', r.status)||r.status
-  r.status=st; store.save(); toast('تم التحديث'); router()
-}
-function openIEP(){
-  const child=prompt('معرف الطفل:','C-502'); if(!child) return
-  const goals=prompt('الأهداف الرئيسية:','تحسين المهارات اللغوية'); if(!goals) return
-  const id='IEP-'+Math.floor(Math.random()*1e5)
-  store.state.ieps.push({id,childId:child,goals,review:today()})
-  store.save(); toast('تم إنشاء IEP'); router()
-}
-function openMarketItem(){
-  const title=prompt('عنوان المبادرة:','جلسات تدخل مبكر - الرياض'); if(!title) return
-  const ask=parseInt(prompt('المبلغ المطلوب (ر.س):','100000')||'0',10)
-  const id='M-'+Math.floor(Math.random()*1e5)
-  store.state.marketplace.push({id,title,kpi:'سيتم التحديد',ask, funded:0, owner:'جمعية'})
-  store.save(); toast('تمت إضافة المبادرة'); router()
-}
-function openCSRContribution(){
-  const to=prompt('معرف المبادرة للتمويل:','M-1'); if(!to) return
-  const company=prompt('اسم الشركة:','شركة مثال'); if(!company) return
-  const amount=parseInt(prompt('المبلغ (ر.س):','20000')||'0',10)
-  const id='CSR-'+Math.floor(Math.random()*1e5)
-  store.state.csr.push({id,company,amount,to,date:today()})
-  const m=store.state.marketplace.find(x=>x.id===to); if(m) m.funded+=amount
-  store.save(); toast('تم تسجيل مساهمة CSR'); router()
-}
-function fund(id){
-  const amount=parseInt(prompt('مبلغ التمويل (ر.س):','10000')||'0',10); if(!amount) return
-  const m=store.state.marketplace.find(x=>x.id===id); if(!m) return
-  m.funded+=amount
-  const cid='CSR-'+Math.floor(Math.random()*1e5)
-  store.state.csr.push({id:cid,company:'شركة داعمة',amount,to:id,date:today()})
-  store.save(); toast('تم تحديث التمويل'); router()
-}
-
+function openConsent(){ const c=store.state.consent;$('#c1').checked=c.c1;$('#c2').checked=c.c2;$('#c3').checked=c.c3;$('#c4').checked=c.c4;openModal('modal-consent') }
 function openModal(id){$('#'+id).classList.add('open')}
 function closeModal(id){$('#'+id).classList.remove('open')}
-function doLogin(){
-  const role=$('#loginRole').value; const region=$('#loginRegion').value
-  store.state.user={role,region}; store.save(); $('#roleTag').textContent='دور: '+role; closeModal('modal-login'); toast('تم تسجيل الدخول كـ '+role)
-}
-function saveConsent(){
-  store.state.consent={c1:$('#c1').checked,c2:$('#c2').checked,c3:$('#c3').checked,c4:$('#c4').checked}
-  store.save(); closeModal('modal-consent'); toast('تم حفظ الموافقات')
-}
 
-function setRegion(region){store.state.user.region=region;store.save();toast('تم ضبط المنطقة');router()}
-function wipe(){localStorage.removeItem('nomu');store.load();toast('تم مسح البيانات');router()}
-function seedDemo(){localStorage.removeItem('nomu');store.load();store.save();toast('تمت إعادة تعبئة البيانات التجريبية');router()}
+function doLogin(){ const role=$('#loginRole').value; const region=$('#loginRegion').value; store.state.user={role,region}; store.save(); $('#roleTag').textContent='دور: '+role; closeModal('modal-login'); toast('تم تسجيل الدخول كـ '+role) }
+function saveConsent(){ store.state.consent={c1:$('#c1').checked,c2:$('#c2').checked,c3:$('#c3').checked,c4:$('#c4').checked}; store.save(); closeModal('modal-consent'); toast('تم حفظ الموافقات') }
 
-function globalSearch(q){
-  q=q.trim(); if(!q){return}
-  const found = store.state.referrals.find(r=>r.id.includes(q))||store.state.marketplace.find(m=>m.id.includes(q))||store.state.households.find(h=>h.id?.includes?.(q)||h.children.some(c=>c.id.includes(q)))
-  if(found){toast('تم العثور: تحويل لملف الإحالات/السوق حسب السياق');}
-}
+function submitScreening(){ const id='S-'+Math.floor(Math.random()*1e5); const payload={ id, childId:$('#f_sc_child').value||'C-501', type:$('#f_sc_type').value, date:$('#f_sc_date').value||today(), result:$('#f_sc_result').value||'—', facility:$('#f_sc_facility').value||store.state.user.region+"/مركز صحي" }; if(api.enabled){ apiFetch('/screenings',{method:'POST',body:JSON.stringify(payload)}).then(()=>toast('تم إرسال الفحص عبر API')).catch(()=>{store.state.screenings.push(payload);store.save();toast('API غير متاح — حُفظ محليًا')}).finally(()=>{closeModal('modal-screening');router()}) } else { store.state.screenings.push(payload); store.save(); closeModal('modal-screening'); toast('تم تسجيل الفحص'); router() } }
+function submitReferral(){ const id='R-'+Math.floor(Math.random()*1e5); const payload={ id, from:$('#f_ref_from').value, to:$('#f_ref_to').value, childId:$('#f_ref_child').value||'C-501', priority:$('#f_ref_pri').value, status:$('#f_ref_status').value, created:$('#f_ref_date').value||today() }; if(api.enabled){ apiFetch('/referrals',{method:'POST',body:JSON.stringify(payload)}).then(()=>toast('تم إرسال الإحالة عبر API')).catch(()=>{store.state.referrals.push(payload);store.save();toast('API غير متاح — حُفظ محليًا')}).finally(()=>{closeModal('modal-referral');router()}) } else { store.state.referrals.push(payload); store.save(); closeModal('modal-referral'); toast('تم إنشاء الإحالة'); router() } }
+function updateReferral(id){ const r=store.state.referrals.find(x=>x.id===id); if(!r) return; const st=prompt('تحديث الحالة:', r.status)||r.status; r.status=st; store.save(); toast('تم التحديث'); router() }
+function submitIEP(){ const id='IEP-'+Math.floor(Math.random()*1e5); const payload={ id, childId:$('#f_iep_child').value||'C-502', goals:$('#f_iep_goals').value||'أهداف', review:$('#f_iep_review').value||today() }; if(api.enabled){ apiFetch('/iep',{method:'POST',body:JSON.stringify(payload)}).then(()=>toast('تم إرسال IEP عبر API')).catch(()=>{store.state.ieps.push(payload);store.save();toast('API غير متاح — حُفظ محليًا')}).finally(()=>{closeModal('modal-iep');router()}) } else { store.state.ieps.push(payload); store.save(); closeModal('modal-iep'); toast('تم إنشاء IEP'); router() } }
+function submitMarket(){ const id='M-'+Math.floor(Math.random()*1e5); const payload={ id, title:$('#f_m_title').value, kpi:$('#f_m_kpi').value, ask:parseInt($('#f_m_ask').value||'0',10), funded:0, owner:$('#f_m_owner').value||'جمعية' }; if(api.enabled){ apiFetch('/market',{method:'POST',body:JSON.stringify(payload)}).then(()=>toast('تم إرسال المبادرة عبر API')).catch(()=>{store.state.marketplace.push(payload);store.save();toast('API غير متاح — حُفظ محليًا')}).finally(()=>{closeModal('modal-market');router()}) } else { store.state.marketplace.push(payload); store.save(); closeModal('modal-market'); toast('تمت إضافة المبادرة'); router() } }
+function submitCSR(){ const id='CSR-'+Math.floor(Math.random()*1e5); const payload={ id, company:$('#f_csr_company').value||'شركة', amount:parseInt($('#f_csr_amount').value||'0',10), to:$('#f_csr_to').value||'M-1', date:$('#f_csr_date').value||today() }; if(api.enabled){ apiFetch('/csr',{method:'POST',body:JSON.stringify(payload)}).then(()=>toast('تم إرسال المساهمة عبر API')).catch(()=>{store.state.csr.push(payload); const m=store.state.marketplace.find(x=>x.id===payload.to); if(m) m.funded+=payload.amount; store.save(); toast('API غير متاح — حُفظ محليًا')}).finally(()=>{closeModal('modal-csr');router()}) } else { store.state.csr.push(payload); const m=store.state.marketplace.find(x=>x.id===payload.to); if(m) m.funded+=payload.amount; store.save(); closeModal('modal-csr'); toast('تم تسجيل مساهمة CSR'); router() } }
+function fund(id){ const amount=parseInt(prompt('مبلغ التمويل (ر.س):','10000')||'0',10); if(!amount) return; const payload={ id:'CSR-'+Math.floor(Math.random()*1e5), company:'شركة داعمة', amount, to:id, date:today() }; if(api.enabled){ apiFetch('/csr',{method:'POST',body:JSON.stringify(payload)}).catch(()=>{}); } store.state.csr.push(payload); const m=store.state.marketplace.find(x=>x.id===id); if(m) m.funded+=amount; store.save(); toast('تم تحديث التمويل'); router() }
+function addChild(){ const h=store.state.households[0]; const id='C-'+Math.floor(Math.random()*1e4); const name=prompt('اسم الطفل:','طفلي'); const dob=prompt('تاريخ الميلاد (YYYY-MM-DD):',today()); if(!name) return; h.children.push({id,name,dob}); store.save(); toast('تمت إضافة الطفل'); router() }
 
-function escapeHtml(str){return str.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+function applyApiSettings(){ api.enabled=$('#api_enabled').checked; api.baseUrl=$('#api_base').value||api.baseUrl; api.token=$('#api_token').value||null; toast(api.enabled?'تم تفعيل وضع API':'تم تعطيل وضع API') }
+
+/* ---------- Charts ---------- */
+function drawTrend(el,title,data){ const w=el.clientWidth||600,h=160,p=18;const min=Math.min(...data),max=Math.max(...data); const points=data.map((v,i)=>{ const x=p + (i*(w-2*p))/(data.length-1); const y=h-p - ((v-min)*(h-2*p))/(max-min||1); return `${x},${y}` }).join(' '); el.innerHTML = `<b>${title}</b><svg viewBox=\"0 0 ${w} ${h}\" width=\"100%\" height=\"${h}\" role=\"img\" aria-label=\"${title}\"><polyline points=\"${points}\" fill=\"none\" stroke=\"${getComputedStyle(document.documentElement).getPropertyValue('--pri')}\" stroke-width=\"3\"/></svg>` }
 
 // Init
 router();
 $('#roleTag').textContent = 'دور: '+store.state.user.role
+</script>
+</body>
+</html>
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>نمو NOMU — نموذج أحادي الملف (index.html)</title>
+  <meta name="description" content="نمو NOMU — منصة وطنية للطفولة المبكرة. هذا نموذج تشغيلي أحادي الملف يستعرض الواجهات وسير الاستخدام والمكوّنات الأساسية مع نماذج موسّعة وخطاف تكامل API." />
+  <style>
+    :root{ --bg:#0b1220;--card:#121a2b;--muted:#1a2440;--pri:#5ac8fa;--sec:#8ef6d0;--acc:#ffd166;--danger:#ff6b6b;--ok:#22c55e;--text:#e6edf7;--sub:#a7b0c3;--border:#263251;--shadow:0 10px 30px rgba(0,0,0,.35);--radius:18px;--pad:18px;--gap:14px;--gap-lg:22px;--font:system-ui,"Segoe UI",Tahoma,Arial;--mono:ui-monospace,Consolas,monaco,monospace }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:linear-gradient(180deg,#0b1220 0%,#0b1220 50%,#0e172a 100%);color:var(--text);font:15px/1.6 var(--font)}
+    a{color:var(--pri);text-decoration:none}
+    .app{display:grid;grid-template-rows:auto 1fr;min-height:100vh}
+    header{position:sticky;top:0;z-index:50;background:rgba(11,18,32,.85);backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--border)}
+    .topbar{display:flex;align-items:center;gap:12px;max-width:1200px;margin:auto;padding:10px var(--pad)}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
+    .logo svg{width:34px;height:34px}
+    .badge{display:inline-flex;align-items:center;gap:6px;background:var(--muted);border:1px solid var(--border);padding:6px 10px;border-radius:999px;color:var(--sub);font-size:12px}
+    .search{margin-inline-start:auto;position:relative}
+    .search input{width:320px;max-width:60vw;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 34px 10px 12px;border-radius:10px}
+    .search svg{position:absolute;inset-inline-end:10px;top:50%;transform:translateY(-50%);opacity:.7}
+    .user{display:flex;align-items:center;gap:10px}
+    .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#4158d0,#c850c0 60%,#ffcc70)}
 
+    .main{max-width:1200px;margin:24px auto;display:grid;grid-template-columns:260px 1fr;gap:var(--gap-lg);padding:0 var(--pad)}
+    nav{position:sticky;top:65px;height:fit-content}
+    .side{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:10px}
+    .group{margin:10px 0}
+    .group h4{margin:6px 12px 8px;color:var(--sub);font-weight:600;font-size:13px}
+    .link{display:flex;align-items:center;gap:10px;border-radius:10px;padding:10px 12px;color:var(--text);border:1px solid transparent}
+    .link:hover{background:var(--muted);border-color:var(--border)}
+    .link.active{background:linear-gradient(180deg,rgba(90,200,250,.09),rgba(90,200,250,.04));border-color:#274a70}
+
+    .content{display:grid;gap:var(--gap-lg)}
+    .cards{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gap)}
+    .card{grid-column:span 4;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:var(--pad);box-shadow:var(--shadow)}
+    .card span.k{display:block;color:var(--sub);font-size:12px}
+    .card b.v{display:block;font-size:26px;margin-top:6px}
+    .card small{color:var(--sub)}
+
+    .wide{grid-column:span 12}
+    .half{grid-column:span 6}
+    .third{grid-column:span 4}
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    button,.btn{background:var(--pri);color:#071426;border:none;padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(90,200,250,.25)}
+    button.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+    button.warn{background:var(--acc);color:#1b1100}
+    button.danger{background:var(--danger)}
+    .tag{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:var(--muted);padding:6px 10px;border-radius:999px;color:var(--sub);font-size:12px}
+
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+
+    table{width:100%;border-collapse:separate;border-spacing:0 10px}
+    th,td{text-align:right;padding:12px;background:var(--card)}
+    th{color:var(--sub);font-size:12px}
+    tbody tr{border:1px solid var(--border)}
+    tbody td{border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    tbody td:first-child{border-inline-start:1px solid var(--border);border-start-start-radius:10px;border-end-start-radius:10px}
+    tbody td:last-child{border-inline-end:1px solid var(--border);border-start-end-radius:10px;border-end-end-radius:10px}
+
+    .grid{display:grid;gap:var(--gap)}
+    .grid.two{grid-template-columns:1fr 1fr}
+    .grid.three{grid-template-columns:repeat(3,1fr)}
+
+    .modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.5);backdrop-filter:blur(2px)}
+    .modal.open{display:grid}
+    .modal .box{width:min(620px,94vw);background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:var(--shadow)}
+
+    input,select,textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:#0f172a;color:var(--text)}
+    label{font-size:13px;color:var(--sub)}
+    .field{display:grid;gap:6px;margin:10px 0}
+    .help{font-size:12px;color:var(--sub)}
+
+    .empty{border:1px dashed var(--border);border-radius:14px;padding:26px;color:var(--sub);text-align:center}
+
+    .footer{margin:30px auto;max-width:1200px;color:var(--sub);text-align:center;padding:10px}
+
+    @media (max-width:960px){
+      .main{grid-template-columns:1fr}
+      nav{position:static}
+      .cards{grid-template-columns:repeat(6,1fr)}
+      .card{grid-column:span 6}
+      .half{grid-column:span 6}
+      .third{grid-column:span 6}
+    }
+  </style>
+</head>
+<body>
+<div class="app" id="app">
+  <header>
+    <div class="topbar" role="banner">
+      <div class="logo" aria-label="NOMU">
+        <!-- شعار قابل للاستبدال -->
+        <svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#5ac8fa"/><stop offset="1" stop-color="#8ef6d0"/></linearGradient></defs><rect x="4" y="4" width="56" height="56" rx="12" fill="url(#g)"/><path d="M18 40 L18 24 L28 34 L38 24 L38 40" fill="none" stroke="#0b1220" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>نمو NOMU</span>
+        <span class="badge" title="نموذج">Prototype</span>
+      </div>
+      <nav class="actions" aria-label="التنقل السريع">
+        <a class="btn" href="#/home">الرئيسية</a>
+        <button class="ghost" onclick="openLogin()">تسجيل الدخول</button>
+        <button class="ghost" onclick="openConsent()">الموافقة والخصوصية</button>
+      </nav>
+      <div class="search" role="search">
+        <input id="q" placeholder="ابحث عن طفل، إحالة، جمعية، مبادرة…" oninput="globalSearch(this.value)" />
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </div>
+      <div class="user" aria-label="الحساب">
+        <div class="tag" id="roleTag">دخول ضيف</div>
+        <div class="avatar" title="المستخدم"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main" role="main">
+    <nav>
+      <div class="side" role="navigation" aria-label="أقسام المنصة">
+        <div class="group">
+          <h4>لوحات القيادة</h4>
+          <a class="link active" href="#/home" data-route>الرئيسية</a>
+          <a class="link" href="#/family" data-route>حساب الأسرة</a>
+          <a class="link" href="#/health" data-route>الصحة</a>
+          <a class="link" href="#/education" data-route>التعليم</a>
+          <a class="link" href="#/nonprofit" data-route>الجمعيات</a>
+          <a class="link" href="#/csr" data-route>القطاع الخاص (CSR)</a>
+          <a class="link" href="#/admin" data-route>اللجنة الوطنية / الإدارة</a>
+        </div>
+        <div class="group">
+          <h4>أدوات</h4>
+          <a class="link" href="#/market" data-route>سوق الرعاية</a>
+          <a class="link" href="#/referrals" data-route>الإحالات</a>
+          <a class="link" href="#/reports" data-route>التقارير</a>
+          <a class="link" href="#/settings" data-route>الإعدادات</a>
+        </div>
+      </div>
+    </nav>
+
+    <section class="content" id="view"></section>
+  </main>
+
+  <footer class="footer">نمو — نموذج أحادي الملف لأغراض العرض فقط. البيانات تُخزَّن محليًا في متصفحك. يمكن تفعيل وضع API من الإعدادات.</footer>
+</div>
+
+<!-- Modals: Login / Consent / Forms -->
+<div class="modal" id="modal-login" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+  <div class="box">
+    <h3 id="loginTitle">تسجيل الدخول</h3>
+    <p class="help">اختر نوع الحساب لتجربة الواجهات. لا يوجد خادم — يستخدم LocalStorage إلا إذا فعّلت وضع API.</p>
+    <div class="grid two">
+      <div class="field">
+        <label>نوع المستخدم</label>
+        <select id="loginRole">
+          <option value="guest">ضيف</option>
+          <option value="family">أسرة</option>
+          <option value="health">الصحة</option>
+          <option value="education">التعليم</option>
+          <option value="nonprofit">جمعية</option>
+          <option value="csr">شركة (CSR)</option>
+          <option value="admin">لجنة وطنية</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>المنطقة الإدارية</label>
+        <select id="loginRegion">
+          <option>الرياض</option>
+          <option>حائل</option>
+          <option>الشرقية</option>
+          <option>مكة المكرمة</option>
+          <option>المدينة المنورة</option>
+        </select>
+      </div>
+    </div>
+    <div class="actions" style="margin-top:10px">
+      <button onclick="doLogin()">دخول</button>
+      <button class="ghost" onclick="closeModal('modal-login')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-consent" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
+  <div class="box">
+    <h3 id="consentTitle">الموافقة وإدارة الخصوصية (PDPL)</h3>
+    <div class="grid two">
+      <div class="field"><label><input type="checkbox" id="c1"> معالجة بيانات الأم خلال الحمل لأغراض المتابعة الصحية</label></div>
+      <div class="field"><label><input type="checkbox" id="c2"> مشاركة تقارير الطفل النمائية مع وزارة التعليم</label></div>
+      <div class="field"><label><input type="checkbox" id="c3"> مشاركة بيانات الدعم الاجتماعي مع الوزارة المختصة</label></div>
+      <div class="field"><label><input type="checkbox" id="c4"> تلقي تنبيهات وتوصيات عبر البريد/الرسائل</label></div>
+    </div>
+    <div class="actions" style="margin-top:10px">
+      <button onclick="saveConsent()">حفظ</button>
+      <button class="ghost" onclick="closeModal('modal-consent')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- نموذج فحص نمائي/صحي -->
+<div class="modal" id="modal-screening" role="dialog" aria-modal="true" aria-labelledby="screeningTitle">
+  <div class="box">
+    <h3 id="screeningTitle">تسجيل فحص</h3>
+    <div class="grid two">
+      <div class="field"><label>معرف الطفل</label><input id="f_sc_child" placeholder="C-501"></div>
+      <div class="field"><label>نوع الفحص</label><select id="f_sc_type"><option>نمو نمائي</option><option>سمع</option><option>نظر</option><option>نفسي</option></select></div>
+      <div class="field"><label>التاريخ</label><input id="f_sc_date" type="date"></div>
+      <div class="field"><label>النتيجة</label><input id="f_sc_result" placeholder="سليم / إحالة / متابعة"></div>
+      <div class="field"><label>المنشأة</label><input id="f_sc_facility" placeholder="مركز صحي - المنطقة"></div>
+    </div>
+    <div class="actions"><button onclick="submitScreening()">حفظ</button><button class="ghost" onclick="closeModal('modal-screening')">إلغاء</button></div>
+  </div>
+</div>
+
+<!-- نموذج إحالة -->
+<div class="modal" id="modal-referral" role="dialog" aria-modal="true" aria-labelledby="refTitle">
+  <div class="box">
+    <h3 id="refTitle">إنشاء إحالة</h3>
+    <div class="grid two">
+      <div class="field"><label>من</label><select id="f_ref_from"><option>الأسرة</option><option>الصحة</option><option>التعليم</option><option>جمعية</option></select></div>
+      <div class="field"><label>إلى</label><select id="f_ref_to"><option>الصحة</option><option>التعليم</option><option>جمعية</option></select></div>
+      <div class="field"><label>معرف الطفل</label><input id="f_ref_child" placeholder="C-501"></div>
+      <div class="field"><label>الأولوية</label><select id="f_ref_pri"><option>عادية</option><option>عاجلة</option></select></div>
+      <div class="field"><label>الحالة</label><select id="f_ref_status"><option>قيد المعالجة</option><option>مكتملة</option></select></div>
+      <div class="field"><label>التاريخ</label><input id="f_ref_date" type="date"></div>
+    </div>
+    <div class="actions"><button onclick="submitReferral()">حفظ</button><button class="ghost" onclick="closeModal('modal-referral')">إلغاء</button></div>
+  </div>
+</div>
+
+<!-- نموذج IEP -->
+<div class="modal" id="modal-iep" role="dialog" aria-modal="true" aria-labelledby="iepTitle">
+  <div class="box">
+    <h3 id="iepTitle">إنشاء خطة IEP</h3>
+    <div class="grid two">
+      <div class="field"><label>معرف الطفل</label><input id="f_iep_child" placeholder="C-502"></div>
+      <div class="field"><label>مراجعة</label><input id="f_iep_review" type="date"></div>
+      <div class="field" style="grid-column:1/-1"><label>الأهداف</label><textarea id="f_iep_goals" rows="3" placeholder="أهداف قابلة للقياس بزمن ومسؤولية"></textarea></div>
+    </div>
+    <div class="actions"><button onclick="submitIEP()">حفظ</button><button class="ghost" onclick="closeModal('modal-iep')">إلغاء</button></div>
+  </div>
+</div>
+
+<!-- نموذج مبادرة سوق الرعاية -->
+<div class="modal" id="modal-market" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="box">
+    <h3 id="mTitle">طرح مبادرة</h3>
+    <div class="grid two">
+      <div class="field"><label>العنوان</label><input id="f_m_title" placeholder="جلسات تدخل مبكر - الرياض"></div>
+      <div class="field"><label>الهدف (KPI)</label><input id="f_m_kpi" placeholder="100 طفل خلال 6 أشهر"></div>
+      <div class="field"><label>المبلغ المطلوب</label><input id="f_m_ask" type="number" min="0" step="1000" placeholder="100000"></div>
+      <div class="field"><label>الجهة المالكة</label><input id="f_m_owner" placeholder="جمعية نماء"></div>
+    </div>
+    <div class="actions"><button onclick="submitMarket()">حفظ</button><button class="ghost" onclick="closeModal('modal-market')">إلغاء</button></div>
+  </div>
+</div>
+
+<!-- نموذج مساهمة CSR -->
+<div class="modal" id="modal-csr" role="dialog" aria-modal="true" aria-labelledby="csrTitle">
+  <div class="box">
+    <h3 id="csrTitle">مساهمة CSR</h3>
+    <div class="grid two">
+      <div class="field"><label>معرف المبادرة</label><input id="f_csr_to" placeholder="M-1"></div>
+      <div class="field"><label>الشركة</label><input id="f_csr_company" placeholder="شركة الأفق"></div>
+      <div class="field"><label>المبلغ (ر.س)</label><input id="f_csr_amount" type="number" min="0" step="1000" placeholder="20000"></div>
+      <div class="field"><label>التاريخ</label><input id="f_csr_date" type="date"></div>
+    </div>
+    <div class="actions"><button onclick="submitCSR()">حفظ</button><button class="ghost" onclick="closeModal('modal-csr')">إلغاء</button></div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================
+   NOMU — Single-File Prototype (Enhanced)
+   - Hash Router (views)
+   - LocalStorage store + optional API bridge
+   - Forms via modals (no prompts)
+   - KPIs, Marketplace, Referrals, IEP
+   ========================================================== */
+
+const $ = (q,root=document)=>root.querySelector(q)
+const $$ = (q,root=document)=>Array.from(root.querySelectorAll(q))
+
+/* ---------- API Bridge (disabled by default) ---------- */
+const api = {
+  enabled:false,
+  baseUrl:'https://api.example.com',
+  token:null,
+}
+async function apiFetch(path,opts={}){
+  if(!api.enabled){ throw new Error('API_DISABLED') }
+  const res = await fetch(api.baseUrl+path,{
+    headers:Object.assign({'Content-Type':'application/json', ...(api.token?{Authorization:'Bearer '+api.token}:{})}),
+    ...opts
+  })
+  if(!res.ok){ const t=await res.text(); throw new Error('API '+res.status+': '+t) }
+  return res.json()
+}
+
+/* ---------- Store ---------- */
+const store = {
+  load(){
+    try{const data=JSON.parse(localStorage.getItem('nomu')||'{}');this.state=Object.assign({
+      user:{role:'guest',region:'الرياض'},
+      consent:{c1:false,c2:false,c3:false,c4:false},
+      households:[{id:'H-1001', father:'محمد', mother:'سارة', region:'حائل', children:[{id:'C-501', name:'ليان', dob:'2021-03-10'},{id:'C-502', name:'تركي', dob:'2019-11-02'}]}],
+      screenings:[{id:'S-9001', childId:'C-501', type:'نمو نمائي', date:'2025-09-20', result:'سليم', facility:'مركز صحي شمال حائل'}],
+      referrals:[{id:'R-7001', from:'الصحة', to:'التعليم', childId:'C-502', priority:'عادية', status:'قيد المعالجة', created:'2025-09-25'}],
+      ieps:[{id:'IEP-3001', childId:'C-502', goals:'تحسين المهارات اللغوية', review:'2025-12-01'}],
+      nonprofits:[{id:'NPO-10', name:'جمعية نماء للطفولة', region:'حائل', programs:3, beneficiaries:120}],
+      marketplace:[{id:'M-1', title:'جلسات تدخل مبكر لحائل', kpi:'100 طفل خلال 6 أشهر', ask:250000, funded:120000, owner:'جمعية نماء'},
+                   {id:'M-2', title:'فحوص سمع لحديثي الولادة – الشرقية', kpi:'300 وليد', ask:180000, funded:45000, owner:'صحة الشرقية'}],
+      csr:[{id:'CSR-100', company:'شركة الأفق', amount:50000, to:'M-1', date:'2025-10-01'}]
+    }, data)}catch(e){this.state={}}
+  },
+  save(){localStorage.setItem('nomu',JSON.stringify(this.state))}
+}
+store.load()
+
+/* ---------- Utilities ---------- */
+function fmt(n){return new Intl.NumberFormat('ar-SA').format(n)}
+function today(){return new Date().toISOString().slice(0,10)}
+function toast(msg){ const t=document.createElement('div'); t.textContent=msg; Object.assign(t.style,{position:'fixed',bottom:'18px',left:'18px',background:'#111b',color:'#fff',padding:'10px 14px',borderRadius:'12px',backdropFilter:'blur(4px)',zIndex:9999}); document.body.appendChild(t); setTimeout(()=>t.remove(),2500) }
+function escapeHtml(str){return str.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+
+/* ---------- Router ---------- */
+const routes = { '/home': viewHome, '/family': viewFamily, '/health': viewHealth, '/education': viewEducation, '/nonprofit': viewNonprofit, '/csr': viewCSR, '/admin': viewAdmin, '/market': viewMarket, '/referrals': viewReferrals, '/reports': viewReports, '/settings': viewSettings }
+function router(){ const path = location.hash.replace('#','') || '/home'; $$('a.link').forEach(a=>a.classList.toggle('active',a.getAttribute('href')===`#${path}`)); const el = document.getElementById('view'); el.innerHTML=''; (routes[path]||view404)(el) }
+window.addEventListener('hashchange',router)
+
+/* ---------- Cards helper ---------- */
+function kpiCard(title,value,delta){ return `<div class="card third"><span class="k">${title}</span><b class="v">${value}</b><small>${delta||''}</small></div>` }
+
+/* ---------- Views ---------- */
+function viewHome(root){
+  const totalKids = store.state.households.reduce((a,h)=>a+h.children.length,0)
+  const screened = store.state.screenings.length
+  const referrals = store.state.referrals.length
+  const funded = store.state.marketplace.reduce((a,m)=>a+m.funded,0)
+  root.innerHTML = `
+    <div class="toolbar">
+      <h2>لوحة وطنية مختصرة</h2>
+      <div class="actions">
+        <span class="tag">المنطقة: ${store.state.user.region}</span>
+        <button onclick="location.hash='#/reports'">عرض التقارير</button>
+      </div>
+    </div>
+    <div class="cards">
+      ${kpiCard('الأطفال في السجل', fmt(totalKids), 'كل المناطق')}
+      ${kpiCard('فحوص نمائية مُسجلة', fmt(screened))}
+      ${kpiCard('إحالات نشطة', fmt(referrals))}
+      ${kpiCard('تمويل CSR/منح (ر.س)', fmt(funded))}
+      <div class="card wide" id="chart"></div>
+      <div class="card half">
+        <div class="toolbar"><b>آخر المبادرات في سوق الرعاية</b><div class="actions"><button class="ghost" onclick="location.hash='#/market'">إدارة</button></div></div>
+        ${tableMarketplace(store.state.marketplace.slice(0,5))}
+      </div>
+      <div class="card half">
+        <div class="toolbar"><b>آخر الإحالات</b><div class="actions"><button class="ghost" onclick="location.hash='#/referrals'">إدارة</button></div></div>
+        ${tableReferrals(store.state.referrals.slice(0,5))}
+      </div>
+    </div>`
+  drawTrend($('#chart'),'أطفال مفحوصون خلال 6 أشهر',[40,55,61,70,86,93])
+}
+
+function viewFamily(root){
+  const h = store.state.households[0]
+  root.innerHTML = `
+  <div class="toolbar"><h2>حساب الأسرة</h2><div class="actions"><button onclick="openModal('modal-screening')">حجز/تسجيل فحص</button><button class="ghost" onclick="openModal('modal-referral')">طلب إحالة</button></div></div>
+  <div class="cards">
+    ${kpiCard('الأطفال', h.children.length)}
+    ${kpiCard('فحوص مكتملة', store.state.screenings.filter(s=>h.children.some(c=>c.id===s.childId)).length)}
+    ${kpiCard('إحالات مرتبطة', store.state.referrals.filter(r=>h.children.some(c=>c.id===r.childId)).length)}
+    <div class="card wide">
+      <div class="toolbar"><b>أطفال الأسرة</b><div class="actions"><button class="ghost" onclick="addChild()">إضافة طفل</button></div></div>
+      ${tableKids(h.children)}
+    </div>
+    <div class="card half">
+      <b>الفحوص</b>
+      ${tableScreenings(store.state.screenings.filter(s=>h.children.some(c=>c.id===s.childId)))}
+    </div>
+    <div class="card half">
+      <b>التوصيات الذكية</b>
+      <div class="empty">ستظهر التوصيات حسب العمر والفحوص المنجزة.</div>
+    </div>
+  </div>`
+}
+
+function viewHealth(root){
+  root.innerHTML = `
+  <div class="toolbar"><h2>وزارة الصحة</h2><div class="actions"><button onclick="openModal('modal-screening')">تسجيل فحص</button><button class="ghost" onclick="openModal('modal-referral')">إحالة للتعليم</button></div></div>
+  <div class="cards">
+    ${kpiCard('فحوص هذا الشهر', store.state.screenings.filter(s=>s.date.slice(0,7)===today().slice(0,7)).length)}
+    ${kpiCard('متوسط زمن الانتظار (يوم)', 7)}
+    ${kpiCard('الإحالات المرسلة', store.state.referrals.filter(r=>r.from==='الصحة').length)}
+    <div class="card wide">
+      <b>سجل الفحوص</b>
+      ${tableScreenings(store.state.screenings)}
+    </div>
+  </div>`
+}
+
+function viewEducation(root){
+  root.innerHTML = `
+  <div class="toolbar"><h2>وزارة التعليم</h2><div class="actions"><button onclick="openModal('modal-iep')">إنشاء IEP</button></div></div>
+  <div class="cards">
+    ${kpiCard('تقارير الجاهزية الصادرة', 42)}
+    ${kpiCard('خطط IEP نشطة', store.state.ieps.length)}
+    ${kpiCard('إحالات واردة', store.state.referrals.filter(r=>r.to==='التعليم').length)}
+    <div class="card half">
+      <b>الإحالات الواردة</b>
+      ${tableReferrals(store.state.referrals.filter(r=>r.to==='التعليم'))}
+    </div>
+    <div class="card half">
+      <b>خطط IEP</b>
+      ${tableIEP(store.state.ieps)}
+    </div>
+  </div>`
+}
+
+function viewNonprofit(root){
+  root.innerHTML = `
+  <div class="toolbar"><h2>الجمعيات</h2><div class="actions"><button onclick="openModal('modal-market')">طرح مبادرة</button></div></div>
+  <div class="cards">
+    ${kpiCard('برامج فعّالة', 5)}
+    ${kpiCard('المستفيدون', 120)}
+    ${kpiCard('المتطوعون', 48)}
+    <div class="card wide">
+      <b>جمعيات مسجلة</b>
+      ${tableNPOs(store.state.npof || store.state.nonprofits)}
+    </div>
+  </div>`
+}
+
+function viewCSR(root){
+  root.innerHTML = `
+  <div class="toolbar"><h2>القطاع الخاص (CSR)</h2><div class="actions"><button onclick="openModal('modal-csr')">مساهمة جديدة</button></div></div>
+  <div class="cards">
+    ${kpiCard('إجمالي المساهمات (ر.س)', fmt(store.state.csr.reduce((a,c)=>a+c.amount,0)))}
+    ${kpiCard('عدد الشركات', new Set(store.state.csr.map(c=>c.company)).size)}
+    ${kpiCard('مبادرات مدعومة', new Set(store.state.csr.map(c=>c.to)).size)}
+    <div class="card half">
+      <b>المساهمات</b>
+      ${tableCSR(store.state.csr)}
+    </div>
+    <div class="card half">
+      <b>سوق الرعاية</b>
+      ${tableMarketplace(store.state.marketplace)}
+    </div>
+  </div>`
+}
+
+function viewAdmin(root){
+  root.innerHTML = `
+  <div class="toolbar"><h2>اللجنة الوطنية / إدارة المنصة</h2><div class="actions"><button class="warn" onclick="seedDemo()">ملء بيانات تجريبية</button><button class="danger" onclick="wipe()">مسح البيانات</button></div></div>
+  <div class="cards">
+    ${kpiCard('مستخدمون نشطون (تجريبي)', 312)}
+    ${kpiCard('عمليات تكامل ناجحة', 99+'%')}
+    ${kpiCard('أمان وامتثال', 'PDPL / MFA')}
+    <div class="card half"><b>إعدادات عامة</b>
+      <div class="grid two">
+        <div class="field"><label>منطقة افتراضية</label><select onchange="setRegion(this.value)"><option ${store.state.user.region==='الرياض'?'selected':''}>الرياض</option><option ${store.state.user.region==='حائل'?'selected':''}>حائل</option><option ${store.state.user.region==='الشرقية'?'selected':''}>الشرقية</option></select></div>
+        <div class="field"><label>لغة الواجهة</label><select disabled><option>العربية</option><option>English</option></select><div class="help">(مغلقة في النموذج)</div></div>
+      </div>
+    </div>
+    <div class="card half"><b>سياسات الخصوصية</b>
+      <div class="grid">
+        <div class="tag">أقل حد من البيانات (PoLP)</div>
+        <div class="tag">سجل تدقيق</div>
+        <div class="tag">تشفير راكد/منقول</div>
+        <div class="tag">إدارة الموافقات</div>
+      </div>
+    </div>
+  </div>`
+}
+
+function viewMarket(root){ root.innerHTML = `<div class="toolbar"><h2>سوق الرعاية</h2><div class="actions"><button onclick=\"openModal('modal-market')\">مبادرة جديدة</button></div></div><div class=\"cards\"><div class=\"card wide\">${tableMarketplace(store.state.marketplace,true)}</div></div>` }
+function viewReferrals(root){ root.innerHTML = `<div class="toolbar"><h2>الإحالات</h2><div class="actions"><button onclick=\"openModal('modal-referral')\">إحالة جديدة</button></div></div><div class=\"cards\"><div class=\"card wide\">${tableReferrals(store.state.referrals,true)}</div></div>` }
+function viewReports(root){ const totals={kids:store.state.households.reduce((a,h)=>a+h.children.length,0), scr:store.state.screenings.length, ref:store.state.referrals.length}; root.innerHTML = `<div class="toolbar"><h2>التقارير</h2><div class="actions"><button class="ghost" onclick="window.print()">طباعة/حفظ PDF</button></div></div><div class="cards">${kpiCard('إجمالي الأطفال', fmt(totals.kids))}${kpiCard('الفحوص', fmt(totals.scr))}${kpiCard('الإحالات', fmt(totals.ref))}<div class="card wide" id="chart2"></div><div class="card wide"><b>سجل كامل</b><pre style="white-space:pre-wrap;background:#0f172a;border:1px solid var(--border);padding:12px;border-radius:12px;direction:ltr">${escapeHtml(JSON.stringify(store.state,null,2))}</pre></div></div>`; drawTrend($('#chart2'),'تمويل شهري (ر.س)',[20,30,15,60,40,80]) }
+function viewSettings(root){ root.innerHTML = `<div class="toolbar"><h2>الإعدادات</h2></div><div class="cards"><div class="card half"><b>إدارة الموافقات</b><p class="help">نفس عناصر نافذة الخصوصية.</p><div class="actions"><button onclick="openConsent()">فتح</button></div></div><div class="card half"><b>جلسة المستخدم</b><div class="actions"><button class="ghost" onclick="openLogin()">تبديل الدور</button><button class="danger" onclick="wipe()">مسح البيانات المحلية</button></div></div><div class="card wide"><b>وضع التكامل مع API</b><div class="grid two"><div class="field"><label><input type="checkbox" id="api_enabled"> تفعيل وضع API</label><div class="help">عند التفعيل، سيُحاول النموذج استدعاء REST بدلاً من LocalStorage.</div></div><div class="field"><label>Base URL</label><input id="api_base" placeholder="https://api.example.com" /></div><div class="field"><label>Token</label><input id="api_token" placeholder="Bearer ..." /></div></div><div class="actions"><button onclick="applyApiSettings()">حفظ إعدادات API</button></div></div></div>`; $('#api_enabled').checked=api.enabled; $('#api_base').value=api.baseUrl; $('#api_token').value=api.token||'' }
+function view404(root){ root.innerHTML = `<div class="empty"><b>الصفحة غير موجودة</b><div>المسار: ${location.hash}</div></div>` }
+
+/* ---------- Tables / UI helpers ---------- */
+function tableKids(items){ return `<table><thead><tr><th>الرقم</th><th>الاسم</th><th>الميلاد</th></tr></thead><tbody>${items.map(c=>`<tr><td>${c.id}</td><td>${c.name}</td><td>${c.dob}</td></tr>`).join('')}</tbody></table>` }
+function tableScreenings(items){ return `<table><thead><tr><th>المعرف</th><th>الطفل</th><th>النوع</th><th>التاريخ</th><th>النتيجة</th><th>المنشأة</th></tr></thead><tbody>${items.map(s=>`<tr><td>${s.id}</td><td>${s.childId}</td><td>${s.type}</td><td>${s.date}</td><td>${s.result}</td><td>${s.facility}</td></tr>`).join('')}</tbody></table>` }
+function tableReferrals(items,actions){ return `<table><thead><tr><th>المعرف</th><th>من</th><th>إلى</th><th>الطفل</th><th>الأولوية</th><th>الحالة</th><th>التاريخ</th>${actions?'<th></th>':''}</tr></thead><tbody>${items.map(r=>`<tr><td>${r.id}</td><td>${r.from}</td><td>${r.to}</td><td>${r.childId}</td><td>${r.priority}</td><td>${r.status}</td><td>${r.created}</td>${actions?`<td><button class='ghost' onclick=\"updateReferral('${r.id}')\">تحديث</button></td>`:''}</tr>`).join('')}</tbody></table>` }
+function tableIEP(items){ return `<table><thead><tr><th>المعرف</th><th>الطفل</th><th>الأهداف</th><th>مراجعة</th></tr></thead><tbody>${items.map(i=>`<tr><td>${i.id}</td><td>${i.childId}</td><td>${i.goals}</td><td>${i.review}</td></tr>`).join('')}</tbody></table>` }
+function tableNPOs(items){ return `<table><thead><tr><th>المعرف</th><th>الاسم</th><th>المنطقة</th><th>برامج</th><th>مستفيدون</th></tr></thead><tbody>${items.map(n=>`<tr><td>${n.id||'-'}</td><td>${n.name}</td><td>${n.region}</td><td>${n.programs}</td><td>${n.beneficiaries}</td></tr>`).join('')}</tbody></table>` }
+function tableCSR(items){ return `<table><thead><tr><th>المعرف</th><th>الشركة</th><th>المبلغ</th><th>المبادرة</th><th>التاريخ</th></tr></thead><tbody>${items.map(c=>`<tr><td>${c.id}</td><td>${c.company}</td><td>${fmt(c.amount)}</td><td>${c.to}</td><td>${c.date}</td></tr>`).join('')}</tbody></table>` }
+function tableMarketplace(items,actions){ return `<table><thead><tr><th>المعرف</th><th>المبادرة</th><th>KPI</th><th>المطلوب</th><th>الممول</th><th>الجهة</th>${actions?'<th></th>':''}</tr></thead><tbody>${items.map(m=>`<tr><td>${m.id}</td><td>${m.title}</td><td>${m.kpi}</td><td>${fmt(m.ask)}</td><td>${fmt(m.funded)}</td><td>${m.owner}</td>${actions?`<td><button class='ghost' onclick=\"fund('${m.id}')\">تمويل</button></td>`:''}</tr>`).join('')}</tbody></table>` }
+
+/* ---------- Tiny chart (SVG) ---------- */
+function drawTrend(el,title,data){ const w=el.clientWidth||600,h=160,p=18;const min=Math.min(...data),max=Math.max(...data); const points=data.map((v,i)=>{ const x=p + (i*(w-2*p))/(data.length-1); const y=h-p - ((v-min)*(h-2*p))/(max-min||1); return `${x},${y}` }).join(' '); el.innerHTML = `<b>${title}</b><svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" role="img" aria-label="${title}"><polyline points="${points}" fill="none" stroke="${getComputedStyle(document.documentElement).getPropertyValue('--pri')}" stroke-width="3"/></svg>` }
+
+/* ---------- Modals logic & Forms submit ---------- */
+function openLogin(){openModal('modal-login')}
+function openConsent(){ const c=store.state.consent;$('#c1').checked=c.c1;$('#c2').checked=c.c2;$('#c3').checked=c.c3;$('#c4').checked=c.c4;openModal('modal-consent') }
+function openModal(id){$('#'+id).classList.add('open')}
+function closeModal(id){$('#'+id).classList.remove('open')}
+
+function doLogin(){ const role=$('#loginRole').value; const region=$('#loginRegion').value; store.state.user={role,region}; store.save(); $('#roleTag').textContent='دور: '+role; closeModal('modal-login'); toast('تم تسجيل الدخول كـ '+role) }
+function saveConsent(){ store.state.consent={c1:$('#c1').checked,c2:$('#c2').checked,c3:$('#c3').checked,c4:$('#c4').checked}; store.save(); closeModal('modal-consent'); toast('تم حفظ الموافقات') }
+
+function submitScreening(){ const id='S-'+Math.floor(Math.random()*1e5); const payload={ id, childId:$('#f_sc_child').value||'C-501', type:$('#f_sc_type').value, date:$('#f_sc_date').value||today(), result:$('#f_sc_result').value||'—', facility:$('#f_sc_facility').value||store.state.user.region+"/مركز صحي" }; if(api.enabled){ apiFetch('/screenings',{method:'POST',body:JSON.stringify(payload)}).then(()=>toast('تم إرسال الفحص عبر API')).catch(()=>{store.state.screenings.push(payload);store.save();toast('API غير متاح — حُفظ محليًا')}).finally(()=>{closeModal('modal-screening');router()}) } else { store.state.screenings.push(payload); store.save(); closeModal('modal-screening'); toast('تم تسجيل الفحص'); router() } }
+function submitReferral(){ const id='R-'+Math.floor(Math.random()*1e5); const payload={ id, from:$('#f_ref_from').value, to:$('#f_ref_to').value, childId:$('#f_ref_child').value||'C-501', priority:$('#f_ref_pri').value, status:$('#f_ref_status').value, created:$('#f_ref_date').value||today() }; if(api.enabled){ apiFetch('/referrals',{method:'POST',body:JSON.stringify(payload)}).then(()=>toast('تم إرسال الإحالة عبر API')).catch(()=>{store.state.referrals.push(payload);store.save();toast('API غير متاح — حُفظ محليًا')}).finally(()=>{closeModal('modal-referral');router()}) } else { store.state.referrals.push(payload); store.save(); closeModal('modal-referral'); toast('تم إنشاء الإحالة'); router() } }
+function updateReferral(id){ const r=store.state.referrals.find(x=>x.id===id); if(!r) return; const st=prompt('تحديث الحالة:', r.status)||r.status; r.status=st; store.save(); toast('تم التحديث'); router() }
+function submitIEP(){ const id='IEP-'+Math.floor(Math.random()*1e5); const payload={ id, childId:$('#f_iep_child').value||'C-502', goals:$('#f_iep_goals').value||'أهداف', review:$('#f_iep_review').value||today() }; if(api.enabled){ apiFetch('/iep',{method:'POST',body:JSON.stringify(payload)}).then(()=>toast('تم إرسال IEP عبر API')).catch(()=>{store.state.ieps.push(payload);store.save();toast('API غير متاح — حُفظ محليًا')}).finally(()=>{closeModal('modal-iep');router()}) } else { store.state.ieps.push(payload); store.save(); closeModal('modal-iep'); toast('تم إنشاء IEP'); router() } }
+function submitMarket(){ const id='M-'+Math.floor(Math.random()*1e5); const payload={ id, title:$('#f_m_title').value, kpi:$('#f_m_kpi').value, ask:parseInt($('#f_m_ask').value||'0',10), funded:0, owner:$('#f_m_owner').value||'جمعية' }; if(api.enabled){ apiFetch('/market',{method:'POST',body:JSON.stringify(payload)}).then(()=>toast('تم إرسال المبادرة عبر API')).catch(()=>{store.state.marketplace.push(payload);store.save();toast('API غير متاح — حُفظ محليًا')}).finally(()=>{closeModal('modal-market');router()}) } else { store.state.marketplace.push(payload); store.save(); closeModal('modal-market'); toast('تمت إضافة المبادرة'); router() } }
+function submitCSR(){ const id='CSR-'+Math.floor(Math.random()*1e5); const payload={ id, company:$('#f_csr_company').value||'شركة', amount:parseInt($('#f_csr_amount').value||'0',10), to:$('#f_csr_to').value||'M-1', date:$('#f_csr_date').value||today() }; if(api.enabled){ apiFetch('/csr',{method:'POST',body:JSON.stringify(payload)}).then(()=>toast('تم إرسال المساهمة عبر API')).catch(()=>{store.state.csr.push(payload); const m=store.state.marketplace.find(x=>x.id===payload.to); if(m) m.funded+=payload.amount; store.save(); toast('API غير متاح — حُفظ محليًا')}).finally(()=>{closeModal('modal-csr');router()}) } else { store.state.csr.push(payload); const m=store.state.marketplace.find(x=>x.id===payload.to); if(m) m.funded+=payload.amount; store.save(); closeModal('modal-csr'); toast('تم تسجيل مساهمة CSR'); router() } }
+function fund(id){ const amount=parseInt(prompt('مبلغ التمويل (ر.س):','10000')||'0',10); if(!amount) return; const payload={ id:'CSR-'+Math.floor(Math.random()*1e5), company:'شركة داعمة', amount, to:id, date:today() }; if(api.enabled){ apiFetch('/csr',{method:'POST',body:JSON.stringify(payload)}).catch(()=>{}); } store.state.csr.push(payload); const m=store.state.marketplace.find(x=>x.id===id); if(m) m.funded+=amount; store.save(); toast('تم تحديث التمويل'); router() }
+function addChild(){ const h=store.state.households[0]; const id='C-'+Math.floor(Math.random()*1e4); const name=prompt('اسم الطفل:','طفلي'); const dob=prompt('تاريخ الميلاد (YYYY-MM-DD):',today()); if(!name) return; h.children.push({id,name,dob}); store.save(); toast('تمت إضافة الطفل'); router() }
+
+function applyApiSettings(){ api.enabled=$('#api_enabled').checked; api.baseUrl=$('#api_base').value||api.baseUrl; api.token=$('#api_token').value||null; toast(api.enabled?'تم تفعيل وضع API':'تم تعطيل وضع API') }
+
+/* ---------- Charts ---------- */
+function drawTrend(el,title,data){ const w=el.clientWidth||600,h=160,p=18;const min=Math.min(...data),max=Math.max(...data); const points=data.map((v,i)=>{ const x=p + (i*(w-2*p))/(data.length-1); const y=h-p - ((v-min)*(h-2*p))/(max-min||1); return `${x},${y}` }).join(' '); el.innerHTML = `<b>${title}</b><svg viewBox=\"0 0 ${w} ${h}\" width=\"100%\" height=\"${h}\" role=\"img\" aria-label=\"${title}\"><polyline points=\"${points}\" fill=\"none\" stroke=\"${getComputedStyle(document.documentElement).getPropertyValue('--pri')}\" stroke-width=\"3\"/></svg>` }
+
+// Init
+router();
+$('#roleTag').textContent = 'دور: '+store.state.user.role
 </script>
 </body>
 </html>
