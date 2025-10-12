@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>نمو NOMU — نموذج أحادي الملف</title>
+  <meta name="description" content="نمو NOMU — منصة وطنية للطفولة المبكرة. نموذج أحادي الملف مع نماذج موسّعة، RBAC، تصدير CSV، شعارات قابلة للرفع، i18n، وتحسينات وصولية، تحقق من النماذج، وروابط عميقة." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app" id="app">
+  <header>
+    <div class="topbar" role="banner">
+      <div class="logo" aria-label="NOMU">
+        <img id="logo" alt="شعار" class="ph" />
+        <span id="t-app">نمو NOMU</span>
+        <span class="badge" title="نموذج">Prototype</span>
+      </div>
+      <nav class="actions" aria-label="التنقل السريع">
+        <a class="btn" href="#/home" data-i18n="nav.home">الرئيسية</a>
+        <button class="ghost" onclick="openLogin()" data-i18n="nav.login">تسجيل الدخول</button>
+        <button class="ghost" onclick="openConsent()" data-i18n="nav.consent">الموافقة والخصوصية</button>
+      </nav>
+      <div class="search" role="search">
+        <input id="q" placeholder="ابحث عن طفل، إحالة، جمعية، مبادرة…" oninput="globalSearch(this.value)" />
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <div id="searchResults" class="sr" role="listbox" aria-label="نتائج البحث"></div>
+      </div>
+      <div class="user" aria-label="الحساب">
+        <div class="tag" id="roleTag">دخول ضيف</div>
+        <div class="avatar" title="المستخدم"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main" role="main">
+    <nav>
+      <div class="side" role="navigation" aria-label="أقسام المنصة">
+        <div class="group">
+          <h4 data-i18n="nav.dashboards">لوحات القيادة</h4>
+          <a class="link active" href="#/home" data-route data-i18n="nav.home">الرئيسية</a>
+          <a class="link" href="#/family" data-route data-perm="family:view" data-i18n="nav.family">حساب الأسرة</a>
+          <a class="link" href="#/health" data-route data-perm="health:view" data-i18n="nav.health">الصحة</a>
+          <a class="link" href="#/education" data-route data-perm="education:view" data-i18n="nav.education">التعليم</a>
+          <a class="link" href="#/nonprofit" data-route data-perm="nonprofit:view" data-i18n="nav.nonprofit">الجمعيات</a>
+          <a class="link" href="#/csr" data-route data-perm="csr:view" data-i18n="nav.csr">القطاع الخاص (CSR)</a>
+          <a class="link" href="#/admin" data-route data-perm="admin:view" data-i18n="nav.admin">اللجنة الوطنية / الإدارة</a>
+        </div>
+        <div class="group">
+          <h4 data-i18n="nav.tools">أدوات</h4>
+          <a class="link" href="#/market" data-route data-perm="market:view" data-i18n="nav.market">سوق الرعاية</a>
+          <a class="link" href="#/referrals" data-route data-perm="referrals:view" data-i18n="nav.referrals">الإحالات</a>
+          <a class="link" href="#/reports" data-route data-perm="reports:view" data-i18n="nav.reports">التقارير</a>
+          <a class="link" href="#/settings" data-route data-i18n="nav.settings">الإعدادات</a>
+        </div>
+      </div>
+    </nav>
+
+    <section class="content" id="view"></section>
+  </main>
+
+  <footer class="footer" id="footer-note">نمو — نموذج أحادي الملف. البيانات محليًا. يمكن تفعيل API ورفع شعار من الإعدادات.</footer>
+</div>
+
+<!-- Toast container (ARIA) -->
+<div id="toastRegion" role="status" aria-live="polite" style="position:fixed;inset-inline-start:18px;bottom:18px;display:grid;gap:8px;z-index:9999"></div>
+
+<!-- Modals: Login / Consent / Forms / Logo Upload -->
+<div class="modal" id="modal-login" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+  <div class="box">
+    <h3 id="loginTitle" data-i18n="login.title">تسجيل الدخول</h3>
+    <p class="help" id="loginHelp" data-i18n="login.help">اختر نوع الحساب لتجربة الواجهات.</p>
+    <div class="grid two">
+      <div class="field">
+        <label data-i18n="login.role">نوع المستخدم</label>
+        <select id="loginRole" required>
+          <option value="guest">ضيف</option>
+          <option value="family">أسرة</option>
+          <option value="health">الصحة</option>
+          <option value="education">التعليم</option>
+          <option value="nonprofit">جمعية</option>
+          <option value="csr">شركة (CSR)</option>
+          <option value="admin">لجنة وطنية</option>
+        </select>
+        <div class="err" data-err="loginRole"></div>
+      </div>
+      <div class="field">
+        <label data-i18n="login.region">المنطقة الإدارية</label>
+        <select id="loginRegion" required>
+          <option>الرياض</option>
+          <option>حائل</option>
+          <option>الشرقية</option>
+          <option>مكة المكرمة</option>
+          <option>المدينة المنورة</option>
+        </select>
+        <div class="err" data-err="loginRegion"></div>
+      </div>
+    </div>
+    <div class="actions" style="margin-top:10px">
+      <button onclick="doLogin()" data-i18n="btn.login">دخول</button>
+      <button class="ghost" onclick="closeModal('modal-login')" data-i18n="btn.cancel">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-consent" role="dialog" aria-modal="true" aria-labelledby="consentTitle" aria-describedby="consentDesc">
+  <div class="box">
+    <h3 id="consentTitle" data-i18n="consent.title">الموافقة وإدارة الخصوصية (PDPL)</h3>
+    <p class="help" id="consentDesc">حدد موافقاتك على معالجة البيانات ومشاركتها.</p>
+    <div class="grid two">
+      <div class="field"><label><input type="checkbox" id="c1"> <span data-i18n="consent.c1">معالجة بيانات الأم خلال الحمل لأغراض المتابعة الصحية</span></label></div>
+      <div class="field"><label><input type="checkbox" id="c2"> <span data-i18n="consent.c2">مشاركة تقارير الطفل النمائية مع وزارة التعليم</span></label></div>
+      <div class="field"><label><input type="checkbox" id="c3"> <span data-i18n="consent.c3">مشاركة بيانات الدعم الاجتماعي مع الوزارة المختصة</span></label></div>
+      <div class="field"><label><input type="checkbox" id="c4"> <span data-i18n="consent.c4">تلقي تنبيهات وتوصيات عبر البريد/الرسائل</span></label></div>
+    </div>
+    <div class="actions" style="margin-top:10px">
+      <button onclick="saveConsent()" data-i18n="btn.save">حفظ</button>
+      <button class="ghost" onclick="closeModal('modal-consent')" data-i18n="btn.cancel">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- Forms -->
+<div class="modal" id="modal-screening" role="dialog" aria-modal="true" aria-labelledby="screeningTitle">
+  <div class="box">
+    <h3 id="screeningTitle" data-i18n="screening.title">تسجيل فحص</h3>
+    <div class="grid two">
+      <div class="field"><label data-i18n="labels.childId">معرف الطفل</label><input id="f_sc_child" data-req data-pattern="^C-\\d+$" placeholder="C-501"><div class="err" data-err="f_sc_child"></div></div>
+      <div class="field"><label data-i18n="labels.type">نوع الفحص</label><select id="f_sc_type"><option>نمو نمائي</option><option>سمع</option><option>نظر</option><option>نفسي</option></select></div>
+      <div class="field"><label data-i18n="labels.date">التاريخ</label><input id="f_sc_date" type="date" data-req><div class="err" data-err="f_sc_date"></div></div>
+      <div class="field"><label data-i18n="labels.result">النتيجة</label><input id="f_sc_result" placeholder="سليم / إحالة / متابعة"></div>
+      <div class="field"><label data-i18n="labels.facility">المنشأة</label><input id="f_sc_facility" placeholder="مركز صحي - المنطقة"></div>
+    </div>
+    <div class="actions"><button onclick="submitScreening()" data-i18n="btn.save">حفظ</button><button class="ghost" onclick="closeModal('modal-screening')" data-i18n="btn.cancel">إلغاء</button></div>
+  </div>
+</div>
+
+<div class="modal" id="modal-referral" role="dialog" aria-modal="true" aria-labelledby="refTitle">
+  <div class="box">
+    <h3 id="refTitle" data-i18n="referral.title">إنشاء إحالة</h3>
+    <div class="grid two">
+      <div class="field"><label data-i18n="labels.from">من</label><select id="f_ref_from"><option>الأسرة</option><option>الصحة</option><option>التعليم</option><option>جمعية</option></select></div>
+      <div class="field"><label data-i18n="labels.to">إلى</label><select id="f_ref_to"><option>الصحة</option><option>التعليم</option><option>جمعية</option></select></div>
+      <div class="field"><label data-i18n="labels.childId">معرف الطفل</label><input id="f_ref_child" data-req data-pattern="^C-\\d+$" placeholder="C-501"><div class="err" data-err="f_ref_child"></div></div>
+      <div class="field"><label data-i18n="labels.priority">الأولوية</label><select id="f_ref_pri"><option>عادية</option><option>عاجلة</option></select></div>
+      <div class="field"><label data-i18n="labels.status">الحالة</label><select id="f_ref_status"><option>قيد المعالجة</option><option>مكتملة</option></select></div>
+      <div class="field"><label data-i18n="labels.date">التاريخ</label><input id="f_ref_date" type="date" data-req><div class="err" data-err="f_ref_date"></div></div>
+    </div>
+    <div class="actions"><button onclick="submitReferral()" data-i18n="btn.save">حفظ</button><button class="ghost" onclick="closeModal('modal-referral')" data-i18n="btn.cancel">إلغاء</button></div>
+  </div>
+</div>
+
+<div class="modal" id="modal-iep" role="dialog" aria-modal="true" aria-labelledby="iepTitle">
+  <div class="box">
+    <h3 id="iepTitle" data-i18n="iep.title">إنشاء خطة IEP</h3>
+    <div class="grid two">
+      <div class="field"><label data-i18n="labels.childId">معرف الطفل</label><input id="f_iep_child" data-req data-pattern="^C-\\d+$" placeholder="C-502"><div class="err" data-err="f_iep_child"></div></div>
+      <div class="field"><label data-i18n="labels.review">مراجعة</label><input id="f_iep_review" type="date" data-req><div class="err" data-err="f_iep_review"></div></div>
+      <div class="field" style="grid-column:1/-1"><label data-i18n="labels.goals">الأهداف</label><textarea id="f_iep_goals" rows="3" placeholder="أهداف قابلة للقياس بزمن ومسؤولية"></textarea></div>
+    </div>
+    <div class="actions"><button onclick="submitIEP()" data-i18n="btn.save">حفظ</button><button class="ghost" onclick="closeModal('modal-iep')" data-i18n="btn.cancel">إلغاء</button></div>
+  </div>
+</div>
+
+<div class="modal" id="modal-market" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="box">
+    <h3 id="mTitle" data-i18n="market.title">طرح مبادرة</h3>
+    <div class="grid two">
+      <div class="field"><label data-i18n="labels.title">العنوان</label><input id="f_m_title" data-req placeholder="جلسات تدخل مبكر - الرياض"><div class="err" data-err="f_m_title"></div></div>
+      <div class="field"><label data-i18n="labels.kpi">الهدف (KPI)</label><input id="f_m_kpi" data-req placeholder="100 طفل خلال 6 أشهر"><div class="err" data-err="f_m_kpi"></div></div>
+      <div class="field"><label data-i18n="labels.ask">المبلغ المطلوب</label><input id="f_m_ask" type="number" min="0" step="1000" data-req placeholder="100000"><div class="err" data-err="f_m_ask"></div></div>
+      <div class="field"><label data-i18n="labels.owner">الجهة المالكة</label><input id="f_m_owner" data-req placeholder="جمعية نماء"><div class="err" data-err="f_m_owner"></div></div>
+    </div>
+    <div class="actions"><button onclick="submitMarket()" data-i18n="btn.save">حفظ</button><button class="ghost" onclick="closeModal('modal-market')" data-i18n="btn.cancel">إلغاء</button></div>
+  </div>
+</div>
+
+<div class="modal" id="modal-csr" role="dialog" aria-modal="true" aria-labelledby="csrTitle">
+  <div class="box">
+    <h3 id="csrTitle" data-i18n="csr.title">مساهمة CSR</h3>
+    <div class="grid two">
+      <div class="field"><label data-i18n="labels.marketId">معرف المبادرة</label><input id="f_csr_to" data-req placeholder="M-1"><div class="err" data-err="f_csr_to"></div></div>
+      <div class="field"><label data-i18n="labels.company">الشركة</label><input id="f_csr_company" data-req placeholder="شركة الأفق"><div class="err" data-err="f_csr_company"></div></div>
+      <div class="field"><label data-i18n="labels.amount">المبلغ (ر.س)</label><input id="f_csr_amount" type="number" min="0" step="1000" data-req placeholder="20000"><div class="err" data-err="f_csr_amount"></div></div>
+      <div class="field"><label data-i18n="labels.date">التاريخ</label><input id="f_csr_date" type="date" data-req><div class="err" data-err="f_csr_date"></div></div>
+    </div>
+    <div class="actions"><button onclick="submitCSR()" data-i18n="btn.save">حفظ</button><button class="ghost" onclick="closeModal('modal-csr')" data-i18n="btn.cancel">إلغاء</button></div>
+  </div>
+</div>
+
+<!-- رفع الشعار -->
+<div class="modal" id="modal-logo" role="dialog" aria-modal="true" aria-labelledby="logoTitle">
+  <div class="box">
+    <h3 id="logoTitle" data-i18n="logo.title">رفع شعار الجهة</h3>
+    <div class="field"><input type="file" accept="image/*" id="logoFile"></div>
+    <div class="actions"><button onclick="uploadLogo()" data-i18n="btn.save">حفظ</button><button class="ghost" onclick="closeModal('modal-logo')" data-i18n="btn.cancel">إلغاء</button></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
