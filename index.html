@@ -1,514 +1,390 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>NOMU – المنصة الوطنية للطفولة المبكرة</title>
-  <meta name="description" content="منصة نمو NOMU: رحلة الطفل من قبل الحمل حتى دخول المدرسة عبر تكامل صحي/تعليمي/اجتماعي"/>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --primary:#2B7BBC; --accent:#15A085;
-      --beige:#FFF6EA; --beige-2:#FDEBD2;
-      --bg:#FAFCFF; --card:#FFFFFF; --text:#0B2239; --muted:#56627A;
-      --radius:16px; --gap:16px; --shadow:0 8px 24px rgba(2,18,46,.08);
-      --animDur:420ms;
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{background:linear-gradient(180deg,var(--bg),var(--beige) 200%);color:var(--text);font-family:"IBM Plex Sans Arabic",system-ui;line-height:1.65}
-    a{text-decoration:none;color:var(--primary)}
-    .container{max-width:1200px;margin:auto;padding:0 16px}
-    .row{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
-    .muted{color:var(--muted)}
-    .badge{background:rgba(43,123,188,.10);color:var(--primary);padding:6px 12px;border-radius:999px;font-size:.92rem}
-    .btn{background:var(--primary);color:#fff;border:none;padding:12px 18px;border-radius:14px;cursor:pointer;box-shadow:var(--shadow);transition:.2s}
-    .btn:hover{transform:translateY(-2px)}
-    .btn.alt{background:var(--accent)}
-    .btn.ghost{background:transparent;color:var(--primary);border:1px solid rgba(43,123,188,.35)}
-    .card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
-    main section{padding:56px 0}
-    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-    @media(max-width:900px){.grid-3,.grid-4{grid-template-columns:1fr}}
-    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:20px;align-items:center}
-    @media(max-width:1000px){.hero{grid-template-columns:1fr}}
+import React, { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import { Menu, X, ChevronRight, Shield, Sparkles, Banknote, Factory, Building2, GraduationCap, HeartHandshake, Users, Handshake, PhoneCall, Globe2, CreditCard, ArrowUpRight, PlayCircle, FileText, CheckCircle2, ChevronDown, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-    /* === Top strip (logos) === */
-    .top-strip{background:#fff;border-bottom:1px solid #E9EEF5}
-    .top-strip .in{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0}
-    .top-logos{display:flex;align-items:center;gap:10px}
-    .top-logos img{height:34px;display:block}
-    @media(max-width:768px){ .top-logos img{height:28px} }
+/**
+ * منصة "نمو" – واجهة أحادية الملف (Single-File SPA)
+ * — مكتملة ومهيّأة للجوال + تحسين موضع الشعار بالهاتف
+ * — يحتوي الشريط العلوي (Top Ribbon) على شعاري الرؤية وتلبية فقط
+ * — إزالة الشعارات من الهيدر واستبدالها بشعار المنصة وحده
+ * — جعل شعار المنصة على الجهة المقابلة على الجوال (Mirrored Placement)
+ * — إمكانية ربط مزوّد الدفع (نموذج قياسي Placeholder)
+ * — تصميم حديث باستخدام Tailwind + shadcn/ui + framer-motion
+ */
 
-    /* Header (wordmark only) */
-    header{position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(6px) saturate(140%);z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-    .hdr-line{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 0}
-    .wordmark svg{height:88px; display:block}
-    .wordmark text{paint-order:stroke fill; stroke:#fff; stroke-width:2.8px}
-    /* Mobile alignment fix: NOMU opposite to top logos */
-    @media(max-width:768px){ .wordmark svg{ height:68px } }
+// إعدادات عامة — يمكن تغيير الروابط لاحقاً عند الدمج مع المشروع الكامل
+const ASSETS = {
+  // ضع روابط الشعارات الفعلية لاحقاً أو استخدم مسارات محلية ضمن /public
+  vision2030: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Vision_2030_Logo.svg/512px-Vision_2030_Logo.svg.png",
+  talabiya: "https://raw.githubusercontent.com/hasseef/assets/main/talabiya-logo.png",
+  // شعار المنصة (نمو)
+  nomuLogoDark: "https://raw.githubusercontent.com/hasseef/assets/main/nomu-logo-dark.png",
+  nomuLogoLight: "https://raw.githubusercontent.com/hasseef/assets/main/nomu-logo-light.png",
+};
 
-    nav a{padding:10px 14px;border-radius:10px;color:var(--text)}
-    nav a.active,nav a:hover{background:rgba(43,123,188,.10)}
+// عناصر القائمة الرئيسية
+const NAV_ITEMS = [
+  { id: "home", label: "الرئيسية" },
+  { id: "accounts", label: "الحسابات" },
+  { id: "features", label: "المزايا" },
+  { id: "sponsors", label: "الرعاة" },
+  { id: "payments", label: "الدفع" },
+  { id: "contact", label: "تواصل" },
+];
 
-    .hide{display:none}
-    .view{opacity:0;transform:translateY(10px);animation:fadeUp var(--animDur) ease forwards}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none}}
-    .slideIn{animation:slideIn var(--animDur) ease both}
-    @keyframes slideIn{from{opacity:.0;transform:translateX(12px)} to{opacity:1;transform:none}}
+// بطاقات الحسابات الستة حسب ملف حصيف (يمكن تعديل التسميات لتتطابق 100%)
+const ACCOUNTS = [
+  { icon: Building2, title: "القطاع الحكومي", desc: "إدارة المبادرات، الطلب على الحلول، تقارير الربط مع مستهدفات رؤية 2030." },
+  { icon: Factory, title: "القطاع الخاص", desc: "تفعيل المسؤولية الاجتماعية، فرص رعاية واستثمار، إدارة الفعاليات والمرافق." },
+  { icon: HeartHandshake, title: "القطاع غير الربحي", desc: "الوظائف، التطوع، المنح والتقارير، متابعة الأداء والشفافية." },
+  { icon: GraduationCap, title: "الجامعات", desc: "تعزيز علمي للمشاريع، تسويق الأبحاث والبرامج، شراكات وتمويل." },
+  { icon: Users, title: "الأفراد", desc: "مبادراتي، فرص تدريب وتطوع ووظائف، محفظة ومكافآت." },
+  { icon: Banknote, title: "حساب المانحين", desc: "فرص المنح، محفظة وتقارير، تخصيص معايير الدعم ومتابعة الأثر." },
+];
 
-    .timeline{position:relative;padding-inline-start:18px}
-    .timeline::before{content:"";position:absolute;inset-inline-start:6px;top:0;bottom:0;width:4px;background:linear-gradient(#2B7BBC,#15A085);border-radius:4px;opacity:.4}
-    .tl-item{position:relative;margin:12px 0;padding:12px 12px 12px 18px;background:linear-gradient(180deg,#fff,var(--beige));border-radius:12px;box-shadow:var(--shadow)}
-    .tl-item::before{content:"";position:absolute;inset-inline-start:-2px;top:18px;width:12px;height:12px;background:#2B7BBC;border:3px solid #fff;border-radius:50%}
+// مزوّدو الدفع (نموذج)
+const PAYMENT_PROVIDERS = [
+  { id: "mada", name: "Mada", logo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/Mada_logo.png" },
+  { id: "stcpay", name: "stc pay", logo: "https://upload.wikimedia.org/wikipedia/commons/0/04/Stc_pay_logo_2020.svg" },
+  { id: "tap", name: "Tap Payments", logo: "https://seeklogo.com/images/T/tap-payments-logo-8C0C2A5D35-seeklogo.com.png" },
+  { id: "hyperpay", name: "HyperPay", logo: "https://companieslogo.com/img/orig/HYPERPAY_BIG-7b8e6847.png?t=1720262647" },
+];
 
-    .wallet{display:grid;grid-template-columns:1fr 2fr;gap:16px}
-    @media(max-width:900px){.wallet{grid-template-columns:1fr}}
+export default function NomuApp() {
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("home");
 
-    .sponsors-line{display:flex;gap:10px;overflow:auto;scrollbar-width:none;padding:6px 0}
-    .sponsors-line::-webkit-scrollbar{display:none}
-    .s-logo{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:var(--shadow);cursor:pointer}
-    .tier-gold .s-logo{background:linear-gradient(135deg,#FFF4CC,#FFE79A);color:#7A5B00;border:1px solid #E8C96B}
-    .tier-silver .s-logo{background:linear-gradient(135deg,#F3F7FB,#E7EEF6);color:#475569;border:1px solid #CBD5E1}
-    .tier-bronze .s-logo{background:linear-gradient(135deg,#F7EDE6,#EDD8CB);color:#6B4F3A;border:1px solid #D7B8A2}
-
-    .stats-bar{background:#fff; border-top:1px solid #E5EAF0; border-bottom:1px solid #E5EAF0; padding:10px 0; margin-top:8px}
-    .stats-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; align-items:center}
-    .stat{background:linear-gradient(180deg,#fff,var(--beige)); border-radius:12px; padding:10px; text-align:center; box-shadow:var(--shadow)}
-    .stat h4{margin-bottom:4px}
-
-    footer{background:#fff;border-top:1px solid #EDF2F7;padding:12px;text-align:center;font-size:.9rem;color:var(--muted)}
-  </style>
-</head>
-<body>
-
-  <!-- شريط علوي: شعاري رؤية 2030 + تلبية -->
-  <div class="top-strip">
-    <div class="container in">
-      <div class="top-logos">
-        <!-- خيار يعمل فورًا (SVG نصّي خفيف): -->
-        <img alt="رؤية 2030"
-             src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="180" height="36"><rect width="180" height="36" fill="white"/><text x="50%" y="62%" text-anchor="middle" font-family="Arial" font-size="16" fill="%23666">رؤية 2030</text></svg>'/>
-        <img alt="شركة تلبية"
-             src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="36"><rect width="160" height="36" fill="white"/><text x="50%" y="62%" text-anchor="middle" font-family="Arial" font-size="16" fill="%23009055">Talbiya</text></svg>'/>
-
-        <!-- بدائل Base64 الرسمية (أزل التعليقات وضع السلاسل لديك):
-        <img alt="رؤية 2030" src="data:image/png;base64, VISION_B64_HERE"/>
-        <img alt="شركة تلبية" src="data:image/png;base64, TALBIYA_B64_HERE"/>
-        -->
-      </div>
-      <div style="font-size:.85rem;color:#6B7280">—</div>
-    </div>
-  </div>
-
-  <!-- Header: الشعار الكتابي فقط -->
-  <header id="hdr">
-    <div class="container hdr-line">
-      <div class="wordmark" aria-label="شعار نمو NOMU">
-        <svg viewBox="0 0 900 240" preserveAspectRatio="xMaxYMid meet" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#2B7BBC"/><stop offset="1" stop-color="#15A085"/>
-            </linearGradient>
-          </defs>
-          <rect width="900" height="240" fill="transparent"/>
-          <path d="M710 45c22 0 40 14 45 34-22 8-44-2-53-20-3-6-2-10 8-14z" fill="#15A085" opacity=".9"/>
-          <text x="860" y="118" text-anchor="end" font-family="IBM Plex Sans Arabic, system-ui" font-weight="800" font-size="100" fill="url(#grad)">نمو</text>
-          <text x="852" y="168" text-anchor="end" font-family="IBM Plex Sans Arabic, system-ui" font-weight="700" font-size="52" fill="url(#grad)">NOMU</text>
-          <text x="855" y="210" text-anchor="end" font-family="IBM Plex Sans Arabic, system-ui" font-weight="400" font-size="26" fill="#6B7280">المنصة الوطنية للطفولة المبكرة</text>
-        </svg>
-      </div>
-    </div>
-
-    <div class="container sponsors-line" id="sponsorsLine"></div>
-
-    <nav class="container row" style="justify-content:center;gap:8px;flex-wrap:wrap;padding-bottom:10px">
-      <a href="#/home" id="nav-home" class="active">الرئيسية</a>
-      <a href="#/journey" id="nav-journey">رحلة الطفل</a>
-      <a href="#/roles" id="nav-roles">الأدوار المؤسسية</a>
-      <a href="#/wallet" id="nav-wallet">محفظتي</a>
-      <a href="#/market" id="nav-market">سوق الرعاية</a>
-      <a href="#/kpis" id="nav-kpis">المؤشرات</a>
-      <a href="#/about" id="nav-about">عن المنصة</a>
-      <a href="#/sponsor" id="nav-sponsor">رعاية المنصة</a>
-      <a href="#/contact" id="nav-contact">تواصل</a>
-    </nav>
-  </header>
-
-  <main class="container">
-    <section id="home" class="hero view">
-      <div class="card slideIn" style="background:linear-gradient(180deg,#fff,var(--beige-2));">
-        <span class="badge">المنصة الوطنية للطفولة المبكرة</span>
-        <h1 style="margin:10px 0 8px">رحلة الطفل من قبل الحمل حتى المدرسة</h1>
-        <p class="muted" style="margin-bottom:16px;">توحيد الخدمات بين الصحة والتعليم والتنمية الاجتماعية، مع توصيات ذكية وتقارير أثر وطنية.</p>
-        <div class="row">
-          <button class="btn" onclick="go('#/journey')">ابدأ من رحلة الطفل</button>
-          <button class="btn alt" onclick="go('#/market')">فرص الرعاية</button>
-        </div>
-      </div>
-      <div class="card slideIn">
-        <h3>لماذا NOMU؟</h3>
-        <div class="grid-3" style="margin-top:12px;">
-          <div class="card view"><strong>توحيد الخدمات</strong><p class="muted">صحة + تعليم + تنمية اجتماعية في منصة واحدة.</p></div>
-          <div class="card view"><strong>تمكين الأسرة</strong><p class="muted">ملف حمل/طفل وتوصيات وتقارير جاهزية.</p></div>
-          <div class="card view"><strong>بيانات وطنية</strong><p class="muted">مؤشرات لدعم القرار والتخطيط الاستراتيجي.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="journey" class="hide">
-      <h2 class="view" style="margin-bottom:12px;">رحلة الطفل</h2>
-      <div class="timeline">
-        <div class="tl-item view"><strong>ما قبل الحمل</strong><p class="muted">فحص ما قبل الزواج، التوعية، دعم اتخاذ القرار الصحي.</p></div>
-        <div class="tl-item view"><strong>الحمل</strong><p class="muted">متابعة الزيارات، التحاليل، دعم نفسي للأم، تذكير بالمواعيد.</p></div>
-        <div class="tl-item view"><strong>الولادة</strong><p class="muted">إنشاء ملف الطفل، اللقاحات، فحص السمع والكشف المبكر.</p></div>
-        <div class="tl-item view"><strong>0–3 سنوات</strong><p class="muted">متابعة نمائية، توصيات منزلية، إحالات للتدخل المبكر.</p></div>
-        <div class="tl-item view"><strong>3–6 سنوات</strong><p class="muted">تهيئة روضية، تقرير الجاهزية المدرسية، الربط مع التعليم.</p></div>
-      </div>
-    </section>
-
-    <section id="roles" class="hide">
-      <h2 class="view" style="margin-bottom:12px;">الأدوار المؤسسية</h2>
-      <div class="grid-3">
-        <div class="card view"><h3>وزارة الصحة</h3><p>فحوص الحمل والطفولة، تدخل مبكر، دعم نفسي للأم.</p></div>
-        <div class="card view"><h3>وزارة التعليم</h3><p>رياض الأطفال، خطط فردية IEP، تقارير جاهزية.</p></div>
-        <div class="card view"><h3>الموارد البشرية</h3><p>دعم مالي وأسري، منصات تمكين وتطوع.</p></div>
-        <div class="card view"><h3>الجمعيات الأهلية</h3><p>برامج دعم وإرشاد، إدارة مستفيدين ومتطوعين.</p></div>
-        <div class="card view"><h3>القطاع الخاص (CSR)</h3><p>سوق رعاية، مساهمات مستدامة، تقارير أثر.</p></div>
-        <div class="card view"><h3>اللجنة الوطنية</h3><p>حوكمة ومؤشرات وطنية وتناسق سياساتي.</p></div>
-      </div>
-    </section>
-
-    <section id="wallet" class="hide">
-      <h2 class="view" style="margin-bottom:12px;">محفظتي</h2>
-      <div class="wallet">
-        <div class="card view">
-          <h3>الرصيد</h3><p id="bal" style="font-weight:700;font-size:1.25rem">0 ريال</p>
-          <div class="row"><button class="btn" onclick="charge(500)">شحن 500</button><button class="btn alt" onclick="charge(1000)">شحن 1000</button><button class="btn ghost" onclick="charge(5000)">شحن 5000</button></div>
-        </div>
-        <div class="card view">
-          <h3>العمليات</h3><div id="tx" class="muted" style="margin-top:8px">لا توجد عمليات بعد.</div>
-          <div style="height:12px"></div>
-          <div class="row" style="justify-content:flex-end">
-            <button class="btn" onclick="buy('اشتراك مدرسة أهلية',1500)">دفع اشتراك مدرسة أهلية (1,500)</button>
-            <button class="btn alt" onclick="buy('تقرير جاهزية متقدم',200)">شراء تقرير جاهزية (200)</button>
-            <button class="btn ghost" onclick="go('#/sponsor')">رعاية مبادرة</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="market" class="hide">
-      <h2 class="view" style="margin-bottom:12px;">سوق الرعاية (CSR)</h2>
-      <div class="grid-3">
-        <div class="card view"><h3>برنامج دعم الأمهات الجدد</h3><p class="muted">جلسات إرشاد ونفسية بعد الولادة – منطقة حائل.</p><div class="row" style="justify-content:space-between"><span class="badge">مستهدف: 120,000 ريال</span><button class="btn" onclick="openSponsor('برنامج دعم الأمهات الجدد',120000)">رعاية</button></div></div>
-        <div class="card view"><h3>فحص نمائي مبكر 0–3</h3><p class="muted">حملات فحص مجتمعية وربط بالإحالة.</p><div class="row" style="justify-content:space-between"><span class="badge">مستهدف: 200,000 ريال</span><button class="btn" onclick="openSponsor('فحص نمائي مبكر',200000)">رعاية</button></div></div>
-        <div class="card view"><h3>جاهزية المدرسة</h3><p class="muted">تهيئة 3–6 سنوات وتدريب أولياء الأمور.</p><div class="row" style="justify-content:space-between"><span class="badge">مستهدف: 150,000 ريال</span><button class="btn" onclick="openSponsor('جاهزية المدرسة',150000)">رعاية</button></div></div>
-      </div>
-    </section>
-
-    <section id="kpis" class="hide">
-      <h2 class="view" style="margin-bottom:12px;">المؤشرات الوطنية</h2>
-      <div class="grid-3">
-        <div class="card view"><h3>% فحوص ما قبل الزواج</h3><p>—</p></div>
-        <div class="card view"><h3>% دعم نفسي للأمهات</h3><p>—</p></div>
-        <div class="card view"><h3>% فحص نمائي</h3><p>—</p></div>
-        <div class="card view"><h3>% تدخل مبكر</h3><p>—</p></div>
-        <div class="card view"><h3>% جاهزية المدرسة</h3><p>—</p></div>
-        <div class="card view"><h3>% مشاركة مجتمعية</h3><p>—</p></div>
-      </div>
-    </section>
-
-    <section id="about" class="hide">
-      <h2 class="view" style="margin-bottom:12px;">عن المنصة</h2>
-      <div class="card view"><p>«نمو NOMU» مبادرة وطنية تنموية من شركة تلبية للبحث والتطوير (الحاضنة لمبادرة تلبية)، توحّد رحلة الطفل من ما قبل الحمل حتى دخول المدرسة عبر تكامل صحي/تعليمي/اجتماعي، وترتكز على الوقاية بالتدخل المبكر وخفض الأعباء الاقتصادية بما ينسجم مع رؤية المملكة 2030.</p></div>
-    </section>
-
-    <section id="sponsor" class="hide">
-      <h2 class="view" style="margin-bottom:12px;">رعاية منصة NOMU</h2>
-      <p class="muted view" style="margin-bottom:8px;">اختر باقة الرعاية المناسبة وادفع إلكترونياً لدعم استدامة المنصة وتأثيرها الوطني.</p>
-      <div class="grid-4">
-        <div class="card view"><h3>شريك مجتمعي</h3><p class="muted">25,000 ريال / سنوي</p><ul><li>إدراج في سجل الشركاء</li><li>شعار في صفحة الرعاية</li><li>تقرير أثر مختصر</li></ul><button class="btn" onclick="openSponsor('شريك مجتمعي',25000)">رعاية الآن</button></div>
-        <div class="card view"><h3>شريك فضي</h3><p class="muted">100,000 ريال / سنوي</p><ul><li>شعار في المؤشرات والمكتبة</li><li>قصة نجاح سنوية</li><li>وصول لتقارير محددة</li></ul><button class="btn" onclick="openSponsor('شريك فضي',100000)">رعاية الآن</button></div>
-        <div class="card view"><h3>شريك ذهبي</h3><p class="muted">250,000 ريال / سنوي</p><ul><li>شعار في صفحة الحسابات</li><li>تقارير تفاعلية مخصصة</li><li>دعوات لملتقيات المنصة</li></ul><button class="btn" onclick="openSponsor('شريك ذهبي',250000)">رعاية الآن</button></div>
-        <div class="card view"><h3>شريك استراتيجي</h3><p class="muted">500,000 ريال / سنوي</p><ul><li>شعار في كل الصفحات</li><li>تقرير أثر سنوي موسع</li><li>أولوية المشاركة الوطنية</li></ul><button class="btn" onclick="openSponsor('شريك استراتيجي',500000)">رعاية الآن</button></div>
-      </div>
-
-      <div class="card view" style="margin-top:16px;">
-        <h3>إضافة راعٍ (محليًا للتجربة)</h3>
-        <div class="row" style="gap:10px;align-items:flex-end;flex-wrap:wrap">
-          <div style="display:grid;gap:6px">
-            <label>اسم الراعي</label>
-            <input id="spName" placeholder="اسم الشركة" style="padding:10px 12px;border:1px solid #E2E8F0;border-radius:12px"/>
-          </div>
-          <div style="display:grid;gap:6px">
-            <label>الفئة</label>
-            <select id="spTier" style="padding:10px 12px;border:1px solid #E2E8F0;border-radius:12px">
-              <option value="gold">ذهبي</option>
-              <option value="silver">فضي</option>
-              <option value="bronze">مجتمعي</option>
-            </select>
-          </div>
-          <div style="display:grid;gap:6px;flex:1;min-width:240px">
-            <label>رابط الشعار (اختياري)</label>
-            <input id="spLogo" placeholder="https://example.com/logo.png" style="padding:10px 12px;border:1px solid #E2E8F0;border-radius:12px"/>
-          </div>
-          <button class="btn alt" onclick="addSponsor()">إضافة</button>
-          <button class="btn ghost" onclick="resetSponsors()">حذف الكل</button>
-          <button class="btn" onclick="exportSponsorsCSV()">تصدير CSV</button>
-        </div>
-        <small class="muted">* يتم الحفظ محليًا داخل المتصفح (localStorage) لغرض العرض فقط.</small>
-      </div>
-    </section>
-
-    <section id="sponsorProfile" class="hide">
-      <h2 class="view" style="margin-bottom:12px;">ملف الراعي</h2>
-      <div id="spProfileCard" class="card view">—</div>
-      <div class="row" style="justify-content:flex-end;margin-top:10px;gap:8px">
-        <button class="btn ghost" onclick="go('#/sponsor')">عودة إلى الرعاية</button>
-        <button class="btn alt" onclick="shareSponsor()">مشاركة</button>
-      </div>
-    </section>
-
-    <section id="contact" class="hide">
-      <h2 class="view" style="margin-bottom:12px;">تواصل معنا</h2>
-      <div class="card view"><p>📧 info@talbiya.sa<br/>📞 +966507208120</p></div>
-    </section>
-  </main>
-
-  <div class="stats-bar">
-    <div class="container stats-grid" id="statsGrid">
-      <div class="stat"><h4>إجمالي الرعايات</h4><div id="stTotal" class="muted">—</div></div>
-      <div class="stat"><h4>عدد الرعاة</h4><div id="stCount" class="muted">—</div></div>
-      <div class="stat"><h4>ذهبي/فضي/مجتمعي</h4><div id="stTiers" class="muted">—</div></div>
-      <div class="stat"><h4>آخر إضافة</h4><div id="stLast" class="muted">—</div></div>
-    </div>
-  </div>
-
-  <footer>
-    <div>© جميع الحقوق محفوظة – منصة نمو NOMU<br>الشريك الاستشاري: شركة تلبية للبحث والتطوير الحاضنة لمبادرة تلبية</div>
-  </footer>
-
-  <!-- Modal الرعاية -->
-  <div class="modal hide" id="sponsorModal" aria-hidden="true" aria-label="نموذج الرعاية"
-       style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(3,12,23,.45);z-index:200">
-    <div class="content" style="background:#fff;border-radius:16px;max-width:680px;width:92%;padding:18px;box-shadow:var(--shadow)">
-      <div class="row" style="justify-content:space-between">
-        <h3 id="pkgTitle">طلب رعاية</h3>
-        <button class="btn ghost" onclick="closeSponsor()">إغلاق</button>
-      </div>
-      <form onsubmit="return submitSponsor(event)">
-        <div class="field" style="display:grid;gap:6px;margin:10px 0">
-          <label>اسم الجهة</label>
-          <input required id="orgName" placeholder="اسم الشركة/المؤسسة" style="padding:10px 12px;border:1px solid #E2E8F0;border-radius:12px;font-family:inherit"/>
-        </div>
-        <div class="field" style="display:grid;gap:6px;margin:10px 0">
-          <label>الباقة</label>
-          <select id="pkgSelect" onchange="recalc()" style="padding:10px 12px;border:1px solid #E2E8F0;border-radius:12px;font-family:inherit">
-            <option value="25000">شريك مجتمعي – 25,000</option>
-            <option value="100000">شريك فضي – 100,000</option>
-            <option value="250000">شريك ذهبي – 250,000</option>
-            <option value="500000">شريك استراتيجي – 500,000</option>
-          </select>
-        </div>
-        <div class="field" style="display:grid;gap:6px;margin:10px 0">
-          <label>مدة الرعاية</label>
-          <select id="duration" onchange="recalc()" style="padding:10px 12px;border:1px solid #E2E8F0;border-radius:12px;font-family:inherit">
-            <option value="1">سنة واحدة</option>
-            <option value="2">سنتان (خصم 5%)</option>
-            <option value="3">ثلاث سنوات (خصم 10%)</option>
-          </select>
-        </div>
-        <div class="field" style="display:grid;gap:6px;margin:10px 0">
-          <label>ملاحظات</label>
-          <textarea id="notes" rows="3" placeholder="أي ملاحظات إضافية" style="padding:10px 12px;border:1px solid #E2E8F0;border-radius:12px;font-family:inherit"></textarea>
-        </div>
-        <div class="row" style="justify-content:space-between;align-items:center;margin-top:6px">
-          <div>الإجمالي التقديري</div>
-          <div id="totalPrice" style="font-weight:700;font-size:1.15rem">—</div>
-        </div>
-        <div class="row" style="justify-content:flex-end;margin-top:10px">
-          <button class="btn alt" type="button" onclick="simulatePay()">دفع إلكتروني</button>
-          <button class="btn" type="submit">إرسال طلب</button>
-        </div>
-        <p class="muted" style="margin-top:8px">* الربط الإنتاجي مع HyperPay يتطلب إنشاء checkoutId عبر خادم المنصة.</p>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    // ===== Routing =====
-    const sections = ['home','journey','roles','wallet','market','kpis','about','sponsor','sponsorProfile','contact'];
-    const navIds   = ['nav-home','nav-journey','nav-roles','nav-wallet','nav-market','nav-kpis','nav-about','nav-sponsor','nav-contact'];
-
-    function render(){
-      const hash = location.hash || '#/home';
-      const route = hash.replace('#/','');
-      const [base, query] = route.split('?');
-      sections.forEach(id=>{
-        const el=document.getElementById(id); if(!el) return;
-        const show=(id===base);
-        el.classList.toggle('hide',!show);
-        if(show){ el.classList.remove('view'); void el.offsetWidth; el.classList.add('view'); }
-      });
-      navIds.forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.toggle('active', el.getAttribute('href')===('#/'+base)); });
-      if(base==='sponsorProfile'){ renderSponsorProfile(new URLSearchParams(query)); }
-      updateStats();
-      window.scrollTo({top:0,behavior:'smooth'});
-      try{ recalc(); loadWallet(); }catch(e){}
-    }
-    function go(h){ location.hash=h; }
-    window.addEventListener('hashchange', render);
-    document.addEventListener('DOMContentLoaded', ()=>{ render(); drawSponsors(); updateStats(); });
-
-    // ===== Payment (HyperPay stub) =====
-    async function simulatePay(){
-      const amount = recalc();
-      if(!amount){ alert('الرجاء اختيار باقة أولاً.'); return; }
-      try{
-        const res = await fetch('/create-checkout', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ amount, currency:'SAR', paymentType:'DB' })
-        });
-        const data = await res.json();
-        if(!data.checkoutId) throw new Error('لم يتم استلام checkoutId');
-        const s = document.createElement('script'); s.src = 'https://oppwa.com/v1/paymentWidgets.js?checkoutId='+data.checkoutId;
-        s.onload = ()=>{ window.location.href = 'https://oppwa.com/payment-widget?checkoutId='+data.checkoutId; };
-        s.onerror = ()=>alert('تعذّر تحميل Widget HyperPay');
-        document.body.appendChild(s);
-      }catch(err){ alert('تعذّر إنشاء عملية الدفع: '+err.message); }
-    }
-
-    // ===== Wallet (demo) =====
-    function loadWallet(){ const bal=+localStorage.getItem('nomu_bal')||0; const txs=JSON.parse(localStorage.getItem('nomu_txs')||'[]'); const balEl=document.getElementById('bal'); if(balEl) balEl.textContent=bal.toLocaleString('ar-EG')+' ريال'; const txEl=document.getElementById('tx'); if(txEl) txEl.innerHTML= txs.length?('<ul>'+txs.map(t=>'<li>'+t+'</li>').join('')+'</ul>'):'لا توجد عمليات بعد.'; }
-    function saveWallet(bal, note){ localStorage.setItem('nomu_bal', String(bal)); const txs=JSON.parse(localStorage.getItem('nomu_txs')||'[]'); txs.unshift(new Date().toLocaleString('ar-EG')+' — '+note); localStorage.setItem('nomu_txs', JSON.stringify(txs.slice(0,50))); loadWallet(); }
-    function charge(amount){ let bal=+localStorage.getItem('nomu_bal')||0; bal+=amount; saveWallet(bal,'شحن محفظة +'+amount.toLocaleString('ar-EG')+' ريال'); alert('تم الشحن بنجاح.'); }
-    function buy(label, amount){ let bal=+localStorage.getItem('nomu_bal')||0; if(bal<amount){ alert('الرصيد غير كافٍ.'); return; } bal-=amount; saveWallet(bal,'شراء: '+label+' -'+amount.toLocaleString('ar-EG')+' ريال'); alert('تمت العملية بنجاح.'); }
-
-    // ===== Sponsors =====
-    const DEFAULT_SPONSORS=[
-      { id:'alef', name:'شركة ألف', tier:'gold',  logo:'', initials:'أ', amount:250000, since:'2025-01-01' },
-      { id:'baa',  name:'شركة باء', tier:'silver',logo:'', initials:'ب', amount:100000, since:'2025-02-10' },
-      { id:'jeem', name:'شركة جيم', tier:'bronze',logo:'', initials:'ج', amount:25000,  since:'2025-03-05' }
-    ];
-    function getSponsors(){ try{ return JSON.parse(localStorage.getItem('nomu_sponsors')||'null')||DEFAULT_SPONSORS; }catch(_ ){ return DEFAULT_SPONSORS; } }
-    function saveSponsors(list){ localStorage.setItem('nomu_sponsors', JSON.stringify(list)); drawSponsors(); updateStats(); }
-    function addSponsor(){
-      const name=spName.value.trim(); const tier=spTier.value; const logo=spLogo.value.trim();
-      if(!name){ alert('أدخل اسم الراعي'); return; }
-      const initials = Array.from(name)[0];
-      const id = (name+'-'+Date.now()).toLowerCase().replace(/[^a-z0-9]+/g,'-');
-      const amount = tier==='gold'?250000 : tier==='silver'?100000 : 25000;
-      const sp={id,name,tier,logo,initials,amount, since:new Date().toISOString().slice(0,10)};
-      const list=getSponsors(); list.unshift(sp); saveSponsors(list);
-      spName.value=''; spLogo.value='';
-    }
-    function resetSponsors(){ if(confirm('سيتم حذف قائمة الرعاة المحلية.')) saveSponsors(DEFAULT_SPONSORS); }
-    function drawSponsors(){
-      const list=getSponsors();
-      const line=document.getElementById('sponsorsLine'); if(!line) return;
-      line.innerHTML='';
-      list.forEach(sp=>{
-        const wrap=document.createElement('div'); wrap.className='tier-'+(sp.tier||'bronze');
-        const box=document.createElement('div'); box.className='s-logo'; box.title=sp.name;
-        if(sp.logo){ const img=document.createElement('img'); img.src=sp.logo; img.alt=sp.name; img.style='max-width:100%;max-height:100%;border-radius:8px;'; box.appendChild(img); }
-        else{ box.textContent=sp.initials||sp.name?.slice(0,1)||'—'; }
-        box.onclick=()=>go('#/sponsorProfile?id='+encodeURIComponent(sp.id));
-        wrap.appendChild(box);
-        line.appendChild(wrap);
-      });
-    }
-
-    // ===== Stats =====
-    function updateStats(){
-      const list=getSponsors();
-      const total=list.reduce((s,sp)=>s+(+sp.amount||0),0);
-      const gold=list.filter(s=>s.tier==='gold').length;
-      const silver=list.filter(s=>s.tier==='silver').length;
-      const bronze=list.filter(s=>s.tier==='bronze').length;
-      const last = list[0];
-      document.getElementById('stTotal').textContent = total.toLocaleString('ar-EG')+' ريال';
-      document.getElementById('stCount').textContent = list.length.toLocaleString('ar-EG');
-      document.getElementById('stTiers').textContent = gold+' / '+silver+' / '+bronze;
-      document.getElementById('stLast').textContent  = last? (last.name+' – '+(last.since||'—')):'—';
-    }
-
-    // ===== Sponsor Profile & Share =====
-    function renderSponsorProfile(params){
-      const id = params.get('id')||'';
-      const sp = getSponsors().find(s=>String(s.id)===String(id));
-      const card=document.getElementById('spProfileCard');
-      if(!card) return;
-      if(!sp){ card.innerHTML='<p class="muted">لم يتم العثور على الراعي المطلوب.</p>'; return; }
-      const badge = sp.tier==='gold'?'ذهبي': sp.tier==='silver'?'فضي':'مجتمعي';
-      card.innerHTML = `
-        <div class="row" style="gap:16px; align-items:center; flex-wrap:wrap">
-          <div class="s-logo tier-${sp.tier}">${sp.logo?'<img src="${sp.logo}" alt="${sp.name}" style="max-width:100%;max-height:100%;border-radius:8px;">': (sp.initials||sp.name.slice(0,1)) }</div>
-          <div>
-            <h3 style="margin-bottom:4px">${sp.name}</h3>
-            <div class="muted">فئة الرعاية: ${badge} • قيمة الالتزام: ${(+sp.amount||0).toLocaleString('ar-EG')} ريال • منذ: ${sp.since||'—'}</div>
-            <div style="margin-top:6px"><small class="muted">رابط المشاركة سيشير مباشرة إلى هذه الصفحة.</small></div>
-          </div>
-        </div>
-      `;
-      localStorage.setItem('nomu_last_sp', id);
-    }
-    async function shareSponsor(){
-      const lastId = localStorage.getItem('nomu_last_sp');
-      if(!lastId){ alert('افتح ملف راعٍ أولاً.'); return; }
-      const url = location.origin + location.pathname + '#/sponsorProfile?id=' + encodeURIComponent(lastId);
-      const title = 'منصة NOMU – ملف راعٍ';
-      const text = 'اطلع على ملف الراعي في منصة نمو NOMU';
-      try{
-        if(navigator.share){
-          await navigator.share({ title, text, url });
-        }else{
-          await navigator.clipboard.writeText(url);
-          alert('تم نسخ رابط المشاركة: ' + url);
+  // مراقبة القسم النشط أثناء التمرير
+  useEffect(() => {
+    const handler = () => {
+      const sections = NAV_ITEMS.map((i) => document.getElementById(i.id)).filter(Boolean) as HTMLElement[];
+      const scrollPos = window.scrollY + 120; // تعويض الشريط + النافبار
+      for (const s of sections) {
+        if (scrollPos >= s.offsetTop && scrollPos < s.offsetTop + s.offsetHeight) {
+          setActive(s.id);
+          break;
         }
-      }catch(e){
-        try{ await navigator.clipboard.writeText(url); alert('تم نسخ رابط المشاركة: ' + url); }
-        catch(_){ alert(url); }
       }
-    }
+    };
+    window.addEventListener("scroll", handler);
+    handler();
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
 
-    // ===== CSV Export =====
-    function exportSponsorsCSV(){
-      const list = getSponsors();
-      const rows = [['id','name','tier','amount','since','logo']].concat(
-        list.map(s=>[s.id,s.name,s.tier,s.amount,s.since||'',s.logo||''])
-      );
-      const csv = rows.map(r=>r.map(v=>(''+v).replace(/"/g,'""')).map(v=>`"${v}"`).join(',')).join('\n');
-      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'nomu_sponsors.csv'; a.click();
-      URL.revokeObjectURL(url);
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      setOpen(false);
     }
+  };
 
-    // ===== Calc helpers =====
-    function openSponsor(title, price){
-      const m=document.getElementById('sponsorModal');
-      m.style.display='flex';
-      document.getElementById('pkgTitle').textContent='طلب رعاية – '+title;
-      const select=document.getElementById('pkgSelect');
-      [...select.options].forEach(o=>{ if(parseInt(o.value)==price) select.value=o.value; });
-      recalc();
-    }
-    function closeSponsor(){ document.getElementById('sponsorModal').style.display='none'; }
-    function recalc(){
-      const base=parseInt(document.getElementById('pkgSelect')?.value||'0');
-      const years=parseInt(document.getElementById('duration')?.value||'1');
-      let total=base*years; if(years==2) total*=0.95; if(years==3) total*=0.90;
-      const el=document.getElementById('totalPrice');
-      if(el) el.textContent= total? (total.toLocaleString('ar-EG')+' ريال'):'—'; return total;
-    }
-    function submitSponsor(e){
-      e.preventDefault();
-      const data={ org:orgName.value.trim(), pkg:+pkgSelect.value, years:+duration.value, notes:notes.value.trim(), total:recalc() };
-      alert('تم استلام الطلب بنجاح.\n'+JSON.stringify(data,null,2));
-      closeSponsor(); return false;
-    }
-  </script>
-</body>
-</html>
+  return (
+    <div dir="rtl" className="min-h-screen bg-white text-gray-900">
+      {/* الشريط العلوي — يحتوي شعار الرؤية + تلبية فقط */}
+      <div className="w-full bg-gray-50 border-b sticky top-0 z-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-10 items-center justify-between">
+            {/* Desktop: الرؤية يسار، تلبية يمين — Mobile: يتكدس افقياً مع مسافات */}
+            <div className="flex items-center gap-3 py-1">
+              <img src={ASSETS.vision2030} alt="Vision 2030" className="h-6 w-auto object-contain" />
+            </div>
+            <div className="flex items-center gap-3 py-1">
+              <img src={ASSETS.talabiya} alt="Talabiya" className="h-6 w-auto object-contain" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* النافبار — شعار المنصة فقط. على الجوال يوضع مقابل الشريط (Mirrored) */}
+      <header className="sticky top-10 z-40 bg-white/80 backdrop-blur border-b">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            {/* شعار المنصة: على الجوال نضعه بالجهة المقابلة مع محاذاة لتوازن الواجهة */}
+            <div className="flex items-center gap-3">
+              <img
+                src={ASSETS.nomuLogoDark}
+                alt="Nomu Platform"
+                className="h-8 w-auto object-contain md:order-none order-2 md:mr-0 mr-auto"
+              />
+            </div>
+
+            {/* قائمة كبيرة */}
+            <nav className="hidden md:flex items-center gap-2">
+              {NAV_ITEMS.map((item) => (
+                <Button
+                  key={item.id}
+                  variant={active === item.id ? "default" : "ghost"}
+                  className="rounded-full"
+                  onClick={() => scrollTo(item.id)}
+                >
+                  {item.label}
+                </Button>
+              ))}
+            </nav>
+
+            {/* زر القائمة للجوال */}
+            <button onClick={() => setOpen(!open)} className="md:hidden p-2">
+              {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
+        </div>
+
+        {/* قائمة الجوال */}
+        {open && (
+          <div className="md:hidden border-t bg-white">
+            <div className="mx-auto max-w-7xl px-4 py-2 flex flex-col gap-1">
+              {NAV_ITEMS.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollTo(item.id)}
+                  className={`flex items-center justify-between py-3 text-base ${
+                    active === item.id ? "font-semibold" : ""
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* الرئيسية */}
+      <section id="home" className="relative overflow-hidden">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            <div>
+              <motion.h1
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight"
+              >
+                منصة <span className="text-primary">نمو</span> — حاضنة حلول
+                <br className="hidden sm:block" />
+                تربط الجهات وتُسرّع الأثر التنموي
+              </motion.h1>
+              <p className="mt-4 text-gray-600 md:text-lg">
+                نموذج عمل مبتكر يدعم مستهدفات رؤية 2030 عبر ربط القطاع الحكومي والخاص وغير الربحي والجامعات والأفراد والمانحين ضمن
+                منظومة واحدة شفافة.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Button onClick={() => scrollTo("features")}>
+                  اكتشف المزايا <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+                <Button variant="outline" onClick={() => scrollTo("accounts")}>تعرّف على الحسابات</Button>
+                <Button variant="ghost" onClick={() => scrollTo("payments")}>بوابة الدفع</Button>
+              </div>
+              {/* شارة اعتماد MVPLAB/Sajilha (اختياري) */}
+              <div className="mt-6 flex items-center gap-4 text-sm text-gray-500">
+                <CheckCircle2 className="h-5 w-5" />
+                <span>مدمج مع منتجات تقنية وطنية — MVPLAB (نموذج عرض)</span>
+              </div>
+            </div>
+            <div className="relative">
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+              >
+                <Card className="rounded-2xl shadow-xl">
+                  <CardHeader>
+                    <CardTitle>أهداف المنصة</CardTitle>
+                  </CardHeader>
+                  <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {[{
+                      icon: Shield, text: "تعزيز فاعلية الحكومة وشفافية العمل"
+                    }, {
+                      icon: Sparkles, text: "تمكين الحلول ورفع جودة المشاريع"
+                    }, {
+                      icon: Handshake, text: "تكامل القطاعات وشراكات مستدامة"
+                    }, { icon: Globe2, text: "تحفيز الاستثمار المجتمعي والتوسع" }].map((f, idx) => (
+                      <div key={idx} className="flex items-start gap-3">
+                        <f.icon className="h-5 w-5 mt-1" />
+                        <p className="text-gray-700">{f.text}</p>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* الحسابات */}
+      <section id="accounts" className="bg-gray-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+          <h2 className="text-2xl md:text-3xl font-bold mb-8">الحسابات</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {ACCOUNTS.map(({ icon: Ic, title, desc }) => (
+              <Card key={title} className="rounded-2xl">
+                <CardHeader className="flex-row items-center gap-3">
+                  <Ic className="h-6 w-6" />
+                  <CardTitle className="text-lg">{title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 leading-relaxed">{desc}</p>
+                  <div className="mt-4">
+                    <Button variant="ghost" className="px-0" onClick={() => alert(`فتح دليل حساب: ${title}`)}>
+                      فتح الدليل التفصيلي <ArrowUpRight className="mr-1 h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* المزايا */}
+      <section id="features" className="bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold">مزايا المنصة</h2>
+            <Button variant="outline" onClick={() => alert("تحميل الملف التعريفي")}>تحميل الملف التعريفي</Button>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[{
+              title: "ربط علمي وتنفيذي", text: "مشاركة الجامعات في تعزيز المشاريع علمياً وتنفيذياً لرفع الجودة وترشيد الإنفاق.", icon: GraduationCap
+            }, {
+              title: "تقارير أثر وشفافية", text: "لوحات معلومات للأثر التنموي وربط بالمستهدفات الوطنية.", icon: FileText
+            }, {
+              title: "تجربة مرنة للجوال", text: "تصميم متجاوب بالكامل، مع معالجة موضع الشعار على الهواتف.", icon: PhoneCall
+            }].map((f) => (
+              <Card key={f.title} className="rounded-2xl">
+                <CardHeader className="flex-row items-center gap-3">
+                  <f.icon className="h-6 w-6" />
+                  <CardTitle className="text-lg">{f.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">{f.text}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* الرعاة */}
+      <section id="sponsors" className="bg-gray-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+          <h2 className="text-2xl md:text-3xl font-bold mb-8">شركاء ورعاة</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 items-center">
+            {[ASSETS.vision2030, ASSETS.talabiya, ASSETS.nomuLogoDark, ASSETS.nomuLogoLight].map((src, i) => (
+              <div key={i} className="p-4 bg-white rounded-xl border flex items-center justify-center">
+                <img src={src} alt={`sponsor-${i}`} className="h-10 w-auto object-contain" />
+              </div>
+            ))}
+          </div>
+          <div className="mt-6">
+            <Button onClick={() => alert("نموذج اتفاقية رعاية")}>اطلب رعاية</Button>
+          </div>
+        </div>
+      </section>
+
+      {/* الدفع */}
+      <section id="payments" className="bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold">بوابة الدفع</h2>
+            <Button variant="outline" onClick={() => alert("فتح إعدادات التكامل مع مزوّد الدفع")}>إعدادات التكامل</Button>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {PAYMENT_PROVIDERS.map((p) => (
+              <Card key={p.id} className="rounded-2xl">
+                <CardHeader className="flex-row items-center gap-3">
+                  <img src={p.logo} className="h-6 w-auto object-contain" alt={p.name} />
+                  <CardTitle className="text-lg">{p.name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">تكامل قياسي عبر Webhooks وواجهة REST. يدعم مدفوعات المنح والرعايات والاشتراكات.</p>
+                  <div className="mt-4 flex items-center gap-2">
+                    <Button onClick={() => alert(`تفعيل ${p.name}`)}>
+                      تفعيل <CreditCard className="mr-2 h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" onClick={() => alert("اختبار عملية دفع (Sandbox)")}>اختبار Sandbox</Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* نموذج دفع مبسّط */}
+          <div className="mt-10">
+            <Card className="rounded-2xl">
+              <CardHeader>
+                <CardTitle>تبرع/رعاية سريعة</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    alert("تم إرسال العملية إلى بوابة الاختبار — سيتم الاستبدال بالتكامل الفعلي");
+                  }}
+                  className="grid md:grid-cols-4 gap-4"
+                >
+                  <input className="border rounded-xl p-3" required placeholder="الاسم الكامل" />
+                  <input className="border rounded-xl p-3" required type="email" placeholder="البريد الإلكتروني" />
+                  <input className="border rounded-xl p-3" required type="number" min={1} placeholder="المبلغ (ر.س)" />
+                  <Button type="submit" className="rounded-xl">إتمام الدفع</Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* تواصل */}
+      <section id="contact" className="bg-gray-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">تواصل معنا</h2>
+              <p className="text-gray-600 mb-6">للاستفسارات والشراكات وطلبات الرعاية، يسعدنا تواصلكم.</p>
+              <div className="space-y-3 text-gray-700">
+                <div className="flex items-center gap-2"><PhoneCall className="h-5 w-5" /> 9200 000 00</div>
+                <div className="flex items-center gap-2"><Globe2 className="h-5 w-5" /> hasseef.sa</div>
+              </div>
+            </div>
+            <Card className="rounded-2xl">
+              <CardHeader>
+                <CardTitle>نموذج التواصل</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={(e) => { e.preventDefault(); alert("تم الاستلام — سنعاود التواصل"); }} className="grid grid-cols-1 gap-4">
+                  <input className="border rounded-xl p-3" required placeholder="الاسم" />
+                  <input className="border rounded-xl p-3" required type="email" placeholder="البريد الإلكتروني" />
+                  <textarea className="border rounded-xl p-3" rows={4} placeholder="رسالتك"></textarea>
+                  <Button type="submit" className="rounded-xl">إرسال</Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      <footer className="border-t py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-sm text-gray-500 flex flex-col md:flex-row items-center justify-between gap-3">
+          <span>© {new Date().getFullYear()} منصة نمو – جميع الحقوق محفوظة</span>
+          <div className="flex items-center gap-4">
+            <a href="#" className="hover:text-gray-700">سياسة الخصوصية</a>
+            <a href="#" className="hover:text-gray-700">الشروط</a>
+          </div>
+        </div>
+      </footer>
+
+      {/* أنماط دقيقة لضمان تموضع الشعار في الجوال مقابل شعاري الشريط */}
+      <style>{`
+        @media (max-width: 767px) {
+          header .h-16 > div:first-child img { order: 2; margin-right: auto; }
+        }
+      `}</style>
+    </div>
+  );
+}
