@@ -38,24 +38,15 @@
     .top-strip .in{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0}
     .top-logos{display:flex;align-items:center;gap:10px}
     .top-logos img{height:34px;display:block}
-    @media(max-width:768px){
-      .top-logos img{height:28px}
-    }
+    @media(max-width:768px){ .top-logos img{height:28px} }
 
     /* Header (wordmark only) */
     header{position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(6px) saturate(140%);z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.06)}
     .hdr-line{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 0}
     .wordmark svg{height:88px; display:block}
     .wordmark text{paint-order:stroke fill; stroke:#fff; stroke-width:2.8px}
-    /* Mobile alignment fix: keep NOMU on same line opposite to top logos */
-    @media(max-width:768px){
-      .hdr-line{
-        flex-direction:row !important;
-        justify-content:space-between !important;
-        align-items:center !important;
-      }
-      .wordmark svg{ height:68px }
-    }
+    /* Mobile alignment fix: NOMU opposite to top logos */
+    @media(max-width:768px){ .wordmark svg{ height:68px } }
 
     nav a{padding:10px 14px;border-radius:10px;color:var(--text)}
     nav a.active,nav a:hover{background:rgba(43,123,188,.10)}
@@ -91,15 +82,20 @@
 </head>
 <body>
 
-  <!-- شريط علوي نحيف: شعاري رؤية 2030 + تلبية -->
+  <!-- شريط علوي: شعاري رؤية 2030 + تلبية -->
   <div class="top-strip">
     <div class="container in">
       <div class="top-logos">
-        <!-- استبدل data URI التالية بـ Base64 الرسمي إذا رغبت -->
+        <!-- خيار يعمل فورًا (SVG نصّي خفيف): -->
         <img alt="رؤية 2030"
-             src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="36"><rect width="160" height="36" fill="white"/><text x="50%" y="60%" text-anchor="middle" font-family="Arial" font-size="16" fill="%231C4E80">رؤية 2030</text></svg>'/>
+             src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="180" height="36"><rect width="180" height="36" fill="white"/><text x="50%" y="62%" text-anchor="middle" font-family="Arial" font-size="16" fill="%23666">رؤية 2030</text></svg>'/>
         <img alt="شركة تلبية"
-             src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="36"><rect width="140" height="36" fill="white"/><text x="50%" y="60%" text-anchor="middle" font-family="Arial" font-size="16" fill="%231C4E80">Talbiya</text></svg>'/>
+             src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="36"><rect width="160" height="36" fill="white"/><text x="50%" y="62%" text-anchor="middle" font-family="Arial" font-size="16" fill="%23009055">Talbiya</text></svg>'/>
+
+        <!-- بدائل Base64 الرسمية (أزل التعليقات وضع السلاسل لديك):
+        <img alt="رؤية 2030" src="data:image/png;base64, VISION_B64_HERE"/>
+        <img alt="شركة تلبية" src="data:image/png;base64, TALBIYA_B64_HERE"/>
+        -->
       </div>
       <div style="font-size:.85rem;color:#6B7280">—</div>
     </div>
@@ -112,8 +108,7 @@
         <svg viewBox="0 0 900 240" preserveAspectRatio="xMaxYMid meet" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#2B7BBC"/>
-              <stop offset="1" stop-color="#15A085"/>
+              <stop offset="0" stop-color="#2B7BBC"/><stop offset="1" stop-color="#15A085"/>
             </linearGradient>
           </defs>
           <rect width="900" height="240" fill="transparent"/>
@@ -432,14 +427,10 @@
       const silver=list.filter(s=>s.tier==='silver').length;
       const bronze=list.filter(s=>s.tier==='bronze').length;
       const last = list[0];
-      const stTotal=document.getElementById('stTotal');
-      const stCount=document.getElementById('stCount');
-      const stTiers=document.getElementById('stTiers');
-      const stLast=document.getElementById('stLast');
-      if(stTotal) stTotal.textContent = total.toLocaleString('ar-EG')+' ريال';
-      if(stCount) stCount.textContent = list.length.toLocaleString('ar-EG');
-      if(stTiers) stTiers.textContent = gold+' / '+silver+' / '+bronze;
-      if(stLast)  stLast.textContent  = last? (last.name+' – '+(last.since||'—')):'—';
+      document.getElementById('stTotal').textContent = total.toLocaleString('ar-EG')+' ريال';
+      document.getElementById('stCount').textContent = list.length.toLocaleString('ar-EG');
+      document.getElementById('stTiers').textContent = gold+' / '+silver+' / '+bronze;
+      document.getElementById('stLast').textContent  = last? (last.name+' – '+(last.since||'—')):'—';
     }
 
     // ===== Sponsor Profile & Share =====
