@@ -1,1 +1,0 @@
-Archive contains: index.html (prototype), openapi-nomu.yaml, erd-nomu.mmd, system-architecture.md.
