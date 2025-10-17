@@ -3,431 +3,539 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>منصة نمو — نسخة ملف واحد</title>
+  <title>منصة نمو — نموذج أولي</title>
+  <meta name="description" content="منصة نمو — نموذج أولي أحادي الملف يعرض الأدوار، مؤشرات الأداء، الإحالات، المحفظة، ولوحات للقطاعات." />
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['ui-sans-serif','system-ui','-apple-system','Segoe UI','Roboto','Noto Sans Arabic','Ubuntu','Cantarell','Helvetica Neue','Arial','sans-serif'] },
-          colors: { nomu: { 50:'#ecfdf5',100:'#d1fae5',200:'#a7f3d0',300:'#6ee7b7',400:'#34d399',500:'#10b981',600:'#059669',700:'#047857',800:'#065f46',900:'#064e3b' } }
+          fontFamily: { sans: ['ui-sans-serif','system-ui','-apple-system','Segoe UI','Roboto','Noto Sans Arabic','Tahoma','Arial','sans-serif'] },
+          colors: {
+            nomu: { 50:'#ecfdf5',100:'#d1fae5',200:'#a7f3d0',300:'#6ee7b7',400:'#34d399',500:'#10b981',600:'#059669',700:'#047857',800:'#065f46',900:'#064e3b' }
+          }
         }
       }
     }
   </script>
-  <style>html,body{height:100%}body{background:#fff}</style>
+  <style>
+    html,body { height: 100%; background:#fff }
+    [data-badge]{position:relative} [data-badge]::after{content:attr(data-badge);position:absolute;top:-6px;left:-6px;font-size:10px;background:#ef4444;color:#fff;border-radius:999px;padding:2px 6px}
+  </style>
 </head>
-<body>
+<body class="font-sans text-slate-800">
   <div id="root"></div>
 
-  <!-- React & ReactDOM (UMD) + Babel للـJSX -->
+  <!-- React 18 UMD + ReactDOM + Babel (JSX in browser) -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <script type="text/babel" data-presets="react">
-    const { useEffect, useRef, useState } = React;
+    const { useState, useEffect, useMemo, useRef } = React;
 
-    // شعار نمو (مكانه هنا — حدّث الرابط إن لديك SVG رسمي)
-    const NOMULogo = ({ className="h-8 w-auto" }) => (
-      <svg viewBox="0 0 200 50" className={className} aria-label="منصة نمو">
-        <rect width="200" height="50" rx="10" fill="#10b981" opacity="0.08"></rect>
-        <text x="100" y="33" textAnchor="middle" fontFamily="Tahoma, 'Noto Sans Arabic', Arial" fontSize="26" fill="#065f46">نمو</text>
-      </svg>
+    /* ------------------ Utilities ------------------ */
+    const cn = (...a) => a.filter(Boolean).join(" ");
+    const store = {
+      get: (k, fallback) => { try{ return JSON.parse(localStorage.getItem(k)) ?? fallback }catch{ return fallback } },
+      set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+      del: (k) => localStorage.removeItem(k)
+    };
+    const regions = ["الرياض","مكة المكرمة","الشرقية","المدينة","عسير","حائل","تبوك","القصيم","نجران","جازان","الجوف","الباحة","الحدود الشمالية"];
+    const roles = [
+      { id:"guest", label:"ضيف" },
+      { id:"family", label:"الأسرة/الأفراد" },
+      { id:"health", label:"الصحة" },
+      { id:"edu", label:"التعليم" },
+      { id:"ngo", label:"الجمعيات" },
+      { id:"csr", label:"القطاع الخاص (CSR)" },
+      { id:"national", label:"اللجنة الوطنية" }
+    ];
+
+    /* ------------------ Global State (in localStorage) ------------------ */
+    const initData = () => {
+      if(!store.get("nomu_proto_initialized", false)) {
+        store.set("nomu_user", { role:"guest", region:"الرياض", name:"" });
+        store.set("nomu_kpis", {
+          period:"آخر 30 يومًا",
+          byRegion:{
+            "الرياض":   { coverage:82, immunization:91, readiness:76, referralsMedianHrs:18, kgEnroll:88, completeness:96 },
+            "مكة المكرمة":{ coverage:78, immunization:89, readiness:72, referralsMedianHrs:22, kgEnroll:84, completeness:94 }
+          }
+        });
+        store.set("nomu_referrals", [
+          { id:"RF-1001", child:"محمد.س", type:"صحي", status:"مفتوحة", created:"2025-09-20", region:"الرياض" },
+          { id:"RF-1002", child:"جود.م", type:"تعليمي", status:"قيد المعالجة", created:"2025-09-22", region:"الرياض" },
+          { id:"RF-1003", child:"خالد.أ", type:"نمائي 0–3", status:"مغلقة", created:"2025-09-10", region:"مكة المكرمة" }
+        ]);
+        store.set("nomu_wallet", {
+          total: 35000,
+          entries: [
+            { id:"TRX-01", source:"شركة ألف — رعاية روضة", amount:20000, date:"2025-09-05", tag:"CSR" },
+            { id:"TRX-02", source:"منحة تعليم مبكر", amount:10000, date:"2025-09-18", tag:"Grant" },
+            { id:"TRX-03", source:"متبرع فردي", amount:5000,  date:"2025-10-01", tag:"Donation" }
+          ]
+        });
+        store.set("nomu_settings", { brand:"نمو", primary:"#059669", logoType:"text" });
+        store.set("nomu_proto_initialized", true);
+      }
+    };
+
+    /* ------------------ Small Components ------------------ */
+    const Logo = ({ className="h-8 w-auto" }) => {
+      const s = store.get("nomu_settings", { brand:"نمو", primary:"#059669", logoType:"text" });
+      if(s.logoType==="text") {
+        return (
+          <div className={cn("inline-flex items-center gap-2", className)}>
+            <span className="inline-block h-7 w-7 rounded-xl" style={{background:s.primary,opacity:0.2}}/>
+            <span className="text-xl font-bold" style={{color:s.primary}}>منصة {s.brand}</span>
+          </div>
+        );
+      }
+      return <img src={s.logoUrl} alt="منصة نمو" className={className} />;
+    };
+
+    const StatCard = ({ label, value, suffix="%", trend="+0%", good=true }) => (
+      <div className={cn("rounded-2xl p-5 border shadow-sm", good?"border-emerald-200 bg-emerald-50":"border-amber-200 bg-amber-50")}>
+        <div className="text-sm text-slate-600">{label}</div>
+        <div className="mt-2 flex items-baseline gap-2">
+          <div className="text-3xl font-bold text-slate-900">{value}<span className="text-xl">{suffix}</span></div>
+          <div className={cn("text-xs px-2 py-1 rounded-full", good?"bg-emerald-100 text-emerald-800":"bg-amber-100 text-amber-800")}>{trend}</div>
+        </div>
+      </div>
     );
 
-    const cn = (...a)=>a.filter(Boolean).join(" ");
-    function useReveal(opts={threshold:0.12}){ const ref=useRef(null),[v,setV]=useState(false);
-      useEffect(()=>{ const el=ref.current; if(!el) return;
-        const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&setV(true)),opts);
-        io.observe(el); return ()=>io.disconnect();
-      },[opts]); return {ref,visible:v}; }
-
-    const useHash=()=>{ const [h,setH]=useState(()=>window.location.hash||"#/home");
-      useEffect(()=>{ const on=()=>setH(window.location.hash||"#/home");
-        window.addEventListener("hashchange",on); return ()=>window.removeEventListener("hashchange",on);
-      },[]); return h; };
-
-    const NavLink=({to,children})=>(
-      <a href={to} className={cn("px-3 py-2 text-sm font-medium hover:opacity-80 transition-opacity", window.location.hash===to?"underline underline-offset-4":"")}>{children}</a>
+    const Badge = ({text, color="bg-slate-100 text-slate-700"}) => (
+      <span className={cn("text-xs px-2 py-1 rounded-full", color)}>{text}</span>
     );
 
-    function Header(){
-      const [open,setOpen]=useState(false);
+    /* ------------------ Auth / Nav ------------------ */
+    const TopBar = ({ onLogout }) => {
+      const user = store.get("nomu_user", {});
+      const kpis = store.get("nomu_kpis", {});
       return (
-        <header className="w-full sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-3 sm:px-4">
-            <div className="flex items-center justify-between h-14">
-              <a href="#/home" className="flex items-center gap-3"><NOMULogo/><span className="sr-only">منصة نمو</span></a>
-              <nav className="hidden md:flex items-center gap-1 text-slate-700">
-                <NavLink to="#/home">الرئيسية</NavLink>
-                <NavLink to="#/about">تعريف المنصة</NavLink>
-                <NavLink to="#/features">المزايا</NavLink>
-                <NavLink to="#/accounts">الحسابات</NavLink>
-                <NavLink to="#/pricing">الباقات</NavLink>
-                <NavLink to="#/kpis">مؤشرات الأداء</NavLink>
-                <NavLink to="#/support">الدعم الفني والتواصل</NavLink>
-              </nav>
-              <button onClick={()=>setOpen(v=>!v)} className="md:hidden p-2 rounded-lg border border-slate-300" aria-label="القائمة">
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
-              </button>
+        <div className="w-full bg-white/90 backdrop-blur border-b border-slate-200 sticky top-0 z-40">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 h-14 flex items-center justify-between">
+            <a href="#/home" className="flex items-center gap-3"><Logo/></a>
+            <div className="hidden md:flex items-center gap-2 text-sm">
+              <a href="#/home"    className="px-3 py-2 hover:opacity-80">الرئيسية</a>
+              <a href="#/kpis"    className="px-3 py-2 hover:opacity-80">مؤشرات الأداء</a>
+              <a href="#/ref"     className="px-3 py-2 hover:opacity-80">الإحالات</a>
+              <a href="#/wallet"  className="px-3 py-2 hover:opacity-80">سوق الرعاية/المحفظة</a>
+              <a href="#/sectors" className="px-3 py-2 hover:opacity-80">لوحات القطاعات</a>
+              <a href="#/support" className="px-3 py-2 hover:opacity-80">الدعم</a>
+              <a href="#/settings" className="px-3 py-2 hover:opacity-80">الإعدادات</a>
             </div>
-            {open && (
-              <div className="md:hidden pb-3 animate-[fadeIn_.2s_ease]">
-                {[
-                  ["#/home","الرئيسية"],["#/about","تعريف المنصة"],["#/features","المزايا"],
-                  ["#/accounts","الحسابات"],["#/pricing","الباقات"],["#/kpis","مؤشرات الأداء"],["#/support","الدعم الفني والتواصل"]
-                ].map(([to,label])=>(
-                  <a key={to} href={to} className="block px-3 py-2 rounded-lg hover:bg-slate-50" onClick={()=>setOpen(false)}>{label}</a>
-                ))}
-              </div>
-            )}
-          </div>
-        </header>
-      );
-    }
-
-    function Hero(){
-      const {ref,visible}=useReveal();
-      return (
-        <section id="home" ref={ref} className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-tr from-nomu-50 via-white to-sky-50"></div>
-          <div className="relative max-w-7xl mx-auto px-3 sm:px-4 py-20 sm:py-24">
-            <div className={cn("max-w-2xl transition-all duration-700", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-slate-900">
-                منصة <span className="text-nomu-600">نمو</span> — رحلة الطفل المتكاملة تحت حوكمة موحّدة
-              </h1>
-              <p className="mt-4 text-slate-600 text-base sm:text-lg">
-                منصة وطنية للطفولة المبكرة تُنسّق الخدمات بين الأسرة والصحة والتعليم والقطاعين غير الربحي والخاص، مع مؤشرات أداء شفافة لتحقيق أثر قابل للقياس.
-              </p>
-              <div className="mt-6 flex flex-wrap items-center gap-3">
-                <a href="#/about" className="px-5 py-3 rounded-xl bg-nomu-600 text-white font-semibold hover:bg-nomu-700">ما هي نمو؟</a>
-                <a href="#/kpis" className="px-5 py-3 rounded-xl border border-slate-300 hover:bg-slate-50">مؤشرات الأداء</a>
-              </div>
+            <div className="flex items-center gap-3">
+              <Badge text={roles.find(r=>r.id===user.role)?.label ?? "ضيف"}/>
+              <select className="text-sm border rounded-lg px-2 py-1"
+                      value={user.region}
+                      onChange={e=>{ const u={...user, region:e.target.value}; store.set("nomu_user",u); window.dispatchEvent(new Event("storage")); }}>
+                {regions.map(r=> <option key={r} value={r}>{r}</option>)}
+              </select>
+              <button onClick={onLogout} className="text-xs px-2.5 py-1 rounded-lg border hover:bg-slate-50">تبديل الدور</button>
             </div>
           </div>
-        </section>
+        </div>
       );
-    }
+    };
 
-    function About(){
-      const {ref,visible}=useReveal();
+    const Login = ({ onLogin }) => {
+      const [role, setRole] = useState(store.get("nomu_user",{role:"guest"}).role || "guest");
+      const [region, setRegion] = useState(store.get("nomu_user",{region:"الرياض"}).region || "الرياض");
+      const [name, setName] = useState(store.get("nomu_user",{name:""}).name || "");
       return (
-        <section id="about" ref={ref} className="py-14 sm:py-16 bg-slate-50">
-          <div className="max-w-7xl mx-auto px-3 sm:px-4">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">تعريف المنصة</h2>
-            <div className={cn("mt-4 grid md:grid-cols-2 gap-6 items-start transition-all duration-700", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}>
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm leading-8 text-slate-700">
-                <p><strong>منصة نمو</strong> تُوحِّد الرحلات والبيانات بين القطاعات، وتربط المبادرات بالأهداف الوطنية، وتقدم لوحات أداء لحظية لدعم القرار ورفع الجودة وترشيد الإنفاق.</p>
-                <ul className="list-disc pr-5 mt-3 space-y-2">
-                  <li>رحلة الطفل: قبل الحمل → الحمل → الولادة → 0–3 → 3–6.</li>
-                  <li>إدارة الإحالات، الرعايات، والفعاليات مع تتبع الأثر.</li>
-                  <li>حوكمة بيانات وصلاحيات حسب الدور.</li>
-                </ul>
+        <div className="min-h-screen bg-gradient-to-tr from-nomu-50 via-white to-sky-50">
+          <div className="max-w-3xl mx-auto px-3 sm:px-4 py-16">
+            <div className="flex items-center justify-center mb-6"><Logo className="h-10 w-auto"/></div>
+            <h1 className="text-xl sm:text-2xl font-bold text-center">مرحبًا بك في منصة نمو</h1>
+            <p className="mt-2 text-center text-slate-600">اختر الدور والمنطقة لبدء التجربة</p>
+            <div className="mt-6 bg-white border border-slate-200 rounded-2xl shadow-sm p-5 grid md:grid-cols-3 gap-4">
+              <div>
+                <label className="text-sm text-slate-600">الدور</label>
+                <select className="w-full rounded-xl border px-3 py-2 mt-1" value={role} onChange={e=>setRole(e.target.value)}>
+                  {roles.map(r=> <option key={r.id} value={r.id}>{r.label}</option>)}
+                </select>
               </div>
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <h3 className="font-semibold text-slate-900">أهداف رئيسية</h3>
-                <ol className="mt-3 list-decimal pr-5 space-y-2 text-slate-700">
-                  <li>تحسين نتائج الطفولة المبكرة عبر التكامل.</li>
-                  <li>قياس الأثر بمؤشرات واضحة ومعلنة.</li>
-                  <li>تمكين مساهمات القطاع غير الربحي والخاص.</li>
-                </ol>
+              <div>
+                <label className="text-sm text-slate-600">المنطقة</label>
+                <select className="w-full rounded-xl border px-3 py-2 mt-1" value={region} onChange={e=>setRegion(e.target.value)}>
+                  {regions.map(r=> <option key={r} value={r}>{r}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="text-sm text-slate-600">الاسم (اختياري)</label>
+                <input className="w-full rounded-xl border px-3 py-2 mt-1" value={name} onChange={e=>setName(e.target.value)} placeholder="اسم المستخدم"/>
+              </div>
+              <div className="md:col-span-3 flex items-center justify-between">
+                <div className="text-xs text-slate-500">البيانات تجريبية وتُحفظ محليًا.</div>
+                <button
+                  onClick={()=>{ store.set("nomu_user",{role,region,name}); onLogin(); }}
+                  className="rounded-xl bg-nomu-600 text-white px-4 py-2.5 hover:bg-nomu-700">
+                  دخول
+                </button>
               </div>
             </div>
-          </div>
-        </section>
-      );
-    }
 
-    function Features(){
-      const items=[
-        { title:"تكامل الحسابات", desc:"أسرة/أفراد، قطاع خاص، جامعات، غير ربحي، مانحون، جهات حكومية."},
-        { title:"مؤشرات أداء حية", desc:"لوحات قابلة للتصفية حسب المنطقة/الفترة مع تحذيرات تلقائية."},
-        { title:"إحالات فعّالة", desc:"قياس وقت الإغلاق، جودة التحويلات، وتتبع الحالات العاجلة."},
-        { title:"بوابة تمويل", desc:"رعايات ومنح واستثمار اجتماعي مرتبطة بمقاييس الأثر."},
-        { title:"إدارة فعاليات", desc:"موافقات وربط مشاركين وتقارير دعم."},
-        { title:"تعزيز علمي", desc:"مراجعات جامعية لرفع الجودة وترشيد الإنفاق."},
-      ];
-      const {ref,visible}=useReveal();
-      return (
-        <section id="features" ref={ref} className="py-14 sm:py-16">
-          <div className="max-w-7xl mx-auto px-3 sm:px-4">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">المزايا</h2>
-            <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {items.map(it=>(
-                <div key={it.title} className={cn("rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-700", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}>
-                  <h3 className="text-lg font-semibold text-slate-900">{it.title}</h3>
-                  <p className="mt-2 text-slate-600 text-sm leading-7">{it.desc}</p>
-                </div>
+            <div className="mt-6 grid sm:grid-cols-3 gap-3">
+              {roles.map(r=>(
+                <button key={r.id} onClick={()=>{ setRole(r.id); }}
+                        className={cn("rounded-xl border px-4 py-3 hover:bg-slate-50", role===r.id && "ring-2 ring-nomu-300 border-nomu-200")}>
+                  {r.label}
+                </button>
               ))}
             </div>
           </div>
-        </section>
+        </div>
       );
-    }
+    };
 
-    function Accounts(){
-      const items=[
-        { name:"الأسرة/الأفراد", points:["رحلتي وخدماتي","فرص التدريب/الدعم","محفظة ومتابعة الأثر"]},
-        { name:"القطاع الخاص", points:["رعايات ومسؤولية اجتماعية","تقارير أثر","إدارة فعاليات"]},
-        { name:"الجامعات", points:["تعزيز علمي","برامج وأبحاث","عوائد واستشارات"]},
-        { name:"غير الربحي", points:["حشد التمويل","إدارة الحلول","شفافية وأداء"]},
-        { name:"المانحون", points:["حقيبة مانح","فرص منح","متابعة الصرف"]},
-        { name:"الجهات الحكومية", points:["طلبات حلول","لوحات أداء","موافقات"]},
-      ];
-      const {ref,visible}=useReveal();
+    /* ------------------ Pages ------------------ */
+    const Home = () => {
+      const user = store.get("nomu_user",{});
       return (
-        <section id="accounts" ref={ref} className="py-14 sm:py-16 bg-slate-50">
-          <div className="max-w-7xl mx-auto px-3 sm:px-4">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">الحسابات</h2>
-            <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {items.map(acc=>(
-                <div key={acc.name} className={cn("rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition-all duration-700", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}>
-                  <h3 className="text-lg font-semibold text-slate-900">{acc.name}</h3>
-                  <ul className="mt-3 space-y-1 text-slate-700 text-sm">
-                    {acc.points.map(p=>(
-                      <li key={p} className="flex items-start gap-2"><span className="mt-1 h-2 w-2 rounded-full bg-nomu-500"></span><span>{p}</span></li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
+          <div className="rounded-2xl border p-6 bg-white shadow-sm">
+            <h2 className="text-xl font-bold">مرحبًا {user.name || roles.find(r=>r.id===user.role)?.label}</h2>
+            <p className="mt-2 text-slate-600">هذه نسخة نموذجية تستعرض الفكرة العامة لمنصة <b>نمو</b> وربطها بين الأسرة والصحة والتعليم والجمعيات والقطاع الخاص واللجنة الوطنية.</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <a href="#/kpis" className="px-4 py-2 rounded-xl bg-nomu-600 text-white hover:bg-nomu-700">مؤشرات الأداء</a>
+              <a href="#/ref" className="px-4 py-2 rounded-xl border hover:bg-slate-50">الإحالات</a>
+              <a href="#/wallet" className="px-4 py-2 rounded-xl border hover:bg-slate-50">سوق الرعايات/المحفظة</a>
+              <a href="#/sectors" className="px-4 py-2 rounded-xl border hover:bg-slate-50">لوحات القطاعات</a>
             </div>
           </div>
-        </section>
+        </div>
       );
-    }
+    };
 
-    /* الدفع التجريبي */
-    function PaymentModal({open,onClose}){
-      const [amount,setAmount]=useState("2500");
-      const [processing,setProcessing]=useState(false);
-      const [receipt,setReceipt]=useState(null);
-      const pay=()=>{ setProcessing(true);
-        setTimeout(()=>{ const id="نمو-"+Math.random().toString(36).slice(2,10).toUpperCase();
-          setReceipt({id,amount:Number(amount),date:new Date().toLocaleString()}); setProcessing(false);
-        },1100);
+    const KPIs = () => {
+      const user = store.get("nomu_user", {});
+      const kpis = store.get("nomu_kpis", {});
+      const current = (kpis.byRegion[user.region] ?? Object.values(kpis.byRegion)[0]);
+      const [period, setPeriod] = useState(kpis.period || "آخر 30 يومًا");
+      useEffect(()=>{ const s = store.get("nomu_kpis", {}); s.period = period; store.set("nomu_kpis", s); },[period]);
+      return (
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <h2 className="text-xl font-bold">مؤشرات الأداء — {user.region}</h2>
+            <select className="border rounded-xl px-3 py-2 text-sm" value={period} onChange={e=>setPeriod(e.target.value)}>
+              {["آخر 7 أيام","آخر 30 يومًا","آخر 90 يومًا","سنة كاملة"].map(p=><option key={p} value={p}>{p}</option>)}
+            </select>
+          </div>
+          <p className="mt-1 text-slate-600 text-sm">الفترة المختارة: <b>{period}</b></p>
+          <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <StatCard label="التغطية السكانية لعُمر 0–6" value={current.coverage} trend="+1.3%" good={current.coverage>=80}/>
+            <StatCard label="اكتمال التحصين الأساسي" value={current.immunization} trend="+0.6%" good={current.immunization>=90}/>
+            <StatCard label="جاهزية المدرسة المركّبة" value={current.readiness} trend="+2.1%" good={current.readiness>=75}/>
+            <div className="rounded-2xl border p-5 shadow-sm border-sky-200 bg-sky-50">
+              <div className="text-sm text-slate-600">وسيط زمن إغلاق الإحالات (بالساعات)</div>
+              <div className="mt-2 text-3xl font-bold text-slate-900">{current.referralsMedianHrs}<span className="text-xl">س</span></div>
+              <div className="mt-1 text-xs bg-sky-100 text-sky-800 inline-block px-2 py-1 rounded-full">المستهدف ≤ 24 س</div>
+            </div>
+            <StatCard label="الالتحاق برياض الأطفال (3–6)" value={current.kgEnroll} trend="+0.9%" good={current.kgEnroll>=85}/>
+            <StatCard label="اكتمال السجل الأسري" value={current.completeness} trend="+0.2%" good={current.completeness>=95}/>
+          </div>
+          <div className="mt-8 rounded-2xl border bg-white p-5 shadow-sm">
+            <h3 className="font-semibold">التنبيهات والروابط</h3>
+            <ul className="mt-3 text-sm text-slate-700 space-y-2">
+              <li>ربط بطاقات المؤشرات بالإحالات/السجلات التفصيلية (لاحقًا).</li>
+              <li>التحديث المقترح: لحظي للإحالات، يومي لبقية المؤشرات.</li>
+              <li>المرشّحات: الدور/الفئة العمرية/المنطقة — قابلة للتوسعة.</li>
+            </ul>
+          </div>
+        </div>
+      );
+    };
+
+    const Referrals = () => {
+      const [list, setList] = useState(store.get("nomu_referrals", []));
+      const [q, setQ] = useState("");
+      const [modal, setModal] = useState(false);
+      const [form, setForm] = useState({ child:"", type:"صحي", region:store.get("nomu_user",{}).region });
+      useEffect(()=>{ store.set("nomu_referrals", list); }, [list]);
+      const filtered = list.filter(r => [r.id,r.child,r.type,r.status,r.region].join(" ").includes(q));
+      const setStatus = (id, status) => setList(prev => prev.map(r => r.id===id? {...r,status}:r));
+      const addReferral = () => {
+        const id = "RF-" + Math.random().toString(36).slice(2,6).toUpperCase();
+        setList(prev => [{ id, child:form.child, type:form.type, status:"مفتوحة", created:new Date().toISOString().slice(0,10), region:form.region }, ...prev]);
+        setModal(false); setForm({ child:"", type:"صحي", region:store.get("nomu_user",{}).region });
       };
-      if(!open) return null;
       return (
-        <div className="fixed inset-0 z-50 grid place-items-center p-4 bg-black/50">
-          <div className="w-full max-w-md rounded-2xl bg-white shadow-xl">
-            <div className="p-5 border-b border-slate-200 flex items-center justify-between">
-              <h3 className="text-lg font-semibold">بوابة دفع نمو (تجريب)</h3>
-              <button className="p-2 rounded-lg hover:bg-slate-100" onClick={onClose} aria-label="إغلاق">✕</button>
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <h2 className="text-xl font-bold">الإحالات</h2>
+            <div className="flex items-center gap-2">
+              <input className="rounded-xl border px-3 py-2 text-sm" placeholder="بحث..." value={q} onChange={e=>setQ(e.target.value)}/>
+              <button className="rounded-xl bg-nomu-600 text-white px-3 py-2 text-sm hover:bg-nomu-700" onClick={()=>setModal(true)}>فتح إحالة</button>
             </div>
-            <div className="p-5 space-y-4">
-              {!receipt ? (
-                <>
-                  <label className="block text-sm text-slate-600">المبلغ (ر.س)</label>
-                  <input value={amount} onChange={(e)=>setAmount(e.target.value)} type="number" min={1} className="w-full rounded-xl border border-slate-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-nomu-500" />
-                  <button disabled={processing} onClick={pay} className="w-full rounded-xl bg-nomu-600 text-white font-semibold py-2.5 hover:bg-nomu-700 disabled:opacity-60">
-                    {processing ? "جارِ المعالجة..." : "ادفع الآن"}
-                  </button>
-                  <p className="text-xs text-slate-500">هذه محاكاة دفع للعرض — يمكن ربط مزود فعلي لاحقًا.</p>
-                </>
-              ) : (
-                <div className="space-y-3">
-                  <div className="rounded-xl bg-nomu-50 border border-nomu-200 p-4">
-                    <p className="font-semibold text-nomu-800">تم الدفع بنجاح ✅</p>
-                    <p className="text-sm text-nomu-900/80 mt-1">رقم الإيصال: {receipt.id}</p>
-                    <p className="text-sm text-nomu-900/80">المبلغ: {receipt.amount.toLocaleString()} ر.س</p>
-                    <p className="text-sm text-nomu-900/80">التاريخ: {receipt.date}</p>
-                  </div>
-                  <button className="w-full rounded-xl border border-slate-300 py-2.5 hover:bg-slate-50" onClick={onClose}>إغلاق</button>
+          </div>
+          <div className="mt-4 overflow-x-auto rounded-2xl border bg-white shadow-sm">
+            <table className="w-full text-sm">
+              <thead className="bg-slate-50 text-slate-600">
+                <tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">الطفل</th><th className="p-3 text-right">النوع</th><th className="p-3 text-right">الحالة</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">المنطقة</th><th className="p-3"></th></tr>
+              </thead>
+              <tbody>
+                {filtered.map(r=>(
+                  <tr key={r.id} className="border-t">
+                    <td className="p-3">{r.id}</td>
+                    <td className="p-3">{r.child}</td>
+                    <td className="p-3">{r.type}</td>
+                    <td className="p-3">{r.status}</td>
+                    <td className="p-3">{r.created}</td>
+                    <td className="p-3">{r.region}</td>
+                    <td className="p-3 text-left">
+                      <div className="flex gap-2">
+                        <button className="text-xs px-2 py-1 rounded border hover:bg-slate-50" onClick={()=>setStatus(r.id,"قيد المعالجة")}>بدء</button>
+                        <button className="text-xs px-2 py-1 rounded border hover:bg-slate-50" onClick={()=>setStatus(r.id,"مغلقة")}>إغلاق</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {filtered.length===0 && <tr><td className="p-4 text-center text-slate-500" colSpan="7">لا توجد نتائج مطابقة.</td></tr>}
+              </tbody>
+            </table>
+          </div>
+          {modal && (
+            <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
+              <div className="w-full max-w-md bg-white rounded-2xl shadow-xl">
+                <div className="p-4 border-b flex items-center justify-between">
+                  <h3 className="font-semibold">فتح إحالة جديدة</h3>
+                  <button className="p-2 rounded hover:bg-slate-100" onClick={()=>setModal(false)}>✕</button>
                 </div>
-              )}
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    function Pricing(){
-      const plans=[
-        { name:"أساسي", price:"0", features:["عرض عام","روابط حسابات","تقارير عامة"]},
-        { name:"احترافي", price:"2500", features:["لوحات أداء مخصصة","ربط دفع","إدارة فعاليات"], highlighted:true },
-        { name:"مؤسسي", price:"—", features:["تكامل APIs","تحليلات متقدمة","دعم مخصص"]},
-      ];
-      const [open,setOpen]=useState(false);
-      return (
-        <section id="pricing" className="py-14 sm:py-16">
-          <div className="max-w-7xl mx-auto px-3 sm:px-4">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">الباقات</h2>
-            <div className="mt-8 grid md:grid-cols-3 gap-4 sm:gap-6">
-              {plans.map(p=>(
-                <div key={p.name} className={cn("rounded-2xl border bg-white p-6 shadow-sm", p.highlighted ? "border-nomu-300 ring-2 ring-nomu-200" : "border-slate-200")}>
-                  <h3 className="text-lg font-semibold text-slate-900">{p.name}</h3>
-                  <div className="mt-2 flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-slate-900">{p.price}</span>
-                    {p.price !== "—" && <span className="text-slate-500">ر.س / شهر</span>}
-                  </div>
-                  <ul className="mt-4 space-y-2 text-sm text-slate-700">
-                    {p.features.map(f=>(
-                      <li key={f} className="flex items-start gap-2"><span className="mt-1 h-2 w-2 rounded-full bg-nomu-500"></span><span>{f}</span></li>
-                    ))}
-                  </ul>
-                  {p.price !== "—"
-                    ? <button onClick={()=>setOpen(true)} className={cn("mt-6 w-full rounded-xl py-2.5 font-semibold", p.highlighted ? "bg-nomu-600 text-white hover:bg-nomu-700" : "border border-slate-300 hover:bg-slate-50")}>اشترك الآن</button>
-                    : <a href="#/support" className="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-slate-300 py-2.5 hover:bg-slate-50 font-semibold">حلول مؤسسية</a>
-                  }
+                <div className="p-4 space-y-3">
+                  <input className="w-full rounded-xl border px-3 py-2" placeholder="اسم الطفل" value={form.child} onChange={e=>setForm({...form, child:e.target.value})}/>
+                  <select className="w-full rounded-xl border px-3 py-2" value={form.type} onChange={e=>setForm({...form, type:e.target.value})}>
+                    {["صحي","نمائي 0–3","تعليمي","دعم أسري"].map(t=><option key={t}>{t}</option>)}
+                  </select>
+                  <select className="w-full rounded-xl border px-3 py-2" value={form.region} onChange={e=>setForm({...form, region:e.target.value})}>
+                    {regions.map(r=><option key={r}>{r}</option>)}
+                  </select>
+                  <button className="w-full rounded-xl bg-nomu-600 text-white py-2.5 hover:bg-nomu-700" onClick={addReferral}>حفظ الإحالة</button>
                 </div>
-              ))}
-            </div>
-          </div>
-          <PaymentModal open={open} onClose={()=>setOpen(false)}/>
-        </section>
-      );
-    }
-
-    /* -------- KPIs -------- */
-    function KPI({ label, value, suffix="%", trend="+0%", good=true }) {
-      return (
-        <div className={cn("rounded-2xl border p-5 shadow-sm", good? "border-emerald-200 bg-emerald-50" : "border-amber-200 bg-amber-50")}>
-          <div className="text-sm text-slate-600">{label}</div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <div className="text-3xl font-bold text-slate-900">{value}<span className="text-xl">{suffix}</span></div>
-            <div className={cn("text-xs px-2 py-1 rounded-full", good? "bg-emerald-100 text-emerald-800":"bg-amber-100 text-amber-800")}>{trend}</div>
-          </div>
-        </div>
-      );
-    }
-    function KPIs(){
-      const regions = ["الرياض","مكة المكرمة","الشرقية","المدينة","عسير","حائل","تبوك","القصيم","نجران","جازان","الجوف","الباحة","الحدود الشمالية"];
-      const [region,setRegion]=useState("الرياض");
-      const [period,setPeriod]=useState("آخر 30 يومًا");
-      const data = { coverage:82, immunization:91, readiness:76, referralsMedianHrs:18, kgEnroll:88, completeness:96 };
-      return (
-        <section id="kpis" className="py-14 sm:py-16 bg-slate-50">
-          <div className="max-w-7xl mx-auto px-3 sm:px-4">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">مؤشرات الأداء</h2>
-              <div className="flex flex-wrap items-center gap-2">
-                <select value={region} onChange={e=>setRegion(e.target.value)} className="rounded-xl border border-slate-300 px-3 py-2 text-sm">{regions.map(r=><option key={r}>{r}</option>)}</select>
-                <select value={period} onChange={e=>setPeriod(e.target.value)} className="rounded-xl border border-slate-300 px-3 py-2 text-sm">{["آخر 7 أيام","آخر 30 يومًا","آخر 90 يومًا","سنة كاملة"].map(p=><option key={p}>{p}</option>)}</select>
-              </div>
-            </div>
-            <p className="mt-2 text-slate-600 text-sm">المنطقة: <span className="font-semibold">{region}</span> • الفترة: <span className="font-semibold">{period}</span></p>
-            <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              <KPI label="التغطية السكانية لعُمر 0–6" value={data.coverage} trend="+1.3%" good={data.coverage>=80}/>
-              <KPI label="اكتمال التحصين الأساسي" value={data.immunization} trend="+0.6%" good={data.immunization>=90}/>
-              <KPI label="جاهزية المدرسة المركّبة" value={data.readiness} trend="+2.1%" good={data.readiness>=75}/>
-              <div className="rounded-2xl border p-5 shadow-sm border-sky-200 bg-sky-50">
-                <div className="text-sm text-slate-600">وسيط زمن إغلاق الإحالات (بالساعات)</div>
-                <div className="mt-2 text-3xl font-bold text-slate-900">{data.referralsMedianHrs}<span className="text-xl">س</span></div>
-                <div className="mt-1 text-xs bg-sky-100 text-sky-800 inline-block px-2 py-1 rounded-full">المستهدف ≤ 24 س</div>
-              </div>
-              <KPI label="الالتحاق برياض الأطفال (3–6)" value={data.kgEnroll} trend="+0.9%" good={data.kgEnroll>=85}/>
-              <KPI label="اكتمال السجل الأسري" value={data.completeness} trend="+0.2%" good={data.completeness>=95}/>
-            </div>
-            <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <h3 className="font-semibold text-slate-900">تنبيهات</h3>
-              <ul className="mt-3 text-sm text-slate-700 space-y-2">
-                <li>عتبات الألوان قابلة للتعديل لاحقًا من الإعدادات.</li>
-                <li>يمكن ربط البطاقات بسجلات تفصيلية (إحالات/أطفال/مرافق).</li>
-                <li>التحديث المقترح: لحظي للإحالات، يومي لباقي المؤشرات.</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-      );
-    }
-
-    function Support(){
-      const {ref,visible}=useReveal();
-      return (
-        <section id="support" ref={ref} className="py-14 sm:py-16 bg-slate-50">
-          <div className="max-w-7xl mx-auto px-3 sm:px-4">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">الدعم الفني والتواصل</h2>
-            <div className={cn("mt-6 grid lg:grid-cols-3 gap-6", visible ? "opacity-100" : "opacity-0")}>
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <h3 className="font-semibold text-slate-900">قنوات التواصل</h3>
-                <ul className="mt-3 space-y-2 text-slate-700 text-sm leading-7">
-                  <li>البريد: <a href="mailto:info@talbiya.sa" className="underline decoration-nomu-400 decoration-2 underline-offset-2 hover:text-nomu-700">info@talbiya.sa</a></li>
-                  <li>واتساب: <a href="https://wa.me/966556083172" target="_blank" className="underline decoration-nomu-400 decoration-2 underline-offset-2 hover:text-nomu-700">+966 55 608 3172</a></li>
-                  <li>الهاتف: يُضاف عند اعتماد الرقم الرسمي</li>
-                </ul>
-              </div>
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <h3 className="font-semibold text-slate-900">اتفاقية مستوى الخدمة (SLA)</h3>
-                <table className="mt-3 w-full text-sm">
-                  <thead><tr className="text-right text-slate-500"><th className="font-medium py-2">الأولوية</th><th className="font-medium">الوصف</th><th className="font-medium">زمن الاستجابة</th></tr></thead>
-                  <tbody className="text-slate-700">
-                    <tr className="border-t"><td className="py-2">عاجلة</td><td>انقطاع خدمة/خطأ يمنع الاستخدام</td><td>≤ 2 ساعة</td></tr>
-                    <tr className="border-t"><td className="py-2">مرتفعة</td><td>عطل يؤثر على شريحة من المستخدمين</td><td>≤ 8 ساعات</td></tr>
-                    <tr className="border-t"><td className="py-2">عادية</td><td>استفسارات/تحسينات طفيفة</td><td>≤ 1 يوم عمل</td></tr>
-                  </tbody>
-                </table>
-              </div>
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <h3 className="font-semibold text-slate-900">نموذج تواصل سريع (تجريبي)</h3>
-                <form className="mt-3 grid gap-2">
-                  <input required placeholder="الاسم" className="rounded-xl border border-slate-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-nomu-500" />
-                  <input required type="email" placeholder="البريد الإلكتروني" className="rounded-xl border border-slate-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-nomu-500" />
-                  <textarea rows="4" placeholder="وصف الطلب/المشكلة" className="rounded-xl border border-slate-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-nomu-500"></textarea>
-                  <button type="button" className="rounded-xl bg-nomu-600 text-white font-semibold py-2.5 hover:bg-nomu-700">إرسال</button>
-                  <p className="text-xs text-slate-500">للإرسال الحقيقي سنربطه لاحقًا بـ Formspree/Resend/SMTP.</p>
-                </form>
-              </div>
-            </div>
-          </div>
-        </section>
-      );
-    }
-
-    function Footer(){
-      return (
-        <footer className="py-8 border-t border-slate-200">
-          <div className="max-w-7xl mx-auto px-3 sm:px-4 text-sm text-slate-600 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p>© {new Date().getFullYear()} منصة نمو — جميع الحقوق محفوظة.</p>
-            <div className="flex items-center gap-4">
-              <a href="#/kpis" className="hover:opacity-80">مؤشرات الأداء</a>
-              <a href="#/support" className="hover:opacity-80">الدعم</a>
-            </div>
-          </div>
-        </footer>
-      );
-    }
-
-    function SectionRouter(){
-      const route=(useHash().replace("#",""))||"/home";
-      const showHero = route==="/home" || route==="/" || route==="";
-      return (
-        <main>
-          {showHero ? <Hero/> : (
-            <div className="bg-gradient-to-r from-nomu-50 to-sky-50 border-b border-slate-200">
-              <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
-                <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
-                  {route==="/about"?"تعريف المنصة":
-                   route==="/features"?"المزايا":
-                   route==="/accounts"?"الحسابات":
-                   route==="/pricing"?"الباقات":
-                   route==="/kpis"?"مؤشرات الأداء":
-                   route==="/support"?"الدعم الفني والتواصل":"منصة نمو"}
-                </h1>
               </div>
             </div>
           )}
-          {(showHero || route==="/about") && <About/>}
-          {(showHero || route==="/features") && <Features/>}
-          {(showHero || route==="/accounts") && <Accounts/>}
-          {(showHero || route==="/pricing") && <Pricing/>}
-          {(showHero || route==="/kpis") && <KPIs/>}
-          {(showHero || route==="/support") && <Support/>}
-        </main>
-      );
-    }
-
-    function App(){
-      useEffect(()=>{ if(!window.location.hash) window.location.hash="/home"; },[]);
-      return (
-        <div dir="rtl" className="min-h-screen bg-white text-slate-800">
-          <Header />
-          <SectionRouter />
-          <Footer />
-          <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}`}</style>
         </div>
       );
-    }
+    };
+
+    const Wallet = () => {
+      const [state, setState] = useState(store.get("nomu_wallet",{ total:0, entries:[] }));
+      const [form, setForm] = useState({ source:"", amount:"", tag:"CSR" });
+      useEffect(()=>{ store.set("nomu_wallet", state); }, [state]);
+      const add = () => {
+        if(!form.source || !Number(form.amount)) return;
+        const id = "TRX-" + Math.random().toString(36).slice(2,6).toUpperCase();
+        const e = { id, source:form.source, amount:Number(form.amount), date:new Date().toISOString().slice(0,10), tag:form.tag };
+        setState(prev => ({ total: prev.total + e.amount, entries:[e, ...prev.entries] }));
+        setForm({ source:"", amount:"", tag:"CSR" });
+      };
+      return (
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
+          <div className="grid lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 rounded-2xl border bg-white shadow-sm">
+              <div className="p-4 border-b flex items-center justify-between">
+                <h2 className="text-lg font-semibold">سجل الرعايات/المحفظة</h2>
+                <Badge text={`الإجمالي: ${state.total.toLocaleString()} ر.س`} color="bg-nomu-100 text-nomu-900"/>
+              </div>
+              <div className="p-4 overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-slate-50 text-slate-600">
+                    <tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">المصدر</th><th className="p-3 text-right">التصنيف</th><th className="p-3 text-right">المبلغ</th><th className="p-3 text-right">التاريخ</th></tr>
+                  </thead>
+                  <tbody>
+                    {state.entries.map(e=>(
+                      <tr key={e.id} className="border-t">
+                        <td className="p-3">{e.id}</td>
+                        <td className="p-3">{e.source}</td>
+                        <td className="p-3"><Badge text={e.tag}/></td>
+                        <td className="p-3">{e.amount.toLocaleString()} ر.س</td>
+                        <td className="p-3">{e.date}</td>
+                      </tr>
+                    ))}
+                    {state.entries.length===0 && <tr><td className="p-4 text-center text-slate-500" colSpan="5">لا توجد عمليات بعد.</td></tr>}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="rounded-2xl border bg-white shadow-sm p-4">
+              <h3 className="font-semibold">إضافة مساهمة</h3>
+              <div className="mt-3 grid gap-2">
+                <input className="rounded-xl border px-3 py-2" placeholder="المصدر (شركة/منحة/متبرع)" value={form.source} onChange={e=>setForm({...form, source:e.target.value})}/>
+                <input type="number" min="1" className="rounded-xl border px-3 py-2" placeholder="المبلغ (ر.س)" value={form.amount} onChange={e=>setForm({...form, amount:e.target.value})}/>
+                <select className="rounded-xl border px-3 py-2" value={form.tag} onChange={e=>setForm({...form, tag:e.target.value})}>
+                  {["CSR","Grant","Donation","Other"].map(t=><option key={t}>{t}</option>)}
+                </select>
+                <button className="rounded-xl bg-nomu-600 text-white py-2.5 hover:bg-nomu-700" onClick={add}>إضافة</button>
+                <p className="text-xs text-slate-500">ربط الأثر: لاحقًا يتم ربط كل مساهمة بمؤشرات محددة.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const Sectors = () => {
+      const user = store.get("nomu_user", {});
+      const SectorCard = ({title, items}) => (
+        <div className="rounded-2xl border bg-white p-5 shadow-sm">
+          <h3 className="font-semibold text-slate-900">{title}</h3>
+          <ul className="mt-3 text-sm text-slate-700 list-disc pr-5 space-y-1">
+            {items.map(i=><li key={i}>{i}</li>)}
+          </ul>
+        </div>
+      );
+      return (
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
+          <h2 className="text-xl font-bold">لوحات القطاعات — {user.region}</h2>
+          <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <SectorCard title="الصحة" items={["فحوص ما قبل الزواج/الحمل","فحص المواليد (سمع/استقلاب)","تقييم نمائي 0–3","تدخل مبكر","صحة نفسية للأم"]}/>
+            <SectorCard title="التعليم" items={["رياض أطفال","دمج و IEP","تقرير الجاهزية","التواصل مع الأسرة"]}/>
+            <SectorCard title="غير الربحي" items={["برامج دعم","متطوعون","إغلاق الإحالات","قياس أثر"]}/>
+            <SectorCard title="القطاع الخاص (CSR)" items={["رعايات ومنح","تقارير أثر","التزامات زمنية","مواءمة الرؤية"]}/>
+            <SectorCard title="اللجنة الوطنية" items={["مؤشرات وطنية","حوكمة البيانات","سياسات وصلاحيات","توافق 2030"]}/>
+            <SectorCard title="الأسرة" items={["رحلتي 0–6","توصيات ومواعيد","ملف الطفل","الدعم الأسري"]}/>
+          </div>
+        </div>
+      );
+    };
+
+    const Support = () => (
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
+        <div className="grid lg:grid-cols-3 gap-6">
+          <div className="rounded-2xl border bg-white p-5 shadow-sm">
+            <h3 className="font-semibold">قنوات التواصل</h3>
+            <ul className="mt-3 space-y-2 text-sm leading-7">
+              <li>البريد: <a className="underline decoration-nomu-400 underline-offset-2" href="mailto:info@talbiya.sa">info@talbiya.sa</a></li>
+              <li>واتساب: <a className="underline decoration-nomu-400 underline-offset-2" target="_blank" href="https://wa.me/966556083172">+966 55 608 3172</a></li>
+              <li>الهاتف: يُضاف عند الاعتماد</li>
+            </ul>
+          </div>
+          <div className="rounded-2xl border bg-white p-5 shadow-sm">
+            <h3 className="font-semibold">اتفاقية مستوى الخدمة (SLA)</h3>
+            <table className="mt-3 w-full text-sm">
+              <thead className="text-slate-500"><tr><th className="text-right py-2">الأولوية</th><th className="text-right">الوصف</th><th className="text-right">الاستجابة</th></tr></thead>
+              <tbody>
+                <tr className="border-t"><td className="py-2">عاجلة</td><td>انقطاع خدمة/خلل حرج</td><td>≤ 2 ساعة</td></tr>
+                <tr className="border-t"><td className="py-2">مرتفعة</td><td>عطل يؤثر على شريحة</td><td>≤ 8 ساعات</td></tr>
+                <tr className="border-t"><td className="py-2">عادية</td><td>استفسارات/تحسينات</td><td>≤ 1 يوم عمل</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="rounded-2xl border bg-white p-5 shadow-sm">
+            <h3 className="font-semibold">نموذج تواصل سريع (تجريبي)</h3>
+            <form className="mt-3 grid gap-2" onSubmit={(e)=>{e.preventDefault(); alert("تم الإرسال تجريبيًا — اربطه لاحقًا بمزود بريد/نماذج.");}}>
+              <input required placeholder="الاسم" className="rounded-xl border px-3 py-2"/>
+              <input required type="email" placeholder="البريد الإلكتروني" className="rounded-xl border px-3 py-2"/>
+              <textarea rows="4" placeholder="وصف الطلب/المشكلة" className="rounded-xl border px-3 py-2"></textarea>
+              <button className="rounded-xl bg-nomu-600 text-white py-2.5 hover:bg-nomu-700" type="submit">إرسال</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+
+    const Settings = () => {
+      const [s, setS] = useState(store.get("nomu_settings",{ brand:"نمو", primary:"#059669", logoType:"text" }));
+      const [cleared, setCleared] = useState(false);
+      useEffect(()=>{ store.set("nomu_settings", s); }, [s]);
+      const doClear = () => {
+        ["nomu_kpis","nomu_referrals","nomu_wallet","nomu_settings","nomu_user","nomu_proto_initialized"].forEach(store.del);
+        initData(); setCleared(true);
+      };
+      return (
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
+          <div className="grid lg:grid-cols-3 gap-6">
+            <div className="rounded-2xl border bg-white p-5 shadow-sm">
+              <h3 className="font-semibold">العلامة والألوان</h3>
+              <div className="mt-3 grid gap-2">
+                <label className="text-sm">اسم العلامة</label>
+                <input className="rounded-xl border px-3 py-2" value={s.brand} onChange={e=>setS({...s,brand:e.target.value})}/>
+                <label className="text-sm">اللون الأساسي</label>
+                <input type="color" className="rounded-xl border px-3 py-2 h-12" value={s.primary} onChange={e=>setS({...s,primary:e.target.value})}/>
+                <label className="text-sm">نوع الشعار</label>
+                <select className="rounded-xl border px-3 py-2" value={s.logoType} onChange={e=>setS({...s,logoType:e.target.value})}>
+                  <option value="text">نصي</option>
+                  <option value="image">صورة (رابط)</option>
+                </select>
+                {s.logoType==="image" && (
+                  <>
+                    <label className="text-sm">رابط الشعار</label>
+                    <input className="rounded-xl border px-3 py-2" value={s.logoUrl || ""} onChange={e=>setS({...s,logoUrl:e.target.value})} placeholder="https://...svg/png"/>
+                  </>
+                )}
+                <div className="mt-3">
+                  <div className="text-xs text-slate-500 mb-2">معاينة:</div>
+                  <div className="inline-flex items-center gap-2">
+                    <span className="inline-block h-7 w-7 rounded-xl" style={{background:s.primary,opacity:0.2}}></span>
+                    <span className="text-xl font-bold" style={{color:s.primary}}>منصة {s.brand}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-2xl border bg-white p-5 shadow-sm">
+              <h3 className="font-semibold">البيانات</h3>
+              <p className="mt-2 text-sm text-slate-600">النسخة تجريبية وتخزن البيانات محليًا.</p>
+              <button className="mt-3 rounded-xl border px-3 py-2 hover:bg-slate-50" onClick={doClear}>تصفير جميع البيانات</button>
+              {cleared && <p className="text-xs text-emerald-700 mt-2">تم التصفير — أعد تحميل الصفحة.</p>}
+            </div>
+            <div className="rounded-2xl border bg-white p-5 shadow-sm">
+              <h3 className="font-semibold">حول النموذج</h3>
+              <ul className="mt-2 text-sm text-slate-700 list-disc pr-5 space-y-1">
+                <li>ملف واحد — HTML/JS فقط.</li>
+                <li>لا يحتاج بناء — يعمل محليًا أو عبر GitHub Pages.</li>
+                <li>قابل للتوسعة لاحقًا إلى خدمات وواجهات APIs.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const Footer = () => (
+      <footer className="py-8 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 text-sm text-slate-600 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p>© {new Date().getFullYear()} منصة نمو — جميع الحقوق محفوظة.</p>
+          <div className="flex items-center gap-4">
+            <a href="#/kpis" className="hover:opacity-80">مؤشرات الأداء</a>
+            <a href="#/support" className="hover:opacity-80">الدعم</a>
+          </div>
+        </div>
+      </footer>
+    );
+
+    /* ------------------ App / Router ------------------ */
+    const Router = () => {
+      const [hash, setHash] = useState(window.location.hash || "#/home");
+      useEffect(()=>{ const on=()=>setHash(window.location.hash || "#/home"); window.addEventListener("hashchange", on); return ()=>window.removeEventListener("hashchange", on) },[]);
+      const route = hash.replace("#","");
+      switch(route){
+        case "/home": return <Home/>;
+        case "/kpis": return <KPIs/>;
+        case "/ref": return <Referrals/>;
+        case "/wallet": return <Wallet/>;
+        case "/sectors": return <Sectors/>;
+        case "/support": return <Support/>;
+        case "/settings": return <Settings/>;
+        default: return <Home/>;
+      }
+    };
+
+    const App = () => {
+      const [logged, setLogged] = useState(!!store.get("nomu_user", null));
+      const logout = () => { store.set("nomu_user", { role:"guest", region:"الرياض", name:"" }); setLogged(false); location.hash="#/home"; };
+      useEffect(()=>{ initData(); if(!window.location.hash) window.location.hash="/home"; },[]);
+      if(!logged) return <Login onLogin={()=>setLogged(true)}/>;
+      return (
+        <div className="min-h-screen bg-white">
+          <TopBar onLogout={logout}/>
+          <Router/>
+          <Footer/>
+        </div>
+      );
+    };
 
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
