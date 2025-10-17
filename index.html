@@ -53,46 +53,84 @@
     ];
     const CONTACT={ email:"info@talbiya.sa", whatsapp:"966556083172" };
 
-    /* ====================== Dynamic Form Schemas (شاملة لكل الأدوار) ====================== */
-    // كل عنصر: {key,label,type,required,options,dependsOn:{key,value}} — type: text|number|tel|email|date|textarea|select|checkbox
+    /* ====================== Logos ====================== */
+    const LogoNOMU=({color="#059669",className="h-8 w-auto"})=>(
+      <div className="flex items-center gap-2">
+        <svg className={className} viewBox="0 0 220 60" aria-label="نمو" role="img">
+          <title>نمو</title>
+          <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0%" stopColor={color} stopOpacity="0.35"/><stop offset="100%" stopColor={color} stopOpacity="0.9"/></linearGradient></defs>
+        <circle cx="18" cy="16" r="6" fill="url(#g)"/>
+        <path d="M10 46 Q18 28 28 36 T48 46" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
+        <path d="M75 28 q14-10 24 0 t24 0" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
+        <path d="M73 44 q14 12 24 0 t24 0" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
+        <line x1="10" y1="52" x2="200" y2="52" stroke={color} strokeWidth="2" strokeLinecap="round" opacity="0.2"/>
+        </svg>
+        <span className="text-xl font-bold" style={{color}}>منصة نمو</span>
+      </div>
+    );
+    const LogoVision=({className="h-8 w-auto"})=>(
+      <div className="flex items-center gap-2 text-vision-700" title="رؤية 2030">
+        <svg className={className} viewBox="0 0 200 60" role="img"><text x="0" y="38" fontSize="28" fontWeight="700" fill="currentColor">رؤية 2030</text></svg>
+      </div>
+    );
+    const LogoTelbiya=({className="h-8 w-auto"})=>(
+      <div className="flex items-center gap-2 text-telbiya-700" title="تلبية">
+        <svg className={className} viewBox="0 0 200 60" role="img"><text x="0" y="38" fontSize="28" fontWeight="700" fill="currentColor">تلبية</text></svg>
+      </div>
+    );
+
+    /* ====================== Dynamic Form Schemas (مُحسّنة) ====================== */
+    // عنصر الحقل: {key,label,type,required,options,dependsOn:{key,value},placeholder}
+    // أنواع إضافية مقترحة تدعم وضوح آلية العمل: معرفات وطنية، ترميز طبي/تعليمي، اتفاقيات، نطاق تقارير، مؤشرات، مرفقات روابط (URL)
     const SCHEMAS = {
       referral: {
         common: [
           {key:"childName", label:"اسم الطفل", type:"text", required:true},
+          {key:"childNid", label:"هوية/سجل الأسرة (اختياري)", type:"text", placeholder:"رقم الهوية الوطنية أو سجل الأسرة"},
           {key:"refType", label:"نوع الإحالة", type:"select", required:true, options:["صحي","نمائي 0–3","تعليمي","دعم أسري"]},
           {key:"region", label:"المنطقة", type:"select", required:true, options:REGIONS},
-          {key:"summary", label:"وصف مختصر", type:"textarea"}
+          {key:"geo", label:"الموقع التقريبي (URL خرائط)", type:"text", placeholder:"https://maps..."},
+          {key:"summary", label:"وصف مختصر", type:"textarea"},
+          {key:"attachments", label:"روابط مرفقات (URL مفصول بفواصل)", type:"text", placeholder:"https://... , https://..."}
         ],
         byRole: {
           family: [
             {key:"guardianPhone", label:"هاتف ولي الأمر", type:"tel", required:true},
             {key:"preferredContact", label:"طريقة التواصل", type:"select", required:true, options:["الهاتف","واتساب","البريد"]},
-            {key:"consent", label:"موافقة على مشاركة البيانات", type:"checkbox", required:true}
+            {key:"consent", label:"موافقة على مشاركة البيانات", type:"checkbox", required:true},
+            {key:"consentAt", label:"تاريخ/وقت الموافقة", type:"date"}
           ],
           health: [
             {key:"diagnosis", label:"تشخيص/ملاحظة أولية", type:"textarea", required:true},
+            {key:"icd10", label:"ترميز ICD-10 (اختياري)", type:"text", placeholder:"مثال: H91.9"},
             {key:"priority", label:"الأولوية", type:"select", required:true, options:["عاجلة","مرتفعة","عادية"]},
-            {key:"attachmentRef", label:"مرجع مرفق طبي (اختياري)", type:"text"}
+            {key:"slaHours", label:"SLA مستهدف (ساعات)", type:"number", placeholder:"مثال: 24"}
           ],
           edu: [
             {key:"schoolId", label:"رقم المنشأة التعليمية", type:"text"},
-            {key:"iep", label:"حالة خطة تعليم فردي (IEP)", type:"select", options:["غير مطبق","قيد الإعداد","مطبّق"], required:true}
+            {key:"iep", label:"حالة خطة IEP", type:"select", options:["غير مطبق","قيد الإعداد","مطبّق"], required:true},
+            {key:"eduCode", label:"رمز برنامج/مسار تعليمي", type:"text", placeholder:"كود داخلي"}
           ],
           ngo: [
             {key:"program", label:"البرنامج/المبادرة", type:"select", options:["تدخل مبكر","إرشاد أسري","دعم مجتمعي"], required:true},
-            {key:"capacity", label:"طاقة استيعابية حالية", type:"number"}
+            {key:"capacity", label:"الطاقة الاستيعابية الحالية", type:"number"},
+            {key:"outcomeMetric", label:"مؤشر ناتج مستهدف", type:"select", options:["جلسات منجزة","أسر مخدومة","زيارات منزلية"]}
           ],
           csr: [
             {key:"sponsor", label:"اسم الجهة الراعية", type:"text", required:true},
-            {key:"fundingRef", label:"مرجع التزام مالي/منحة", type:"text"}
+            {key:"contractNo", label:"رقم العقد/الاتفاق", type:"text"},
+            {key:"fundingRef", label:"مرجع التزام مالي/منحة", type:"text"},
+            {key:"reportingFreq", label:"دورية التقارير", type:"select", options:["شهري","ربع سنوي","سنوي"], required:true}
           ],
           national: [
             {key:"policyRef", label:"مرجع السياسة/الإجراء", type:"text"},
-            {key:"regionScope", label:"النطاق الجغرافي", type:"select", options:["وطني","منطقة","محافظة"], required:true}
+            {key:"regionScope", label:"النطاق الجغرافي", type:"select", options:["وطني","منطقة","محافظة"], required:true},
+            {key:"auditFlag", label:"علامة للمراجعة الوطنية", type:"select", options:["نعم","لا"]}
           ],
           admin: [
             {key:"internalNote", label:"ملاحظة داخلية", type:"textarea"},
-            {key:"sla", label:"مستوى الخدمة SLA", type:"select", options:["≤2س","≤8س","≤1يوم"], required:true}
+            {key:"sla", label:"مستوى الخدمة SLA", type:"select", options:["≤2س","≤8س","≤1يوم"], required:true},
+            {key:"owner", label:"مسؤول الحالة", type:"text"}
           ]
         }
       },
@@ -102,7 +140,8 @@
           {key:"childId", label:"معرّف/اسم الطفل", type:"text", required:true},
           {key:"screenType", label:"نوع الفحص", type:"select", required:true, options:["newborn_hearing","metabolic","developmental","vision"]},
           {key:"date", label:"تاريخ الفحص", type:"date", required:true},
-          {key:"result", label:"النتيجة", type:"select", required:true, options:["PASS","Needs follow-up","FAIL"]}
+          {key:"result", label:"النتيجة", type:"select", required:true, options:["PASS","Needs follow-up","FAIL"]},
+          {key:"attachments", label:"روابط تقارير/نتائج (URL)", type:"text", placeholder:"https://... , https://..."}
         ],
         byRole: {
           family: [
@@ -111,19 +150,23 @@
           health: [
             {key:"facility", label:"المنشأة الصحية", type:"text", required:true},
             {key:"practitionerId", label:"رقم الممارس", type:"text", required:true},
+            {key:"icd10", label:"ترميز ICD-10 (إن وجد)", type:"text"},
+            {key:"vitals", label:"قراءات أساسية (نص سريع)", type:"text", placeholder:"حرارة/وزن/طول..."},
+            {key:"nextAppointment", label:"موعد المتابعة", type:"date"},
             {key:"notes", label:"ملاحظات", type:"textarea"}
           ],
           edu: [
             {key:"impactOnLearning", label:"أثر على التعلم", type:"select", options:["لا","محتمل","مؤكد"]}
           ],
           ngo: [
-            {key:"supportNeeded", label:"دعم مطلوب بعد الفحص", type:"select", options:["جلسة إرشاد","زيارة منزلية","إحالة جمعية"]}
+            {key:"supportNeeded", label:"دعم بعد الفحص", type:"select", options:["جلسة إرشاد","زيارة منزلية","إحالة جمعية"]}
           ],
           csr: [
             {key:"sponsorCovered", label:"مغطّى ضمن رعاية؟", type:"select", options:["نعم","لا"]},
           ],
           national: [
             {key:"regionScope", label:"نطاق التقرير", type:"select", options:["وطني","منطقة","محافظة"]},
+            {key:"qualityFlag", label:"مؤشر جودة بلاغ", type:"select", options:["S1","S2","S3"]}
           ],
           admin: [
             {key:"qaCheck", label:"جودة البيانات (QA)", type:"select", options:["S1","S2","S3"], required:true}
@@ -134,30 +177,37 @@
       education: {
         common: [
           {key:"childName", label:"اسم الطفل", type:"text", required:true},
+          {key:"childNid", label:"رقم هوية الطفل (اختياري)", type:"text"},
           {key:"applicationType", label:"نوع الطلب", type:"select", required:true, options:["رياض أطفال","دعم جاهزية","خطة فردية IEP"]},
           {key:"date", label:"تاريخ التقديم", type:"date", required:true},
-          {key:"region", label:"المنطقة", type:"select", options:REGIONS, required:true}
+          {key:"region", label:"المنطقة", type:"select", options:REGIONS, required:true},
+          {key:"attachments", label:"مرفقات (URL)", type:"text"}
         ],
         byRole: {
           family: [
             {key:"preferredKG", label:"الروضة المفضلة", type:"text"},
-            {key:"transport", label:"حاجة للنقل المدرسي", type:"select", options:["نعم","لا"]}
+            {key:"transport", label:"حاجة للنقل المدرسي", type:"select", options:["نعم","لا"]},
+            {key:"disabilityCat", label:"فئة إعاقة (إن وجدت)", type:"select", options:["لا يوجد","سمعي","بصري","طيف توحد","تعلمية","حركية"]}
           ],
           edu: [
             {key:"schoolId", label:"رقم المنشأة التعليمية", type:"text", required:true},
             {key:"readinessScore", label:"درجة الجاهزية (0–100)", type:"number"},
+            {key:"placement", label:"المسار/المستوى", type:"text"},
+            {key:"seatAvailability", label:"توفر مقاعد", type:"select", options:["متاح","محدود","ممتلئ"], required:true}
           ],
           health: [
             {key:"medicalNote", label:"ملاحظة طبية مؤثرة", type:"textarea"}
           ],
           ngo: [
-            {key:"supportProgram", label:"برنامج دعم مرافق", type:"select", options:["تدخل مبكر","جلسة علاج وظيفي","جلسة تخاطب"]}
+            {key:"supportProgram", label:"برنامج دعم مرافق", type:"select", options:["تدخل مبكر","علاج وظيفي","تخاطب"]}
           ],
           csr: [
             {key:"scholarship", label:"منحة/رعاية للرسوم", type:"select", options:["نعم","لا"]},
+            {key:"schAmount", label:"مبلغ المنحة (ر.س)", type:"number", dependsOn:{key:"scholarship",value:"نعم"}}
           ],
           national: [
-            {key:"policyRef", label:"مرجع سياسة القبول", type:"text"}
+            {key:"policyRef", label:"مرجع سياسة القبول", type:"text"},
+            {key:"reportingFreq", label:"دورية التقارير", type:"select", options:["شهري","ربع سنوي","سنوي"]}
           ],
           admin: [
             {key:"sla", label:"SLA لمعالجة الطلب", type:"select", options:["≤2يوم","≤5أيام"], required:true}
@@ -170,12 +220,14 @@
           {key:"caseTitle", label:"عنوان الحالة/النشاط", type:"text", required:true},
           {key:"program", label:"البرنامج", type:"select", required:true, options:["تدخل مبكر","إرشاد أسري","دعم مجتمعي"]},
           {key:"region", label:"المنطقة", type:"select", options:REGIONS, required:true},
-          {key:"status", label:"الحالة", type:"select", options:["مجدولة","قيد التنفيذ","منفذة"]}
+          {key:"status", label:"الحالة", type:"select", options:["مجدولة","قيد التنفيذ","منفذة"]},
+          {key:"attachments", label:"مرفقات (URL)", type:"text"}
         ],
         byRole: {
           ngo: [
             {key:"capacity", label:"الطاقة الاستيعابية", type:"number", required:true},
-            {key:"volunteers", label:"عدد المتطوعين", type:"number"}
+            {key:"beneficiaries", label:"عدد المستفيدين المتوقع", type:"number"},
+            {key:"outcomeMetric", label:"مؤشر ناتج", type:"select", options:["جلسات","أسر","زيارات"]}
           ],
           family: [
             {key:"preferredTime", label:"الوقت المفضل", type:"select", options:["صباح","مساء"]}
@@ -196,22 +248,55 @@
           {key:"source", label:"المصدر", type:"text", required:true},
           {key:"amount", label:"المبلغ (ر.س)", type:"number", required:true},
           {key:"date", label:"التاريخ", type:"date", required:true},
-          {key:"tag", label:"التصنيف", type:"select", required:true, options:["CSR","Grant","Donation","Other"]}
+          {key:"tag", label:"التصنيف", type:"select", required:true, options:["CSR","Grant","Donation","Other"]},
+          {key:"attachments", label:"روابط اتفاقيات/محاضر (URL)", type:"text"}
         ],
         byRole: {
           csr: [
-            {key:"impactKPI", label:"مؤشر أثر مستهدف", type:"select", options:["التغطية 0–6","التحصين","الجاهزية","زمن الإغلاق"]},
-            {key:"period", label:"فترة الالتزام", type:"select", options:["شهري","ربع سنوي","سنوي"], required:true}
+            {key:"contractNo", label:"رقم العقد", type:"text"},
+            {key:"MoU", label:"مرجع مذكرة تفاهم", type:"text"},
+            {key:"impactKPI", label:"مؤشر أثر مستهدف", type:"select", options:["التغطية 0–6","التحصين","الجاهزية","زمن الإغلاق"], required:true},
+            {key:"kpiTarget", label:"قيمة مستهدفة", type:"number"},
+            {key:"period", label:"فترة الالتزام", type:"select", options:["شهري","ربع سنوي","سنوي"], required:true},
+            {key:"escrow", label:"حساب ضمان (Escrow)", type:"select", options:["نعم","لا"]}
           ],
           ngo: [
             {key:"program", label:"البرنامج المستفيد", type:"select", options:["تدخل مبكر","إرشاد أسري","دعم مجتمعي"], required:true}
           ],
-          national: [{key:"regionScope", label:"نطاق الصرف", type:"select", options:["وطني","منطقة","محافظة"]}],
+          national: [
+            {key:"regionScope", label:"نطاق الصرف", type:"select", options:["وطني","منطقة","محافظة"]},
+            {key:"reportingFreq", label:"دورية التقارير", type:"select", options:["شهري","ربع سنوي","سنوي"]}
+          ],
           admin: [{key:"internalNote", label:"ملاحظة داخلية", type:"textarea"}]
         }
       }
     };
 
+    /* ====================== Helpers ====================== */
+    const Field = ({field,value,onChange,data})=>{
+      const base="w-full rounded-xl border px-3 py-2 mt-1";
+      const label=<label className="text-xs text-slate-600">{field.label}{field.required?" *":""}</label>;
+      const visible = !field.dependsOn || data?.[field.dependsOn.key]===field.dependsOn.value;
+      if(!visible) return null;
+      if(field.type==="textarea") return <div><>{label}</><textarea rows="3" className="w-full rounded-2xl border px-3 py-2 mt-1" value={value||""} onChange={e=>onChange(e.target.value)}></textarea></div>;
+      if(field.type==="select") return <div><>{label}</><select className={base} value={value||""} onChange={e=>onChange(e.target.value)}>
+        <option value="">— اختر —</option>{(field.options||[]).map(o=><option key={o} value={o}>{o}</option>)}
+      </select></div>;
+      if(field.type==="checkbox") return <div className="mt-2"><label className="inline-flex items-center gap-2 text-sm"><input type="checkbox" checked={!!value} onChange={e=>onChange(e.target.checked)}/>{field.label}{field.required?" *":""}</label></div>;
+      const typeMap = ["text","number","tel","email","date"].includes(field.type)?field.type:"text";
+      return <div><>{label}</><input className={base} type={typeMap} value={value??""} placeholder={field.placeholder||""} onChange={e=>onChange(typeMap==="number"?Number(e.target.value):e.target.value)}/></div>;
+    };
+    const validateRequired = (fields, data) => {
+      for(const f of fields.filter(x=>x.required)){
+        if(f.dependsOn){ const v=data[f.dependsOn.key]; if(v!==f.dependsOn.value) continue; }
+        const val=data[f.key];
+        if(f.type==="checkbox"){ if(!val) return f.label; }
+        else if(val===undefined || val===null || val==="") return f.label;
+      }
+      return null;
+    };
+
+    /* ====================== Seed Data ====================== */
     function seed(){
       if(!store.get("nomu_initialized",false)){
         store.set("user",{ role:"family", region:"الرياض", name:"مستخدم" });
@@ -244,98 +329,27 @@
       }
     }
 
-    /* ====================== Logos ====================== */
-    const LogoNOMU=({color="#059669",className="h-8 w-auto"})=>(
-      <div className="flex items-center gap-2">
-        <svg className={className} viewBox="0 0 220 60" aria-label="نمو" role="img">
-          <title>نمو</title>
-          <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0%" stopColor={color} stopOpacity="0.35"/><stop offset="100%" stopColor={color} stopOpacity="0.9"/></linearGradient></defs>
-          <circle cx="18" cy="16" r="6" fill="url(#g)"/>
-          <path d="M10 46 Q18 28 28 36 T48 46" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
-          <path d="M75 28 q14-10 24 0 t24 0" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
-          <path d="M73 44 q14 12 24 0 t24 0" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
-          <line x1="10" y1="52" x2="200" y2="52" stroke={color} strokeWidth="2" strokeLinecap="round" opacity="0.2"/>
-        </svg>
-        <span className="text-xl font-bold" style={{color}}>منصة نمو</span>
-      </div>
-    );
-    const LogoVision=({className="h-8 w-auto"})=>(
-      <div className="flex items-center gap-2 text-vision-700" title="رؤية 2030">
-        <svg className={className} viewBox="0 0 200 60" role="img"><text x="0" y="38" fontSize="28" fontWeight="700" fill="currentColor">رؤية 2030</text></svg>
-      </div>
-    );
-    const LogoTelbiya=({className="h-8 w-auto"})=>(
-      <div className="flex items-center gap-2 text-telbiya-700" title="تلبية">
-        <svg className={className} viewBox="0 0 200 60" role="img"><text x="0" y="38" fontSize="28" fontWeight="700" fill="currentColor">تلبية</text></svg>
-      </div>
-    );
-
-    /* ====================== Shared UI ====================== */
-    const Badge=({text,color="bg-slate-100 text-slate-700"})=><span className={cn("text-xs px-2 py-1 rounded-full",color)}>{text}</span>;
-    const Stat=({label,value,suffix="%",ok=true})=>(
-      <div className={cn("rounded-2xl p-5 border shadow-sm",ok?"border-emerald-200 bg-emerald-50":"border-amber-200 bg-amber-50")}>
-        <div className="text-sm text-slate-600">{label}</div>
-        <div className="mt-2 text-3xl font-bold">{value}<span className="text-xl">{suffix}</span></div>
-      </div>
-    );
-
-    const Field = ({field,value,onChange})=>{
-      const base="w-full rounded-xl border px-3 py-2 mt-1";
-      const label=<label className="text-xs text-slate-600">{field.label}{field.required?" *":""}</label>;
-      const hint=field.dependsOn? <div className="hint">شرط: {field.dependsOn.key} = {field.dependsOn.value}</div> : null;
-      if(field.type==="textarea") return <div><>{label}</><textarea rows="3" className="w-full rounded-2xl border px-3 py-2 mt-1" value={value||""} onChange={e=>onChange(e.target.value)}></textarea>{hint}</div>;
-      if(field.type==="select") return <div><>{label}</><select className={base} value={value||""} onChange={e=>onChange(e.target.value)}>
-        <option value="">— اختر —</option>{(field.options||[]).map(o=><option key={o} value={o}>{o}</option>)}
-      </select>{hint}</div>;
-      if(field.type==="checkbox") return <div className="mt-2"><label className="inline-flex items-center gap-2 text-sm"><input type="checkbox" checked={!!value} onChange={e=>onChange(e.target.checked)}/>{field.label}{field.required?" *":""}</label></div>;
-      const typeMap = ["text","number","tel","email","date"].includes(field.type)?field.type:"text";
-      return <div><>{label}</><input className={base} type={typeMap} value={value??""} onChange={e=>onChange(typeMap==="number"?Number(e.target.value):e.target.value)}/>{hint}</div>;
-    };
-
-    const validateRequired = (fields, data) => {
-      for(const f of fields.filter(x=>x.required)){
-        // تحقق من الشرط إن وجد
-        if(f.dependsOn){
-          const v = data[f.dependsOn.key];
-          if(v!==f.dependsOn.value) continue; // الشرط غير متحقق → لا حاجة للتحقق
-        }
-        const val = data[f.key];
-        if(f.type==="checkbox"){ if(!val) return f.label; }
-        else if(val===undefined || val===null || val==="") return f.label;
-      }
-      return null;
-    };
-
-    /* ====================== Layout: Header / Footer ====================== */
+    /* ====================== Layout: Header / Footer (Responsive) ====================== */
     const TopBar=({onLogout})=>{
       const user=store.get("user",{});
+      const [open,setOpen]=useState(false);
       return (
         <header className="w-full bg-white/90 backdrop-blur border-b border-slate-200 sticky top-0 z-40">
           <div className="container px-3 sm:px-4 h-16 flex items-center justify-between">
             {/* يمين: NOMU */}
             <a href="#/home" className="flex items-center gap-3"><LogoNOMU/></a>
 
-            {/* وسط: تنقّل */}
+            {/* وسط: قائمة كبيرة */}
             <nav className="hidden xl:flex items-center gap-2 text-sm">
-              <a href="#/home" className="px-3 py-2 hover:opacity-80">الرئيسية</a>
-              <a href="#/journey" className="px-3 py-2 hover:opacity-80">رحلة الطفل</a>
-              <a href="#/kpis" className="px-3 py-2 hover:opacity-80">مؤشرات الأداء</a>
-              <a href="#/referrals" className="px-3 py-2 hover:opacity-80">الإحالات</a>
-              <a href="#/health" className="px-3 py-2 hover:opacity-80">الصحة</a>
-              <a href="#/education" className="px-3 py-2 hover:opacity-80">التعليم</a>
-              <a href="#/ngo" className="px-3 py-2 hover:opacity-80">الجمعيات</a>
-              <a href="#/wallet" className="px-3 py-2 hover:opacity-80">الرعايات/المحفظة</a>
-              <a href="#/govern" className="px-3 py-2 hover:opacity-80">الحوكمة</a>
-              <a href="#/support" className="px-3 py-2 hover:opacity-80">الدعم</a>
-              <a href="#/settings" className="px-3 py-2 hover:opacity-80">الإعدادات</a>
+              {["home|الرئيسية","journey|رحلة الطفل","kpis|مؤشرات الأداء","referrals|الإحالات","health|الصحة","education|التعليم","ngo|الجمعيات","wallet|الرعايات/المحفظة","govern|الحوكمة","support|الدعم","settings|الإعدادات"].map(i=>{
+                const [path,label]=i.split("|");
+                return <a key={path} href={`#/${path}`} className="px-3 py-2 hover:opacity-80">{label}</a>;
+              })}
             </nav>
 
-            {/* يسار: رؤيــة + تلبية + دور/منطقة */}
-            <div className="flex items-center gap-3">
-              <div className="hidden md:flex items-center gap-3">
-                <LogoVision/>
-                <LogoTelbiya/>
-              </div>
+            {/* يسار: الشعارات + أدوات */}
+            <div className="hidden md:flex items-center gap-3">
+              <LogoVision/><LogoTelbiya/>
               <Badge text={ROLES.find(r=>r.id===user.role)?.label ?? "—"}/>
               <select className="text-sm border rounded-lg px-2 py-1" value={user.region}
                 onChange={e=>{const u={...user,region:e.target.value};store.set("user",u);window.dispatchEvent(new Event("storage"));}}>
@@ -343,7 +357,33 @@
               </select>
               <button onClick={onLogout} className="text-xs px-2.5 py-1 rounded-lg border hover:bg-slate-50">تبديل الدور</button>
             </div>
+
+            {/* جوال: زر هامبرغر + شعارات يسار مصغّرة */}
+            <div className="flex md:hidden items-center gap-2">
+              <div className="flex items-center gap-2"><LogoVision className="h-6"/><LogoTelbiya className="h-6"/></div>
+              <button aria-label="فتح القائمة" className="p-2 rounded-lg border" onClick={()=>setOpen(v=>!v)}>☰</button>
+            </div>
           </div>
+
+          {/* قائمة جوال منسدلة */}
+          {open && (
+            <div className="xl:hidden border-t border-slate-200 bg-white">
+              <div className="container px-3 py-3 grid gap-2 text-sm">
+                {["home|الرئيسية","journey|رحلة الطفل","kpis|مؤشرات الأداء","referrals|الإحالات","health|الصحة","education|التعليم","ngo|الجمعيات","wallet|الرعايات/المحفظة","govern|الحوكمة","support|الدعم","settings|الإعدادات"].map(i=>{
+                  const [path,label]=i.split("|");
+                  return <a key={path} href={`#/${path}`} className="px-3 py-2 rounded-lg hover:bg-slate-50" onClick={()=>setOpen(false)}>{label}</a>;
+                })}
+                <div className="flex items-center gap-2 pt-2">
+                  <Badge text={ROLES.find(r=>r.id===user.role)?.label ?? "—"}/>
+                  <select className="text-sm border rounded-lg px-2 py-1" value={user.region}
+                    onChange={e=>{const u={...user,region:e.target.value};store.set("user",u);}}>
+                    {REGIONS.map(r=><option key={r} value={r}>{r}</option>)}
+                  </select>
+                  <button onClick={onLogout} className="text-xs px-2.5 py-1 rounded-lg border hover:bg-slate-50">تبديل الدور</button>
+                </div>
+              </div>
+            </div>
+          )}
         </header>
       );
     };
@@ -358,8 +398,7 @@
             <span className="opacity-70">بمواءمة رؤية 2030 وبدعم تلبية</span>
           </div>
           <div className="flex justify-end gap-4">
-            <a href="#/kpis" className="hover:opacity-80">المؤشرات</a>
-            <a href="#/support" className="hover:opacity-80">الدعم</a>
+            <span className="opacity-80">جميع الحقوق محفوظة لشركة تلبية للبحث والتطوير</span>
           </div>
         </div>
       </footer>
@@ -400,7 +439,7 @@
       );
     };
 
-    /* ====================== Home (Hero + Value) ====================== */
+    /* ====================== Home ====================== */
     const Home=()=>{
       const notes=store.get("notifications",[]);
       return (
@@ -412,7 +451,7 @@
                   <h1 className="text-2xl md:text-3xl font-extrabold">منصة وطنية تربط رحلة الطفل (0–6) بكل الشركاء</h1>
                   <p className="mt-3 text-slate-600 leading-7">
                     تحوّل <b>نمو</b> الإحالات إلى نتائج، وتعرض مؤشرات أثر متوائمة مع <b>رؤية 2030</b>، وبدعم تقني من <b>تلبية</b>.
-                    النماذج هنا <b>ديناميكية حسب الدور</b> لضمان اكتمال دورة الحياة لكل عملية.
+                    النماذج <b>ديناميكية حسب الدور</b> لضمان اكتمال دورة الحياة لكل عملية وشراكة.
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <a href="#/journey" className="px-4 py-2 rounded-xl bg-nomu-600 text-white hover:bg-nomu-700">ابدأ رحلة الطفل</a>
@@ -433,7 +472,7 @@
           <section className="container px-3 sm:px-4 py-8">
             <div className="grid md:grid-cols-3 gap-4">
               <div className="rounded-2xl border bg-white p-5 shadow-sm"><h3 className="font-semibold">سير عمل مُحكم</h3><p className="mt-2 text-sm text-slate-600">SLA وتنبيهات ومرفقات وتعليقات على كل حالة.</p></div>
-              <div className="rounded-2xl border bg-white p-5 shadow-sm"><h3 className="font-semibold">تكامل وطني</h3><p className="mt-2 text-sm text-slate-600">نفاذ، NPHIES، نور، ودفع محلي عند الحاجة.</p></div>
+              <div className="rounded-2xl border bg-white p-5 shadow-sm"><h3 className="font-semibold">تكامل وطني</h3><p className="mt-2 text-sm text-slate-600">نفاذ، NPHIES، نور، والدفع المحلي عند الحاجة.</p></div>
               <div className="rounded-2xl border bg-white p-5 shadow-sm"><h3 className="font-semibold">قياس أثر</h3><p className="mt-2 text-sm text-slate-600">لوحات KPIs مرتبطة بالمحفظة والبرامج.</p></div>
             </div>
           </section>
@@ -452,6 +491,12 @@
     };
 
     /* ====================== KPIs ====================== */
+    const StatBox=({label,val,ok})=>(
+      <div className={cn("rounded-2xl p-5 border shadow-sm", ok?"border-emerald-200 bg-emerald-50":"border-amber-200 bg-amber-50")}>
+        <div className="text-sm text-slate-600">{label}</div>
+        <div className="mt-2 text-3xl font-bold">{val}</div>
+      </div>
+    );
     const KPIs=()=>{
       const user=store.get("user",{});
       const k=store.get("kpis",{});
@@ -526,7 +571,7 @@
       const [list,setList]=useState(store.get("referrals",[]));
       const [q,setQ]=useState(""); const [modal,setModal]=useState(false);
       const user=store.get("user",{role:"family",region:"الرياض"});
-      const [data,setData]=useState({}); // حقول ديناميكية
+      const [data,setData]=useState({});
       useEffect(()=>store.set("referrals",list),[list]);
 
       const common = SCHEMAS.referral.common;
@@ -534,12 +579,10 @@
       const allFields = [...common, ...roleFields];
 
       const filtered=list.filter(r=>JSON.stringify(r).includes(q));
-
       const onChange=(k,v)=>setData(prev=>({...prev,[k]:v}));
-      const visible=(f)=>!f.dependsOn || data[f.dependsOn.key]===f.dependsOn.value;
 
       const save=()=>{
-        const missing = validateRequired(allFields.filter(visible), data);
+        const missing = validateRequired(allFields, data);
         if(missing) return alert(`الرجاء تعبئة: ${missing}`);
         const id="RF-"+Math.random().toString(36).slice(2,6).toUpperCase();
         const record={
@@ -554,7 +597,6 @@
         };
         setList(prev=>[record,...prev]); setModal(false); setData({});
       };
-
       const setStatus=(id,status)=>setList(prev=>prev.map(r=>r.id===id?{...r,status}:r));
 
       return (
@@ -570,7 +612,7 @@
           <div className="mt-4 overflow-x-auto rounded-2xl border bg-white shadow-sm">
             <table className="w-full text-sm">
               <thead className="bg-slate-50 text-slate-600">
-              <tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">الطفل</th><th className="p-3 text-right">النوع</th><th className="p-3 text-right">الحالة</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">المنطقة</th><th className="p-3 text-right">تفاصيل الدور</th><th className="p-3"></th></tr>
+                <tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">الطفل</th><th className="p-3 text-right">النوع</th><th className="p-3 text-right">الحالة</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">المنطقة</th><th className="p-3 text-right">تفاصيل</th><th className="p-3"></th></tr>
               </thead>
               <tbody>
                 {filtered.map(r=>(
@@ -599,8 +641,8 @@
                   <button className="p-2 rounded hover:bg-slate-100" onClick={()=>setModal(false)}>✕</button>
                 </div>
                 <div className="p-4 grid md:grid-cols-2 gap-3">
-                  {[...common, ...roleFields].map(f=> visible(f) && (
-                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)}/>
+                  {[...common, ...roleFields].map(f=>(
+                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)} data={data}/>
                   ))}
                   <div className="md:col-span-2 flex items-center justify-end gap-2 mt-2">
                     <button className="rounded-xl border px-4 py-2 hover:bg-slate-50" onClick={()=>setModal(false)}>إلغاء</button>
@@ -625,13 +667,12 @@
       const common=SCHEMAS.health.common;
       const roleFields=SCHEMAS.health.byRole[user.role]||[];
       const allFields=[...common,...roleFields];
-      const onChange=(k,v)=>setData(prev=>({...prev,[k]:v}));
-      const visible=(f)=>!f.dependsOn || data[f.dependsOn.key]===f.dependsOn.value;
 
       const filtered=list.filter(s=>JSON.stringify(s).includes(q));
+      const onChange=(k,v)=>setData(prev=>({...prev,[k]:v}));
 
       const save=()=>{
-        const missing=validateRequired(allFields.filter(visible),data);
+        const missing=validateRequired(allFields,data);
         if(missing) return alert(`الرجاء تعبئة: ${missing}`);
         const id="SC-"+Math.random().toString(36).slice(2,6).toUpperCase();
         const rec={ id, childId:data.childId, type:data.screenType, date:data.date, result:data.result,
@@ -651,7 +692,7 @@
 
           <div className="mt-4 rounded-2xl border bg-white p-4 shadow-sm overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-slate-50 text-slate-600"><tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">الطفل</th><th className="p-3 text-right">النوع</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">النتيجة</th><th className="p-3 text-right">تفاصيل الدور</th></tr></thead>
+              <thead className="bg-slate-50 text-slate-600"><tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">الطفل</th><th className="p-3 text-right">النوع</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">النتيجة</th><th className="p-3 text-right">تفاصيل</th></tr></thead>
               <tbody>
                 {filtered.map(s=>(
                   <tr key={s.id} className="border-t align-top">
@@ -674,8 +715,8 @@
                   <button className="p-2 rounded hover:bg-slate-100" onClick={()=>setModal(false)}>✕</button>
                 </div>
                 <div className="p-4 grid md:grid-cols-2 gap-3">
-                  {[...common, ...roleFields].map(f=> visible(f) && (
-                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)}/>
+                  {[...common, ...roleFields].map(f=>(
+                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)} data={data}/>
                   ))}
                   <div className="md:col-span-2 flex items-center justify-end gap-2 mt-2">
                     <button className="rounded-xl border px-4 py-2 hover:bg-slate-50" onClick={()=>setModal(false)}>إلغاء</button>
@@ -704,10 +745,9 @@
       const roleFields=SCHEMAS.education.byRole[user.role]||[];
       const allFields=[...common,...roleFields];
       const onChange=(k,v)=>setData(prev=>({...prev,[k]:v}));
-      const visible=(f)=>!f.dependsOn || data[f.dependsOn.key]===f.dependsOn.value;
 
       const save=()=>{
-        const missing=validateRequired(allFields.filter(visible),data);
+        const missing=validateRequired(allFields,data);
         if(missing) return alert(`الرجاء تعبئة: ${missing}`);
         const id="KG-"+Math.random().toString(36).slice(2,6).toUpperCase();
         const rec={ id, child:data.childName, status:"قيد المراجعة", region:data.region, date:data.date,
@@ -729,7 +769,7 @@
 
           <div className="mt-4 rounded-2xl border bg-white p-4 shadow-sm overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-slate-50 text-slate-600"><tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">الطفل</th><th className="p-3 text-right">الحالة</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">المنطقة</th><th className="p-3 text-right">تفاصيل الدور</th><th className="p-3"></th></tr></thead>
+              <thead className="bg-slate-50 text-slate-600"><tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">الطفل</th><th className="p-3 text-right">الحالة</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">المنطقة</th><th className="p-3 text-right">تفاصيل</th><th className="p-3"></th></tr></thead>
               <tbody>
                 {filtered.map(a=>(
                   <tr key={a.id} className="border-t align-top">
@@ -752,8 +792,8 @@
                   <button className="p-2 rounded hover:bg-slate-100" onClick={()=>setModal(false)}>✕</button>
                 </div>
                 <div className="p-4 grid md:grid-cols-2 gap-3">
-                  {[...common, ...roleFields].map(f=> visible(f) && (
-                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)}/>
+                  {[...common, ...roleFields].map(f=>(
+                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)} data={data}/>
                   ))}
                   <div className="md:col-span-2 flex items-center justify-end gap-2 mt-2">
                     <button className="rounded-xl border px-4 py-2 hover:bg-slate-50" onClick={()=>setModal(false)}>إلغاء</button>
@@ -824,7 +864,7 @@
                 </div>
                 <div className="p-4 grid md:grid-cols-2 gap-3">
                   {[...common, ...roleFields].map(f=>(
-                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)}/>
+                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)} data={data}/>
                   ))}
                   <div className="md:col-span-2 flex items-center justify-end gap-2 mt-2">
                     <button className="rounded-xl border px-4 py-2 hover:bg-slate-50" onClick={()=>setModal(false)}>إلغاء</button>
@@ -877,7 +917,7 @@
               </div>
               <div className="p-4 overflow-x-auto">
                 <table className="w-full text-sm">
-                  <thead className="bg-slate-50 text-slate-600"><tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">المصدر</th><th className="p-3 text-right">التصنيف</th><th className="p-3 text-right">المبلغ</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">تفاصيل الدور</th></tr></thead>
+                  <thead className="bg-slate-50 text-slate-600"><tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">المصدر</th><th className="p-3 text-right">التصنيف</th><th className="p-3 text-right">المبلغ</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">تفاصيل</th></tr></thead>
                   <tbody>
                     {filtered.map(e=>(
                       <tr key={e.id} className="border-t align-top">
@@ -894,8 +934,8 @@
             <div className="rounded-2xl border bg-white shadow-sm p-4">
               <h3 className="font-semibold">ملخّص</h3>
               <ul className="mt-2 text-sm text-slate-700 list-disc pr-5 space-y-1">
-                <li>رعايات CSR ومنح وتبرعات مرتبطة بمؤشرات أثر.</li>
-                <li>يمكن لاحقًا ربط كل مساهمة بحالات أو برامج محددة.</li>
+                <li>إدارة رعايات CSR والمنح والتبرعات وربطها بمؤشرات أثر مستهدفة.</li>
+                <li>حقول العقد/مذكرة التفاهم ودورية التقارير وEscrow لشفافية التمويل.</li>
               </ul>
             </div>
           </div>
@@ -909,7 +949,7 @@
                 </div>
                 <div className="p-4 grid md:grid-cols-2 gap-3">
                   {[...common, ...roleFields].map(f=>(
-                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)}/>
+                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)} data={data}/>
                   ))}
                   <div className="md:col-span-2 flex items-center justify-end gap-2 mt-2">
                     <button className="rounded-xl border px-4 py-2 hover:bg-slate-50" onClick={()=>setModal(false)}>إلغاء</button>
