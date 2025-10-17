@@ -1,0 +1,58 @@
+---
+title: NOMU ERD (Prototype)
+---
+erDiagram
+  FAMILY ||--o{ CHILD : has
+  CHILD ||--o{ SCREENING : undergoes
+  CHILD ||--o{ REFERRAL : triggers
+  CSR_PORTFOLIO ||--o{ WALLET_ENTRY : contains
+  KPI_OBSERVATION }o--|| REGION : measured_in
+
+  FAMILY {
+    string id PK
+    string headName
+    string contact
+    string region
+  }
+  CHILD {
+    string id PK
+    string familyId FK
+    string name
+    date   birthDate
+    string gender
+    string region
+  }
+  SCREENING {
+    string id PK
+    string childId FK
+    string type
+    date   date
+    string result
+  }
+  REFERRAL {
+    string id PK
+    string childId FK
+    string type
+    string status
+    date   createdAt
+    string region
+  }
+  WALLET_ENTRY {
+    string id PK
+    string source
+    number amount
+    date   date
+    string tag
+  }
+  KPI_OBSERVATION {
+    string id PK
+    string metric
+    number value
+    date   observedAt
+    string region
+    string period
+  }
+  REGION {
+    string id PK
+    string name
+  }

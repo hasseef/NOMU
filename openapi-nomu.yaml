@@ -1,0 +1,61 @@
+openapi: 3.0.3
+info:
+  title: NOMU Platform API
+  version: 0.1.0
+  description: واجهات أولية لمنصة نمو.
+servers:
+  - url: https://api.nomu.sa/v1
+paths:
+  /auth/login:
+    post:
+      summary: تسجيل دخول
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username: { type: string }
+                password: { type: string }
+      responses:
+        '200':
+          description: نجاح
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+                  role: { type: string, enum: [guest,family,health,edu,ngo,csr,national] }
+  /referrals:
+    get:
+      summary: البحث في الإحالات
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Referral' }
+    post:
+      summary: فتح إحالة
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Referral' }
+      responses: { '201': { description: Created } }
+components:
+  schemas:
+    Referral:
+      type: object
+      required: [id, type, status, region]
+      properties:
+        id: { type: string }
+        child: { type: string }
+        type: { type: string, enum: [health, early0_3, education, family_support] }
+        status: { type: string, enum: [open,processing,closed] }
+        createdAt: { type: string, format: date-time }
+        region: { type: string }
