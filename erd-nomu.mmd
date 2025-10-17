@@ -1,10 +1,13 @@
 ---
-title: NOMU ERD (Prototype)
+title: NOMU ERD (Expanded Prototype)
 ---
 erDiagram
   FAMILY ||--o{ CHILD : has
   CHILD ||--o{ SCREENING : undergoes
   CHILD ||--o{ REFERRAL : triggers
+  REFERRAL }o--|| NGO : handled_by
+  REFERRAL }o--|| HEALTH_PROVIDER : handled_by
+  REFERRAL }o--|| SCHOOL : handled_by
   CSR_PORTFOLIO ||--o{ WALLET_ENTRY : contains
   KPI_OBSERVATION }o--|| REGION : measured_in
 
@@ -56,3 +59,7 @@ erDiagram
     string id PK
     string name
   }
+  NGO { string id PK name string }
+  HEALTH_PROVIDER { string id PK name string }
+  SCHOOL { string id PK name string }
+  CSR_PORTFOLIO { string id PK owner string }
