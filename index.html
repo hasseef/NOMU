@@ -1,1090 +1,1003 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>منصة نمو — تلبية × رؤية 2030</title>
-  <meta name="description" content="منصة نمو الوطنية: ربط الأسرة والصحة والتعليم والجمعيات والقطاع الخاص واللجنة الوطنية ضمن رؤية 2030 وبدعم تلبية."/>
-  <!-- Tailwind عبر jsDelivr (أكثر استقراراً على Pages) -->
-  <script src="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.13/lib/cdn.min.js"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['ui-sans-serif','system-ui','-apple-system','Segoe UI','Roboto','Noto Sans Arabic','Tahoma','Arial','sans-serif'] },
-          colors: {
-            nomu: { 50:'#ecfdf5',100:'#d1fae5',200:'#a7f3d0',300:'#6ee7b7',400:'#34d399',500:'#10b981',600:'#059669',700:'#047857',800:'#065f46',900:'#064e3b' },
-            telbiya: { 600:'#0ea5e9', 700:'#0369a1' },
-            vision: { 700:'#0f766e' }
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    html,body{height:100%;background:#fff}
-    .container{max-width:80rem;margin-inline:auto}
-    .hint{font-size:.75rem;color:#64748b}
-    #fatal{display:none}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>منصة نمو — تلبية × رؤية 2030</title>
+<meta name="description" content="منصة نمو الوطنية — حل تشغيلي متكامل لرحلة الطفل 0–6 وربط الشركاء وفق رؤية 2030 وبدعم تلبية.">
+<style>
+  :root{
+    --bg:#ffffff;--txt:#0f172a;--muted:#64748b;--soft:#f1f5f9;--brd:#e2e8f0;
+    --nomu:#059669;--nomu-100:#d1fae5;--nomu-800:#065f46;
+    --sky:#0ea5e9;--vision:#0f766e;--amber:#f59e0b;--emerald:#10b981;
+  }
+  *{box-sizing:border-box}html,body{height:100%}body{margin:0;background:var(--bg);color:var(--txt);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Arabic",Tahoma,Arial,sans-serif}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1280px;margin-inline:auto}
+  .btn{border:1px solid var(--brd);padding:.6rem 1rem;border-radius:12px;background:#fff;cursor:pointer}
+  .btn:hover{background:#f8fafc}
+  .btn-primary{background:var(--nomu);color:#fff;border-color:transparent}
+  .btn-primary:hover{background:#047857}
+  .chip{display:inline-block;padding:.15rem .5rem;border-radius:999px;background:#eef2f7;font-size:.75rem;color:#334155}
+  .card{background:#fff;border:1px solid var(--brd);border-radius:18px;box-shadow:0 1px 2px rgba(0,0,0,.02)}
+  .grid{display:grid;gap:1rem}
+  .row{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center}
+  .mt-1{margin-top:.25rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.mb-2{margin-bottom:.5rem}
+  .p-2{padding:.5rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-8{padding:2rem}
+  .text-center{text-align:center}.text-right{text-align:right}.text-left{text-align:left}
+  .text-xs{font-size:.75rem}.text-sm{font-size:.875rem}.text-lg{font-size:1.125rem}.text-xl{font-size:1.25rem}.text-2xl{font-size:1.5rem}.text-3xl{font-size:1.875rem}
+  .muted{color:var(--muted)}
+  .title{font-weight:800}
+  .badge-ok{background:#dcfce7;color:#065f46}
+  .badge-warn{background:#fef3c7;color:#92400e}
+  .table{width:100%;border-collapse:collapse}
+  .table th,.table td{padding:.7rem;border-top:1px solid var(--brd);vertical-align:top}
+  .table thead th{background:#f8fafc;color:#475569}
+  input,select,textarea{width:100%;padding:.6rem .7rem;border:1px solid var(--brd);border-radius:12px;background:#fff}
+  textarea{resize:vertical}
+  /* Header */
+  header{position:sticky;top:0;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);border-bottom:1px solid var(--brd);z-index:10}
+  #nav{display:none}
+  @media(min-width:1200px){#nav{display:flex}}
+  .navlink{padding:.6rem .8rem;border-radius:10px}
+  .navlink:hover{background:#f1f5f9}
+  /* Responsive sections */
+  .hero{background:linear-gradient(135deg,#ecfdf5,#ffffff 40%,#e0f2fe)}
+  /* Footer */
+  footer{border-top:1px solid var(--brd)}
+  /* Mobile menu */
+  .mobile{display:flex;gap:.5rem}
+  @media(min-width:768px){.mobile{display:none}}
+  /* Desktop left logos */
+  .left-logos{display:none}
+  @media(min-width:768px){.left-logos{display:flex;gap:.5rem;align-items:center}}
+  /* Simple cols */
+  .cols-3{grid-template-columns:repeat(1,minmax(0,1fr))}
+  @media(min-width:768px){.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  .cols-2{grid-template-columns:repeat(1,minmax(0,1fr))}
+  @media(min-width:992px){.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .cols-4{grid-template-columns:repeat(1,minmax(0,1fr))}
+  @media(min-width:992px){.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  /* Helper */
+  .hidden{display:none}
+  .w-full{width:100%}
+  .notice{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:.6rem}
+  /* Logo text svg placeholders */
+  .svg-txt{display:flex;align-items:center;color:#0f766e}
+  /* Toast fatal */
+  #fatal{display:none;margin:.5rem;border-radius:10px}
+</style>
 </head>
-<body class="font-sans text-slate-800">
-  <noscript style="display:block;padding:1rem;background:#fee2e2;color:#991b1b;text-align:center">
-    هذه الصفحة تحتاج تشغيل JavaScript.
-  </noscript>
-  <div id="fatal" class="p-3 text-sm bg-amber-100 text-amber-900"></div>
-  <div id="root"></div>
-
-  <!-- React 18 + ReactDOM + Babel عبر jsDelivr -->
-  <script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.26.2/babel.min.js"></script>
-
-  <script>
-    // إن فشل تحميل أي مكتبة، أظهر رسالة واضحة بدل صفحة بيضاء
-    (function guard(){
-      function fail(msg){
-        var el=document.getElementById('fatal'); el.style.display='block'; el.textContent=msg;
-      }
-      if(!window.React) return fail('تعذّر تحميل React من شبكة CDN. جرّب تحديث الصفحة أو استخدم اتصالًا مختلفًا.');
-      if(!window.ReactDOM) return fail('تعذّر تحميل ReactDOM من شبكة CDN.');
-      if(!window.Babel) return fail('تعذّر تحميل Babel Standalone من شبكة CDN.');
-    })();
-  </script>
-
-  <!-- تطبيق المنصة (JSX) -->
-  <script type="text/babel" data-presets="react">
-    const { useState, useEffect, useMemo } = React;
-
-    /* ========== أدوات عامة ========== */
-    const cn=(...a)=>a.filter(Boolean).join(" ");
-    const store={ get:(k,f)=>{try{return JSON.parse(localStorage.getItem(k))??f}catch{return f}}, set:(k,v)=>localStorage.setItem(k,JSON.stringify(v)), del:k=>localStorage.removeItem(k) };
-    const REGIONS=["الرياض","مكة المكرمة","الشرقية","المدينة","عسير","حائل","تبوك","القصيم","نجران","جازان","الجوف","الباحة","الحدود الشمالية"];
-    const ROLES=[
-      {id:"family",label:"الأسرة/الأفراد"},
-      {id:"health",label:"الصحة"},
-      {id:"edu",label:"التعليم"},
-      {id:"ngo",label:"الجمعيات"},
-      {id:"csr",label:"القطاع الخاص (CSR)"},
-      {id:"national",label:"اللجنة الوطنية"},
-      {id:"admin",label:"إدارة المنصة"}
-    ];
-    const CONTACT={ email:"info@talbiya.sa", whatsapp:"966556083172" };
-
-    /* ========== شعارات ========== */
-    const LogoNOMU=({color="#059669",className="h-8 w-auto"})=>(
-      <div className="flex items-center gap-2">
-        <svg className={className} viewBox="0 0 220 60" aria-label="نمو" role="img">
-          <title>نمو</title>
-          <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0%" stopColor={color} stopOpacity="0.35"/><stop offset="100%" stopColor={color} stopOpacity="0.9"/></linearGradient></defs>
-          <circle cx="18" cy="16" r="6" fill="url(#g)"/>
-          <path d="M10 46 Q18 28 28 36 T48 46" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
-          <path d="M75 28 q14-10 24 0 t24 0" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
-          <path d="M73 44 q14 12 24 0 t24 0" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
-          <line x1="10" y1="52" x2="200" y2="52" stroke={color} strokeWidth="2" strokeLinecap="round" opacity="0.2"/>
-        </svg>
-        <span className="text-xl font-bold" style={{color}}>منصة نمو</span>
+<body>
+<div id="fatal" class="notice"></div>
+<header>
+  <div class="container p-3 row" style="justify-content:space-between">
+    <!-- يمين: شعار نمو -->
+    <a href="#/home" class="row">
+      <svg viewBox="0 0 220 60" style="height:36px;width:auto"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0%" stop-color="#059669" stop-opacity=".35"/><stop offset="100%" stop-color="#059669" stop-opacity=".9"/></linearGradient></defs>
+        <circle cx="18" cy="16" r="6" fill="url(#g)"></circle>
+        <path d="M10 46 Q18 28 28 36 T48 46" fill="none" stroke="#059669" stroke-width="6" stroke-linecap="round"></path>
+        <path d="M75 28 q14-10 24 0 t24 0" fill="none" stroke="#059669" stroke-width="6" stroke-linecap="round"></path>
+        <path d="M73 44 q14 12 24 0 t24 0" fill="none" stroke="#059669" stroke-width="6" stroke-linecap="round"></path>
+        <line x1="10" y1="52" x2="200" y2="52" stroke="#059669" stroke-width="2" stroke-linecap="round" opacity=".2"></line>
+      </svg>
+      <span class="text-xl title" style="color:var(--nomu)">منصة نمو</span>
+    </a>
+    <!-- وسط: روابط -->
+    <nav id="nav" class="row text-sm">
+      <a class="navlink" href="#/home">الرئيسية</a>
+      <a class="navlink" href="#/journey">رحلة الطفل</a>
+      <a class="navlink" href="#/kpis">مؤشرات الأداء</a>
+      <a class="navlink" href="#/referrals">الإحالات</a>
+      <a class="navlink" href="#/health">الصحة</a>
+      <a class="navlink" href="#/education">التعليم</a>
+      <a class="navlink" href="#/ngo">الجمعيات</a>
+      <a class="navlink" href="#/wallet">الرعايات/المحفظة</a>
+      <a class="navlink" href="#/govern">الحوكمة</a>
+      <a class="navlink" href="#/support">الدعم</a>
+      <a class="navlink" href="#/settings">الإعدادات</a>
+      <a class="navlink" href="#/admin">الإدارة</a>
+    </nav>
+    <!-- يسار: شعارات + أدوات -->
+    <div class="left-logos">
+      <div class="svg-txt" title="رؤية 2030"><svg viewBox="0 0 200 60" style="height:32px;width:auto"><text x="0" y="38" font-size="28" font-weight="700" fill="currentColor">رؤية 2030</text></svg></div>
+      <div class="svg-txt" style="color:#0369a1" title="تلبية"><svg viewBox="0 0 200 60" style="height:32px;width:auto"><text x="0" y="38" font-size="28" font-weight="700" fill="currentColor">تلبية</text></svg></div>
+      <span id="roleChip" class="chip"></span>
+      <select id="regionSel" class="text-sm"></select>
+      <button id="switchRoleBtn" class="btn text-sm">تبديل الدور</button>
+    </div>
+    <!-- جوال: زر قائمة -->
+    <div class="mobile">
+      <div class="svg-txt" title="رؤية 2030"><svg viewBox="0 0 200 60" style="height:24px;width:auto"><text x="0" y="28" font-size="20" font-weight="700" fill="currentColor">رؤية</text></svg></div>
+      <div class="svg-txt" style="color:#0369a1" title="تلبية"><svg viewBox="0 0 200 60" style="height:24px;width:auto"><text x="0" y="28" font-size="20" font-weight="700" fill="currentColor">تلبية</text></svg></div>
+      <button id="menuBtn" class="btn" aria-label="فتح القائمة">☰</button>
+    </div>
+  </div>
+  <div id="mobileMenu" class="hidden">
+    <div class="container p-3 grid" style="border-top:1px solid var(--brd);background:#fff">
+      <a class="navlink" href="#/home">الرئيسية</a>
+      <a class="navlink" href="#/journey">رحلة الطفل</a>
+      <a class="navlink" href="#/kpis">مؤشرات الأداء</a>
+      <a class="navlink" href="#/referrals">الإحالات</a>
+      <a class="navlink" href="#/health">الصحة</a>
+      <a class="navlink" href="#/education">التعليم</a>
+      <a class="navlink" href="#/ngo">الجمعيات</a>
+      <a class="navlink" href="#/wallet">الرعايات/المحفظة</a>
+      <a class="navlink" href="#/govern">الحوكمة</a>
+      <a class="navlink" href="#/support">الدعم</a>
+      <a class="navlink" href="#/settings">الإعدادات</a>
+      <a class="navlink" href="#/admin">الإدارة</a>
+      <div class="row mt-2">
+        <span id="mRoleChip" class="chip"></span>
+        <select id="mRegionSel" class="text-sm"></select>
+        <button id="mSwitchRoleBtn" class="btn text-sm">تبديل الدور</button>
       </div>
-    );
-    const LogoVision=({className="h-8 w-auto"})=>(
-      <div className="flex items-center gap-2 text-vision-700" title="رؤية 2030">
-        <svg className={className} viewBox="0 0 200 60" role="img"><text x="0" y="38" fontSize="28" fontWeight="700" fill="currentColor">رؤية 2030</text></svg>
-      </div>
-    );
-    const LogoTelbiya=({className="h-8 w-auto"})=>(
-      <div className="flex items-center gap-2 text-telbiya-700" title="تلبية">
-        <svg className={className} viewBox="0 0 200 60" role="img"><text x="0" y="38" fontSize="28" fontWeight="700" fill="currentColor">تلبية</text></svg>
-      </div>
-    );
+    </div>
+  </div>
+</header>
 
-    /* ========== مخططات النماذج الديناميكية (محسنة) ========== */
-    const SCHEMAS = {
-      referral: {
-        common: [
-          {key:"childName", label:"اسم الطفل", type:"text", required:true},
-          {key:"childNid", label:"هوية/سجل الأسرة (اختياري)", type:"text"},
-          {key:"refType", label:"نوع الإحالة", type:"select", required:true, options:["صحي","نمائي 0–3","تعليمي","دعم أسري"]},
-          {key:"region", label:"المنطقة", type:"select", required:true, options:REGIONS},
-          {key:"geo", label:"الموقع (رابط خرائط)", type:"text"},
-          {key:"summary", label:"وصف مختصر", type:"textarea"},
-          {key:"attachments", label:"روابط مرفقات (URL مفصول بفواصل)", type:"text"}
-        ],
-        byRole: {
-          family: [
-            {key:"guardianPhone", label:"هاتف ولي الأمر", type:"tel", required:true},
-            {key:"preferredContact", label:"طريقة التواصل", type:"select", required:true, options:["الهاتف","واتساب","البريد"]},
-            {key:"consent", label:"موافقة مشاركة البيانات", type:"checkbox", required:true},
-            {key:"consentAt", label:"تاريخ/وقت الموافقة", type:"date"}
-          ],
-          health: [
-            {key:"diagnosis", label:"تشخيص/ملاحظة أولية", type:"textarea", required:true},
-            {key:"icd10", label:"ترميز ICD-10", type:"text"},
-            {key:"priority", label:"الأولوية", type:"select", required:true, options:["عاجلة","مرتفعة","عادية"]},
-            {key:"slaHours", label:"SLA مستهدف (ساعات)", type:"number"}
-          ],
-          edu: [
-            {key:"schoolId", label:"رقم المنشأة التعليمية", type:"text"},
-            {key:"iep", label:"حالة IEP", type:"select", options:["غير مطبق","قيد الإعداد","مطبّق"], required:true},
-            {key:"eduCode", label:"رمز برنامج/مسار", type:"text"}
-          ],
-          ngo: [
-            {key:"program", label:"البرنامج/المبادرة", type:"select", options:["تدخل مبكر","إرشاد أسري","دعم مجتمعي"], required:true},
-            {key:"capacity", label:"طاقة استيعابية", type:"number"},
-            {key:"outcomeMetric", label:"مؤشر ناتج", type:"select", options:["جلسات منجزة","أسر مخدومة","زيارات منزلية"]}
-          ],
-          csr: [
-            {key:"sponsor", label:"اسم الجهة الراعية", type:"text", required:true},
-            {key:"contractNo", label:"رقم العقد/الاتفاق", type:"text"},
-            {key:"fundingRef", label:"مرجع التزام مالي/منحة", type:"text"},
-            {key:"reportingFreq", label:"دورية التقارير", type:"select", options:["شهري","ربع سنوي","سنوي"], required:true}
-          ],
-          national: [
-            {key:"policyRef", label:"مرجع السياسة/الإجراء", type:"text"},
-            {key:"regionScope", label:"النطاق الجغرافي", type:"select", options:["وطني","منطقة","محافظة"], required:true},
-            {key:"auditFlag", label:"علامة للمراجعة الوطنية", type:"select", options:["نعم","لا"]}
-          ],
-          admin: [
-            {key:"internalNote", label:"ملاحظة داخلية", type:"textarea"},
-            {key:"sla", label:"مستوى الخدمة SLA", type:"select", options:["≤2س","≤8س","≤1يوم"], required:true},
-            {key:"owner", label:"مسؤول الحالة", type:"text"}
-          ]
-        }
-      },
+<main id="root"></main>
 
-      health: {
-        common: [
-          {key:"childId", label:"معرّف/اسم الطفل", type:"text", required:true},
-          {key:"screenType", label:"نوع الفحص", type:"select", required:true, options:["newborn_hearing","metabolic","developmental","vision"]},
-          {key:"date", label:"تاريخ الفحص", type:"date", required:true},
-          {key:"result", label:"النتيجة", type:"select", required:true, options:["PASS","Needs follow-up","FAIL"]},
-          {key:"attachments", label:"روابط تقارير (URL)", type:"text"}
-        ],
-        byRole: {
-          family: [
-            {key:"fasting", label:"هل الطفل صائم؟", type:"select", options:["نعم","لا"], dependsOn:{key:"screenType", value:"metabolic"}}
-          ],
-          health: [
-            {key:"facility", label:"المنشأة الصحية", type:"text", required:true},
-            {key:"practitionerId", label:"رقم الممارس", type:"text", required:true},
-            {key:"icd10", label:"ترميز ICD-10", type:"text"},
-            {key:"vitals", label:"قراءات أساسية", type:"text", placeholder:"حرارة/وزن/طول..."},
-            {key:"nextAppointment", label:"موعد المتابعة", type:"date"},
-            {key:"notes", label:"ملاحظات", type:"textarea"}
-          ],
-          edu: [{key:"impactOnLearning", label:"أثر على التعلم", type:"select", options:["لا","محتمل","مؤكد"]}],
-          ngo: [{key:"supportNeeded", label:"دعم بعد الفحص", type:"select", options:["جلسة إرشاد","زيارة منزلية","إحالة جمعية"]}],
-          csr: [{key:"sponsorCovered", label:"مغطّى ضمن رعاية؟", type:"select", options:["نعم","لا"]}],
-          national: [
-            {key:"regionScope", label:"نطاق التقرير", type:"select", options:["وطني","منطقة","محافظة"]},
-            {key:"qualityFlag", label:"مؤشر جودة بلاغ", type:"select", options:["S1","S2","S3"]}
-          ],
-          admin: [{key:"qaCheck", label:"جودة البيانات (QA)", type:"select", options:["S1","S2","S3"], required:true}]
-        }
-      },
+<footer class="mt-8 p-6">
+  <div class="container row" style="justify-content:space-between;align-items:center">
+    <div class="row">
+      <svg viewBox="0 0 220 60" style="height:28px;width:auto"><circle cx="18" cy="16" r="6" fill="#a7f3d0"></circle><path d="M10 46 Q18 28 28 36 T48 46" fill="none" stroke="#059669" stroke-width="4" stroke-linecap="round"></path></svg>
+      <span class="muted">© <span id="y"></span> — منصة نمو</span>
+    </div>
+    <div class="muted text-center">بمواءمة رؤية 2030 وبدعم تلبية</div>
+    <div class="muted">جميع الحقوق محفوظة لشركة تلبية للبحث والتطوير</div>
+  </div>
+</footer>
 
-      education: {
-        common: [
-          {key:"childName", label:"اسم الطفل", type:"text", required:true},
-          {key:"childNid", label:"رقم هوية الطفل (اختياري)", type:"text"},
-          {key:"applicationType", label:"نوع الطلب", type:"select", required:true, options:["رياض أطفال","دعم جاهزية","خطة فردية IEP"]},
-          {key:"date", label:"تاريخ التقديم", type:"date", required:true},
-          {key:"region", label:"المنطقة", type:"select", options:REGIONS, required:true},
-          {key:"attachments", label:"مرفقات (URL)", type:"text"}
-        ],
-        byRole: {
-          family: [
-            {key:"preferredKG", label:"الروضة المفضلة", type:"text"},
-            {key:"transport", label:"حاجة للنقل المدرسي", type:"select", options:["نعم","لا"]},
-            {key:"disabilityCat", label:"فئة إعاقة (إن وجدت)", type:"select", options:["لا يوجد","سمعي","بصري","طيف توحد","تعلمية","حركية"]}
-          ],
-          edu: [
-            {key:"schoolId", label:"رقم المنشأة التعليمية", type:"text", required:true},
-            {key:"readinessScore", label:"درجة الجاهزية (0–100)", type:"number"},
-            {key:"placement", label:"المسار/المستوى", type:"text"},
-            {key:"seatAvailability", label:"توفر مقاعد", type:"select", options:["متاح","محدود","ممتلئ"], required:true}
-          ],
-          health: [{key:"medicalNote", label:"ملاحظة طبية مؤثرة", type:"textarea"}],
-          ngo: [{key:"supportProgram", label:"برنامج دعم مرافق", type:"select", options:["تدخل مبكر","علاج وظيفي","تخاطب"]}],
-          csr: [
-            {key:"scholarship", label:"منحة/رعاية للرسوم", type:"select", options:["نعم","لا"]},
-            {key:"schAmount", label:"مبلغ المنحة (ر.س)", type:"number", dependsOn:{key:"scholarship",value:"نعم"}}
-          ],
-          national: [
-            {key:"policyRef", label:"مرجع سياسة القبول", type:"text"},
-            {key:"reportingFreq", label:"دورية التقارير", type:"select", options:["شهري","ربع سنوي","سنوي"]}
-          ],
-          admin: [{key:"sla", label:"SLA لمعالجة الطلب", type:"select", options:["≤2يوم","≤5أيام"], required:true}]
-        }
-      },
+<script>
+/* ====== حماية من الصفحة البيضاء: رسالة خطأ إن حصل استثناء في render ====== */
+function fatal(msg){var f=document.getElementById('fatal');f.textContent=msg;f.style.display='block';}
 
-      ngo: {
-        common: [
-          {key:"caseTitle", label:"عنوان الحالة/النشاط", type:"text", required:true},
-          {key:"program", label:"البرنامج", type:"select", required:true, options:["تدخل مبكر","إرشاد أسري","دعم مجتمعي"]},
-          {key:"region", label:"المنطقة", type:"select", options:REGIONS, required:true},
-          {key:"status", label:"الحالة", type:"select", options:["مجدولة","قيد التنفيذ","منفذة"]},
-          {key:"attachments", label:"مرفقات (URL)", type:"text"}
-        ],
-        byRole: {
-          ngo: [
-            {key:"capacity", label:"الطاقة الاستيعابية", type:"number", required:true},
-            {key:"beneficiaries", label:"عدد المستفيدين المتوقع", type:"number"},
-            {key:"outcomeMetric", label:"مؤشر ناتج", type:"select", options:["جلسات","أسر","زيارات"]}
-          ],
-          family: [{key:"preferredTime", label:"الوقت المفضل", type:"select", options:["صباح","مساء"]}],
-          health: [{key:"clinicalCoord", label:"منسق صحي", type:"text"}],
-          edu: [{key:"schoolPartner", label:"شريك تعليمي", type:"text"}],
-          csr: [{key:"sponsor", label:"الراعي", type:"text"},{key:"budget", label:"ميزانية مرصودة (ر.س)", type:"number"}],
-          national: [{key:"policyRef", label:"مرجع توجيه", type:"text"}],
-          admin: [{key:"qaCheck", label:"مراجعة جودة", type:"select", options:["S1","S2","S3"]}]
-        }
-      },
+/* ====== مخزن بسيط ====== */
+const store={
+  get:(k,f)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch{return f}},
+  set:(k,v)=>localStorage.setItem(k,JSON.stringify(v)),
+  del:(k)=>localStorage.removeItem(k)
+};
 
-      wallet: {
-        common: [
-          {key:"source", label:"المصدر", type:"text", required:true},
-          {key:"amount", label:"المبلغ (ر.س)", type:"number", required:true},
-          {key:"date", label:"التاريخ", type:"date", required:true},
-          {key:"tag", label:"التصنيف", type:"select", required:true, options:["CSR","Grant","Donation","Other"]},
-          {key:"attachments", label:"روابط اتفاقيات/محاضر (URL)", type:"text"}
-        ],
-        byRole: {
-          csr: [
-            {key:"contractNo", label:"رقم العقد", type:"text"},
-            {key:"MoU", label:"مرجع مذكرة تفاهم", type:"text"},
-            {key:"impactKPI", label:"مؤشر أثر مستهدف", type:"select", options:["التغطية 0–6","التحصين","الجاهزية","زمن الإغلاق"], required:true},
-            {key:"kpiTarget", label:"قيمة مستهدفة", type:"number"},
-            {key:"period", label:"فترة الالتزام", type:"select", options:["شهري","ربع سنوي","سنوي"], required:true},
-            {key:"escrow", label:"حساب ضمان (Escrow)", type:"select", options:["نعم","لا"]}
-          ],
-          ngo: [{key:"program", label:"البرنامج المستفيد", type:"select", options:["تدخل مبكر","إرشاد أسري","دعم مجتمعي"], required:true}],
-          national: [
-            {key:"regionScope", label:"نطاق الصرف", type:"select", options:["وطني","منطقة","محافظة"]},
-            {key:"reportingFreq", label:"دورية التقارير", type:"select", options:["شهري","ربع سنوي","سنوي"]}
-          ],
-          admin: [{key:"internalNote", label:"ملاحظة داخلية", type:"textarea"}]
-        }
-      }
-    };
+/* ====== بيانات أساسية ====== */
+const REGIONS=["الرياض","مكة المكرمة","الشرقية","المدينة","عسير","حائل","تبوك","القصيم","نجران","جازان","الجوف","الباحة","الحدود الشمالية"];
+const ROLES=[
+  {id:"family",label:"الأسرة/الأفراد"},
+  {id:"health",label:"الصحة"},
+  {id:"edu",label:"التعليم"},
+  {id:"ngo",label:"الجمعيات"},
+  {id:"csr",label:"القطاع الخاص (CSR)"},
+  {id:"national",label:"اللجنة الوطنية"},
+  {id:"admin",label:"إدارة المنصة"}
+];
+const CONTACT={ email:"info@talbiya.sa", whatsapp:"966556083172" };
 
-    /* ========== حقول UI مشتركة ========== */
-    const Badge=({text,color="bg-slate-100 text-slate-700"})=><span className={cn("text-xs px-2 py-1 rounded-full",color)}>{text}</span>;
-    const Stat=({label,value,suffix="%",ok=true})=>(
-      <div className={cn("rounded-2xl p-5 border shadow-sm",ok?"border-emerald-200 bg-emerald-50":"border-amber-200 bg-amber-50")}>
-        <div className="text-sm text-slate-600">{label}</div>
-        <div className="mt-2 text-3xl font-bold">{value}<span className="text-xl">{suffix}</span></div>
-      </div>
-    );
+/* ====== تهيئة بيانات تجريبية أول مرة ====== */
+function seed(){
+  if(!store.get("nomu_initialized",false)){
+    store.set("user",{role:"family",region:"الرياض",name:"مستخدم"});
+    store.set("kpis",{period:"آخر 30 يومًا",byRegion:{
+      "الرياض":{coverage:82,immunization:91,readiness:76,referralsMedianHrs:18,kgEnroll:88,completeness:96},
+      "مكة المكرمة":{coverage:78,immunization:89,readiness:72,referralsMedianHrs:22,kgEnroll:84,completeness:94}
+    }});
+    store.set("children",[
+      {id:"CH-001",familyId:"F-001",name:"سعود",gender:"M",birthDate:"2021-06-10",region:"الرياض"},
+      {id:"CH-002",familyId:"F-001",name:"نورة",gender:"F",birthDate:"2023-02-02",region:"الرياض"}
+    ]);
+    store.set("screenings",[
+      {id:"SC-100",childId:"CH-002",type:"newborn_hearing",date:"2023-02-05",result:"PASS"},
+      {id:"SC-101",childId:"CH-001",type:"developmental",date:"2024-10-01",result:"Needs follow-up"}
+    ]);
+    store.set("referrals",[
+      {id:"RF-1001",child:"سعود",type:"تعليمي",status:"قيد المعالجة",created:"2025-09-22",region:"الرياض",notes:"تقييم جاهزية",meta:{}},
+      {id:"RF-1002",child:"نورة",type:"صحي",status:"مفتوحة",created:"2025-09-28",region:"الرياض",notes:"متابعة سمع",meta:{}}
+    ]);
+    store.set("wallet",{total:35000,entries:[
+      {id:"TRX-01",source:"شركة ألف — رعاية روضة",amount:20000,date:"2025-09-05",tag:"CSR",meta:{}},
+      {id:"TRX-02",source:"منحة تعليم مبكر",amount:10000,date:"2025-09-18",tag:"Grant",meta:{}},
+      {id:"TRX-03",source:"متبرع فردي",amount:5000,date:"2025-10-01",tag:"Donation",meta:{}}
+    ]});
+    store.set("notifications",[
+      {id:"NT-01",level:"info",text:"تذكير: موعد تقييم نمائي بعد 3 أيام."},
+      {id:"NT-02",level:"warn",text:"إحالة RF-1002 تجاوزت 48 ساعة دون تحديث."}
+    ]);
+    store.set("nomu_initialized",true);
+  }
+}
 
-    const Field = ({field,value,onChange,data})=>{
-      const base="w-full rounded-xl border px-3 py-2 mt-1";
-      const label=<label className="text-xs text-slate-600">{field.label}{field.required?" *":""}</label>;
-      const visible = !field.dependsOn || data?.[field.dependsOn.key]===field.dependsOn.value;
-      if(!visible) return null;
-      if(field.type==="textarea") return <div><>{label}</><textarea rows="3" className="w-full rounded-2xl border px-3 py-2 mt-1" value={value||""} onChange={e=>onChange(e.target.value)}></textarea></div>;
-      if(field.type==="select") return <div><>{label}</><select className={base} value={value||""} onChange={e=>onChange(e.target.value)}>
-        <option value="">— اختر —</option>{(field.options||[]).map(o=><option key={o} value={o}>{o}</option>)}
-      </select></div>;
-      if(field.type==="checkbox") return <div className="mt-2"><label className="inline-flex items-center gap-2 text-sm"><input type="checkbox" checked={!!value} onChange={e=>onChange(e.target.checked)}/>{field.label}{field.required?" *":""}</label></div>;
-      const typeMap = ["text","number","tel","email","date"].includes(field.type)?field.type:"text";
-      return <div><>{label}</><input className={base} type={typeMap} value={value??""} placeholder={field.placeholder||""} onChange={e=>onChange(typeMap==="number"?Number(e.target.value):e.target.value)}/></div>;
-    };
-    const validateRequired = (fields, data) => {
-      for(const f of fields.filter(x=>x.required)){
-        if(f.dependsOn){ const v=data[f.dependsOn.key]; if(v!==f.dependsOn.value) continue; }
-        const val=data[f.key];
-        if(f.type==="checkbox"){ if(!val) return f.label; }
-        else if(val===undefined || val===null || val==="") return f.label;
-      }
-      return null;
-    };
+/* ====== أدوات UI ====== */
+const $ = (sel,root=document)=>root.querySelector(sel);
+function el(tag, attrs={}, children=[]){
+  const e=document.createElement(tag);
+  for(const k in attrs){
+    if(k==="class") e.className=attrs[k];
+    else if(k==="style") e.setAttribute("style",attrs[k]);
+    else if(k.startsWith("on") && typeof attrs[k]==="function") e.addEventListener(k.substring(2).toLowerCase(),attrs[k]);
+    else e.setAttribute(k,attrs[k]);
+  }
+  if(!Array.isArray(children)) children=[children];
+  children.filter(Boolean).forEach(c=>{
+    if(typeof c==="string") e.appendChild(document.createTextNode(c));
+    else e.appendChild(c);
+  });
+  return e;
+}
+function chip(text,cls='chip'){return el('span',{class:cls},text)}
+function stat(label,val,ok=true){
+  const cls=ok?'badge-ok':'badge-warn';
+  return el('div',{class:'card p-5'},[
+    el('div',{class:'text-sm muted'},label),
+    el('div',{class:'mt-2 text-3xl title'},String(val)),
+    el('span',{class:`chip mt-2 ${cls}`}, ok?'جيد':'يتطلب تحسين')
+  ]);
+}
+function table(headings,rows){
+  const t=el('table',{class:'table'});
+  const thead=el('thead',{},[el('tr',{},headings.map(h=>el('th',{},h)))]);
+  const tbody=el('tbody',{},rows.map(r=>el('tr',{},r.map(c=>el('td',{},c)))));
+  t.appendChild(thead);t.appendChild(tbody);return t;
+}
+function inputField(f,data,onChange){
+  const wrap=el('div',{},[]);
+  const label=el('label',{class:'text-xs muted'},f.label+(f.required?' *':''));
+  let visible=true;
+  if(f.dependsOn){ const v=data[f.dependsOn.key]; visible = v===f.dependsOn.value; }
+  if(!visible) return el('div',{class:'hidden'});
+  let input;
+  if(f.type==='textarea'){
+    input=el('textarea',{rows:3,placeholder:f.placeholder||''});
+    input.value=data[f.key]||'';
+    input.addEventListener('input',()=>onChange(f.key,input.value));
+  }else if(f.type==='select'){
+    input=el('select',{},[el('option',{value:''},'— اختر —'),...(f.options||[]).map(o=>el('option',{value:o},o))]);
+    input.value=data[f.key]||'';
+    input.addEventListener('change',()=>onChange(f.key,input.value));
+  }else if(f.type==='checkbox'){
+    input=el('input',{type:'checkbox'});
+    input.checked=!!data[f.key];
+    input.addEventListener('change',()=>onChange(f.key,input.checked));
+    return el('label',{class:'row text-sm mt-2'},[input, ' ', f.label+(f.required?' *':'')]);
+  }else{
+    const typeMap=['text','number','tel','email','date'].includes(f.type)?f.type:'text';
+    input=el('input',{type:typeMap,placeholder:f.placeholder||''});
+    if(data[f.key]!==undefined) input.value=data[f.key];
+    input.addEventListener('input',()=>onChange(f.key,typeMap==='number'?Number(input.value):input.value));
+  }
+  wrap.appendChild(label);wrap.appendChild(el('div',{class:'mt-1'},[input]));return wrap;
+}
+function validateRequired(fields,data){
+  for(const f of fields.filter(x=>x.required)){
+    if(f.dependsOn){const v=data[f.dependsOn.key]; if(v!==f.dependsOn.value) continue;}
+    const val=data[f.key];
+    if(f.type==='checkbox'){ if(!val) return f.label; }
+    else if(val===undefined||val===null||val==='') return f.label;
+  }
+  return null;
+}
 
-    /* ========== بيانات أولية ========== */
-    function seed(){
-      if(!store.get("nomu_initialized",false)){
-        store.set("user",{ role:"family", region:"الرياض", name:"مستخدم" });
-        store.set("kpis",{ period:"آخر 30 يومًا", byRegion:{
-          "الرياض":{coverage:82,immunization:91,readiness:76,referralsMedianHrs:18,kgEnroll:88,completeness:96},
-          "مكة المكرمة":{coverage:78,immunization:89,readiness:72,referralsMedianHrs:22,kgEnroll:84,completeness:94}
-        }});
-        store.set("children",[
-          {id:"CH-001", familyId:"F-001", name:"سعود", gender:"M", birthDate:"2021-06-10", region:"الرياض"},
-          {id:"CH-002", familyId:"F-001", name:"نورة", gender:"F", birthDate:"2023-02-02", region:"الرياض"}
-        ]);
-        store.set("screenings",[
-          {id:"SC-100", childId:"CH-002", type:"newborn_hearing", date:"2023-02-05", result:"PASS"},
-          {id:"SC-101", childId:"CH-001", type:"developmental", date:"2024-10-01", result:"Needs follow-up"}
-        ]);
-        store.set("referrals",[
-          {id:"RF-1001", child:"سعود", type:"تعليمي", status:"قيد المعالجة", created:"2025-09-22", region:"الرياض", notes:"تقييم جاهزية", meta:{}},
-          {id:"RF-1002", child:"نورة", type:"صحي", status:"مفتوحة", created:"2025-09-28", region:"الرياض", notes:"متابعة سمع", meta:{}}
-        ]);
-        store.set("wallet",{ total:35000, entries:[
-          {id:"TRX-01", source:"شركة ألف — رعاية روضة", amount:20000, date:"2025-09-05", tag:"CSR", meta:{}},
-          {id:"TRX-02", source:"منحة تعليم مبكر", amount:10000, date:"2025-09-18", tag:"Grant", meta:{}},
-          {id:"TRX-03", source:"متبرع فردي", amount:5000, date:"2025-10-01", tag:"Donation", meta:{}}
-        ]});
-        store.set("notifications",[
-          {id:"NT-01", level:"info", text:"تذكير: موعد تقييم نمائي بعد 3 أيام."},
-          {id:"NT-02", level:"warn", text:"إحالة RF-1002 تجاوزت 48 ساعة دون تحديث."}
-        ]);
-        store.set("nomu_initialized",true);
-      }
+/* ====== مخططات النماذج بحسب الدور ====== */
+const SCHEMAS={
+  referral:{
+    common:[
+      {key:"childName",label:"اسم الطفل",type:"text",required:true},
+      {key:"childNid",label:"هوية/سجل الأسرة (اختياري)",type:"text"},
+      {key:"refType",label:"نوع الإحالة",type:"select",required:true,options:["صحي","نمائي 0–3","تعليمي","دعم أسري"]},
+      {key:"region",label:"المنطقة",type:"select",required:true,options:REGIONS},
+      {key:"geo",label:"الموقع (رابط خرائط)",type:"text"},
+      {key:"summary",label:"وصف مختصر",type:"textarea"},
+      {key:"attachments",label:"روابط مرفقات (URL مفصول بفواصل)",type:"text"}
+    ],
+    byRole:{
+      family:[
+        {key:"guardianPhone",label:"هاتف ولي الأمر",type:"tel",required:true},
+        {key:"preferredContact",label:"طريقة التواصل",type:"select",options:["الهاتف","واتساب","البريد"],required:true},
+        {key:"consent",label:"موافقة مشاركة البيانات",type:"checkbox",required:true},
+        {key:"consentAt",label:"تاريخ/وقت الموافقة",type:"date"}
+      ],
+      health:[
+        {key:"diagnosis",label:"تشخيص/ملاحظة أولية",type:"textarea",required:true},
+        {key:"icd10",label:"ترميز ICD-10",type:"text"},
+        {key:"priority",label:"الأولوية",type:"select",options:["عاجلة","مرتفعة","عادية"],required:true},
+        {key:"slaHours",label:"SLA مستهدف (ساعات)",type:"number"}
+      ],
+      edu:[
+        {key:"schoolId",label:"رقم المنشأة التعليمية",type:"text"},
+        {key:"iep",label:"حالة IEP",type:"select",options:["غير مطبق","قيد الإعداد","مطبّق"],required:true},
+        {key:"eduCode",label:"رمز برنامج/مسار",type:"text"}
+      ],
+      ngo:[
+        {key:"program",label:"البرنامج/المبادرة",type:"select",options:["تدخل مبكر","إرشاد أسري","دعم مجتمعي"],required:true},
+        {key:"capacity",label:"الطاقة الاستيعابية",type:"number"},
+        {key:"outcomeMetric",label:"مؤشر ناتج",type:"select",options:["جلسات منجزة","أسر مخدومة","زيارات منزلية"]}
+      ],
+      csr:[
+        {key:"sponsor",label:"اسم الجهة الراعية",type:"text",required:true},
+        {key:"contractNo",label:"رقم العقد/الاتفاق",type:"text"},
+        {key:"fundingRef",label:"مرجع التزام مالي/منحة",type:"text"},
+        {key:"reportingFreq",label:"دورية التقارير",type:"select",options:["شهري","ربع سنوي","سنوي"],required:true}
+      ],
+      national:[
+        {key:"policyRef",label:"مرجع السياسة/الإجراء",type:"text"},
+        {key:"regionScope",label:"النطاق الجغرافي",type:"select",options:["وطني","منطقة","محافظة"],required:true},
+        {key:"auditFlag",label:"علامة للمراجعة الوطنية",type:"select",options:["نعم","لا"]}
+      ],
+      admin:[
+        {key:"internalNote",label:"ملاحظة داخلية",type:"textarea"},
+        {key:"sla",label:"مستوى الخدمة SLA",type:"select",options:["≤2س","≤8س","≤1يوم"],required:true},
+        {key:"owner",label:"مسؤول الحالة",type:"text"}
+      ]
     }
+  },
+  health:{
+    common:[
+      {key:"childId",label:"معرّف/اسم الطفل",type:"text",required:true},
+      {key:"screenType",label:"نوع الفحص",type:"select",required:true,options:["newborn_hearing","metabolic","developmental","vision"]},
+      {key:"date",label:"تاريخ الفحص",type:"date",required:true},
+      {key:"result",label:"النتيجة",type:"select",required:true,options:["PASS","Needs follow-up","FAIL"]},
+      {key:"attachments",label:"روابط تقارير (URL)",type:"text"}
+    ],
+    byRole:{
+      family:[{key:"fasting",label:"هل الطفل صائم؟",type:"select",options:["نعم","لا"],dependsOn:{key:"screenType",value:"metabolic"}}],
+      health:[
+        {key:"facility",label:"المنشأة الصحية",type:"text",required:true},
+        {key:"practitionerId",label:"رقم الممارس",type:"text",required:true},
+        {key:"icd10",label:"ترميز ICD-10",type:"text"},
+        {key:"vitals",label:"قراءات أساسية",type:"text",placeholder:"حرارة/وزن/طول..."},
+        {key:"nextAppointment",label:"موعد المتابعة",type:"date"},
+        {key:"notes",label:"ملاحظات",type:"textarea"}
+      ],
+      edu:[{key:"impactOnLearning",label:"أثر على التعلم",type:"select",options:["لا","محتمل","مؤكد"]}],
+      ngo:[{key:"supportNeeded",label:"دعم بعد الفحص",type:"select",options:["جلسة إرشاد","زيارة منزلية","إحالة جمعية"]}],
+      csr:[{key:"sponsorCovered",label:"مغطّى ضمن رعاية؟",type:"select",options:["نعم","لا"]}],
+      national:[
+        {key:"regionScope",label:"نطاق التقرير",type:"select",options:["وطني","منطقة","محافظة"]},
+        {key:"qualityFlag",label:"مؤشر جودة بلاغ",type:"select",options:["S1","S2","S3"]}
+      ],
+      admin:[{key:"qaCheck",label:"جودة البيانات (QA)",type:"select",options:["S1","S2","S3"],required:true}]
+    }
+  },
+  education:{
+    common:[
+      {key:"childName",label:"اسم الطفل",type:"text",required:true},
+      {key:"childNid",label:"رقم الهوية (اختياري)",type:"text"},
+      {key:"applicationType",label:"نوع الطلب",type:"select",required:true,options:["رياض أطفال","دعم جاهزية","خطة فردية IEP"]},
+      {key:"date",label:"تاريخ التقديم",type:"date",required:true},
+      {key:"region",label:"المنطقة",type:"select",options:REGIONS,required:true},
+      {key:"attachments",label:"مرفقات (URL)",type:"text"}
+    ],
+    byRole:{
+      family:[
+        {key:"preferredKG",label:"الروضة المفضلة",type:"text"},
+        {key:"transport",label:"حاجة للنقل المدرسي",type:"select",options:["نعم","لا"]},
+        {key:"disabilityCat",label:"فئة إعاقة (إن وجدت)",type:"select",options:["لا يوجد","سمعي","بصري","طيف توحد","تعلمية","حركية"]}
+      ],
+      edu:[
+        {key:"schoolId",label:"رقم المنشأة التعليمية",type:"text",required:true},
+        {key:"readinessScore",label:"درجة الجاهزية (0–100)",type:"number"},
+        {key:"placement",label:"المسار/المستوى",type:"text"},
+        {key:"seatAvailability",label:"توفر مقاعد",type:"select",options:["متاح","محدود","ممتلئ"],required:true}
+      ],
+      health:[{key:"medicalNote",label:"ملاحظة طبية مؤثرة",type:"textarea"}],
+      ngo:[{key:"supportProgram",label:"برنامج دعم مرافق",type:"select",options:["تدخل مبكر","علاج وظيفي","تخاطب"]}],
+      csr:[
+        {key:"scholarship",label:"منحة/رعاية للرسوم",type:"select",options:["نعم","لا"]},
+        {key:"schAmount",label:"مبلغ المنحة (ر.س)",type:"number",dependsOn:{key:"scholarship",value:"نعم"}}
+      ],
+      national:[
+        {key:"policyRef",label:"مرجع سياسة القبول",type:"text"},
+        {key:"reportingFreq",label:"دورية التقارير",type:"select",options:["شهري","ربع سنوي","سنوي"]}
+      ],
+      admin:[{key:"sla",label:"SLA لمعالجة الطلب",type:"select",options:["≤2يوم","≤5أيام"],required:true}]
+    }
+  },
+  ngo:{
+    common:[
+      {key:"caseTitle",label:"عنوان الحالة/النشاط",type:"text",required:true},
+      {key:"program",label:"البرنامج",type:"select",required:true,options:["تدخل مبكر","إرشاد أسري","دعم مجتمعي"]},
+      {key:"region",label:"المنطقة",type:"select",options:REGIONS,required:true},
+      {key:"status",label:"الحالة",type:"select",options:["مجدولة","قيد التنفيذ","منفذة"]},
+      {key:"attachments",label:"مرفقات (URL)",type:"text"}
+    ],
+    byRole:{
+      ngo:[
+        {key:"capacity",label:"الطاقة الاستيعابية",type:"number",required:true},
+        {key:"beneficiaries",label:"عدد المستفيدين المتوقع",type:"number"},
+        {key:"outcomeMetric",label:"مؤشر ناتج",type:"select",options:["جلسات","أسر","زيارات"]}
+      ],
+      family:[{key:"preferredTime",label:"الوقت المفضل",type:"select",options:["صباح","مساء"]}],
+      health:[{key:"clinicalCoord",label:"منسق صحي",type:"text"}],
+      edu:[{key:"schoolPartner",label:"شريك تعليمي",type:"text"}],
+      csr:[{key:"sponsor",label:"الراعي",type:"text"},{key:"budget",label:"ميزانية مرصودة (ر.س)",type:"number"}],
+      national:[{key:"policyRef",label:"مرجع توجيه",type:"text"}],
+      admin:[{key:"qaCheck",label:"مراجعة جودة",type:"select",options:["S1","S2","S3"]}]
+    }
+  },
+  wallet:{
+    common:[
+      {key:"source",label:"المصدر",type:"text",required:true},
+      {key:"amount",label:"المبلغ (ر.س)",type:"number",required:true},
+      {key:"date",label:"التاريخ",type:"date",required:true},
+      {key:"tag",label:"التصنيف",type:"select",required:true,options:["CSR","Grant","Donation","Other"]},
+      {key:"attachments",label:"روابط اتفاقيات/محاضر (URL)",type:"text"}
+    ],
+    byRole:{
+      csr:[
+        {key:"contractNo",label:"رقم العقد",type:"text"},
+        {key:"MoU",label:"مرجع مذكرة تفاهم",type:"text"},
+        {key:"impactKPI",label:"مؤشر أثر مستهدف",type:"select",options:["التغطية 0–6","التحصين","الجاهزية","زمن الإغلاق"],required:true},
+        {key:"kpiTarget",label:"قيمة مستهدفة",type:"number"},
+        {key:"period",label:"فترة الالتزام",type:"select",options:["شهري","ربع سنوي","سنوي"],required:true},
+        {key:"escrow",label:"حساب ضمان (Escrow)",type:"select",options:["نعم","لا"]}
+      ],
+      ngo:[{key:"program",label:"البرنامج المستفيد",type:"select",options:["تدخل مبكر","إرشاد أسري","دعم مجتمعي"],required:true}],
+      national:[
+        {key:"regionScope",label:"نطاق الصرف",type:"select",options:["وطني","منطقة","محافظة"]},
+        {key:"reportingFreq",label:"دورية التقارير",type:"select",options:["شهري","ربع سنوي","سنوي"]}
+      ],
+      admin:[{key:"internalNote",label:"ملاحظة داخلية",type:"textarea"}]
+    }
+  }
+};
 
-    /* ========== رأس/تذييل (Responsive) ========== */
-    const TopBar=({onLogout})=>{
-      const user=store.get("user",{});
-      const [open,setOpen]=useState(false);
-      return (
-        <header className="w-full bg-white/90 backdrop-blur border-b border-slate-200 sticky top-0 z-40">
-          <div className="container px-3 sm:px-4 h-16 flex items-center justify-between">
-            <a href="#/home" className="flex items-center gap-3"><LogoNOMU/></a>
-            <nav className="hidden xl:flex items-center gap-2 text-sm">
-              {["home|الرئيسية","journey|رحلة الطفل","kpis|مؤشرات الأداء","referrals|الإحالات","health|الصحة","education|التعليم","ngo|الجمعيات","wallet|الرعايات/المحفظة","govern|الحوكمة","support|الدعم","settings|الإعدادات"].map(i=>{
-                const [path,label]=i.split("|"); return <a key={path} href={`#/${path}`} className="px-3 py-2 hover:opacity-80">{label}</a>;
-              })}
-            </nav>
-            <div className="hidden md:flex items-center gap-3">
-              <LogoVision/><LogoTelbiya/>
-              <Badge text={ROLES.find(r=>r.id===user.role)?.label ?? "—"}/>
-              <select className="text-sm border rounded-lg px-2 py-1" value={user.region}
-                onChange={e=>{const u={...user,region:e.target.value};store.set("user",u);window.dispatchEvent(new Event("storage"));}}>
-                {REGIONS.map(r=><option key={r} value={r}>{r}</option>)}
-              </select>
-              <button onClick={onLogout} className="text-xs px-2.5 py-1 rounded-lg border hover:bg-slate-50">تبديل الدور</button>
-            </div>
-            <div className="flex md:hidden items-center gap-2">
-              <div className="flex items-center gap-2"><LogoVision className="h-6"/><LogoTelbiya className="h-6"/></div>
-              <button aria-label="فتح القائمة" className="p-2 rounded-lg border" onClick={()=>setOpen(v=>!v)}>☰</button>
-            </div>
-          </div>
-          {open && (
-            <div className="xl:hidden border-t border-slate-200 bg-white">
-              <div className="container px-3 py-3 grid gap-2 text-sm">
-                {["home|الرئيسية","journey|رحلة الطفل","kpis|مؤشرات الأداء","referrals|الإحالات","health|الصحة","education|التعليم","ngo|الجمعيات","wallet|الرعايات/المحفظة","govern|الحوكمة","support|الدعم","settings|الإعدادات"].map(i=>{
-                  const [path,label]=i.split("|");
-                  return <a key={path} href={`#/${path}`} className="px-3 py-2 rounded-lg hover:bg-slate-50" onClick={()=>setOpen(false)}>{label}</a>;
-                })}
-                <div className="flex items-center gap-2 pt-2">
-                  <Badge text={ROLES.find(r=>r.id===user.role)?.label ?? "—"}/>
-                  <select className="text-sm border rounded-lg px-2 py-1" value={user.region}
-                    onChange={e=>{const u={...user,region:e.target.value};store.set("user",u);}}>
-                    {REGIONS.map(r=><option key={r} value={r}>{r}</option>)}
-                  </select>
-                  <button onClick={onLogout} className="text-xs px-2.5 py-1 rounded-lg border hover:bg-slate-50">تبديل الدور</button>
-                </div>
-              </div>
-            </div>
-          )}
-        </header>
-      );
-    };
+/* ====== صفحات ====== */
+function Home(){
+  const notes=store.get("notifications",[]);
+  const heroCards=el('div',{class:'grid cols-4 mt-4'},[
+    cardStat('+90%','تحصين أساسي','#dcfce7'),
+    cardStat('≤24س','وسيط إغلاق الإحالات','#e0f2fe'),
+    cardStat('+85%','التحاق رياض الأطفال','#fef3c7'),
+    cardStat('+95%','اكتمال السجل الأسري','#fae8ff')
+  ]);
+  return el('div',{},[
+    el('section',{class:'hero'},[
+      el('div',{class:'container p-6'},[
+        el('div',{class:'card p-6 row',style:'align-items:center;justify-content:space-between;gap:1.25rem'},[
+          el('div',{style:'flex:1'},[
+            el('div',{class:'text-2xl title'},'منصة وطنية تربط رحلة الطفل (0–6) بكل الشركاء'),
+            el('p',{class:'mt-3 muted'},'تحوّل نمو الإحالات إلى نتائج، وتعرض مؤشرات أثر متوائمة مع رؤية 2030، وبدعم تقني من تلبية. النماذج ديناميكية حسب الدور لضمان اكتمال دورة الحياة.'),
+            el('div',{class:'row mt-3'},[
+              el('a',{href:'#/journey',class:'btn btn-primary'},'ابدأ رحلة الطفل'),
+              el('a',{href:'#/referrals',class:'btn'},'فتح إحالة'),
+              el('a',{href:'#/kpis',class:'btn'},'عرض المؤشرات')
+            ])
+          ]),
+          heroCards
+        ])
+      ])
+    ]),
+    el('section',{},[
+      el('div',{class:'container p-6'},[
+        el('div',{class:'grid cols-3'},[
+          box('سير عمل مُحكم','SLA وتنبيهات ومرفقات وتعليقات على كل حالة.'),
+          box('تكامل وطني','نفاذ، NPHIES، نور، والدفع المحلي عند الحاجة.'),
+          box('قياس أثر','لوحات KPIs مرتبطة بالمحفظة والبرامج.')
+        ])
+      ])
+    ]),
+    el('section',{},[
+      el('div',{class:'container p-6'},[
+        el('div',{class:'grid cols-3'}, notes.map(n => el('div',{class:'card p-4'},[
+          el('div',{class:(n.level==='warn'?'badge-warn':'badge-ok')+' chip'}, n.level==='warn'?'تنبيه':'تذكير'),
+          el('div',{class:'mt-2 text-sm'},n.text)
+        ])))
+      ])
+    ])
+  ]);
+}
+function box(title,desc){return el('div',{class:'card p-5'},[el('div',{class:'title'},title),el('p',{class:'mt-2 text-sm muted'},desc)])}
+function cardStat(big,label,bg){return el('div',{class:'card p-4',style:'background:'+bg},[el('div',{class:'text-3xl title'},big),el('div',{class:'text-xs mt-1 muted'},label)])}
 
-    const Footer=()=>(
-      <footer className="py-10 border-t border-slate-200 mt-12">
-        <div className="container px-3 sm:px-4 text-sm text-slate-600 grid sm:grid-cols-3 gap-6 items-center">
-          <div className="flex items-center gap-3">
-            <LogoNOMU className="h-7 w-auto"/><span>© {new Date().getFullYear()} — منصة نمو</span>
-          </div>
-          <div className="text-center"><span className="opacity-70">بمواءمة رؤية 2030 وبدعم تلبية</span></div>
-          <div className="flex justify-end gap-4">
-            <span className="opacity-80">جميع الحقوق محفوظة لشركة تلبية للبحث والتطوير</span>
-          </div>
-        </div>
-      </footer>
-    );
+function KPIs(){
+  const user=store.get("user",{});
+  const k=store.get("kpis",{byRegion:{}}); const current=k.byRegion[user.region] || Object.values(k.byRegion)[0] || {coverage:0,immunization:0,readiness:0,referralsMedianHrs:0,kgEnroll:0,completeness:0};
+  const periodSel = el('select',{},["آخر 7 أيام","آخر 30 يومًا","آخر 90 يومًا","سنة كاملة"].map(p=>el('option',{value:p},p)));
+  periodSel.value=k.period||"آخر 30 يومًا";
+  periodSel.addEventListener('change',()=>{k.period=periodSel.value;store.set('kpis',k);});
+  return sectionWrap('مؤشرات الأداء — '+user.region,[
+    el('div',{class:'row',style:'justify-content:space-between'},[
+      el('div',{class:'title'},''),
+      el('div',{},[periodSel])
+    ]),
+    el('div',{class:'grid cols-3 mt-4'},[
+      stat('التغطية 0–6', current.coverage+'%', current.coverage>=80),
+      stat('اكتمال التحصين', current.immunization+'%', current.immunization>=90),
+      stat('جاهزية التعليم', current.readiness+'%', current.readiness>=75),
+      el('div',{class:'card p-5'},[
+        el('div',{class:'text-sm muted'},'وسيط إغلاق الإحالات'),
+        el('div',{class:'mt-2 text-3xl title'}, current.referralsMedianHrs+'س'),
+        chip('≤ 24 ساعة مستهدف','chip')
+      ]),
+      stat('التحاق رياض الأطفال', current.kgEnroll+'%', current.kgEnroll>=85),
+      stat('اكتمال السجل الأسري', current.completeness+'%', current.completeness>=95)
+    ])
+  ]);
+}
 
-    /* ========== صفحات ========== */
-    const Home=()=>{
-      const notes=store.get("notifications",[]);
-      return (
-        <main>
-          <section className="bg-gradient-to-l from-nomu-50 via-white to-sky-50">
-            <div className="container px-3 sm:px-4 py-12">
-              <div className="rounded-3xl border bg-white shadow-sm p-6 md:p-8 flex flex-col lg:flex-row gap-6 items-center">
-                <div className="flex-1">
-                  <h1 className="text-2xl md:text-3xl font-extrabold">منصة وطنية تربط رحلة الطفل (0–6) بكل الشركاء</h1>
-                  <p className="mt-3 text-slate-600 leading-7">
-                    تحوّل <b>نمو</b> الإحالات إلى نتائج، وتعرض مؤشرات أثر متوائمة مع <b>رؤية 2030</b>، وبدعم تقني من <b>تلبية</b>.
-                    النماذج <b>ديناميكية حسب الدور</b> لضمان اكتمال دورة الحياة لكل عملية وشراكة.
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <a href="#/journey" className="px-4 py-2 rounded-xl bg-nomu-600 text-white hover:bg-nomu-700">ابدأ رحلة الطفل</a>
-                    <a href="#/referrals" className="px-4 py-2 rounded-xl border hover:bg-slate-50">فتح إحالة</a>
-                    <a href="#/kpis" className="px-4 py-2 rounded-xl border hover:bg-slate-50">عرض المؤشرات</a>
-                  </div>
-                </div>
-                <div className="w-full lg:w-1/3 grid grid-cols-2 gap-3">
-                  <div className="rounded-2xl border bg-emerald-50 p-4 text-center"><div className="text-3xl font-bold">+90%</div><div className="text-xs mt-1">تحصين أساسي</div></div>
-                  <div className="rounded-2xl border bg-sky-50 p-4 text-center"><div className="text-3xl font-bold">≤24س</div><div className="text-xs mt-1">وسيط إغلاق الإحالات</div></div>
-                  <div className="rounded-2xl border bg-amber-50 p-4 text-center"><div className="text-3xl font-bold">+85%</div><div className="text-xs mt-1">التحاق رياض الأطفال</div></div>
-                  <div className="rounded-2xl border bg-fuchsia-50 p-4 text-center"><div className="text-3xl font-bold">+95%</div><div className="text-xs mt-1">اكتمال السجل الأسري</div></div>
-                </div>
-              </div>
-            </div>
-          </section>
+function Journey(){
+  const children=store.get("children",[]);
+  const screenings=store.get("screenings",[]);
+  return sectionWrap('رحلة الطفل (0–6)',[
+    el('div',{class:'grid cols-2 mt-4'},[
+      el('div',{class:'card p-5'},[
+        el('div',{class:'title text-lg'},'أطفال الأسرة'),
+        el('ul',{class:'mt-3'}, children.map(c=>el('li',{class:'mt-2',style:'border-top:1px solid var(--brd);padding-top:.6rem'},[
+          el('div',{class:'row',style:'justify-content:space-between'},[
+            el('div',{},[el('b',{},c.name),' — ', (c.gender==='M'?'ذكر':'أنثى'),' — مولود ',c.birthDate]),
+            chip(c.region)
+          ])
+        ])))
+      ]),
+      el('div',{class:'card p-5'},[
+        el('div',{class:'title text-lg'},'الفحوص/التقييمات'),
+        el('ul',{class:'mt-3'}, screenings.map(s=>el('li',{class:'mt-2',style:'border-top:1px solid var(--brd);padding-top:.6rem'},[
+          el('div',{class:'row',style:'justify-content:space-between'},[
+            el('div',{},[el('b',{},s.type),' — ',s.date]),
+            chip(s.result==='PASS'?'سليم':'متابعة', s.result==='PASS'?'chip badge-ok':'chip badge-warn')
+          ])
+        ])))
+      ])
+    ])
+  ]);
+}
 
-          <section className="container px-3 sm:px-4 py-8">
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="rounded-2xl border bg-white p-5 shadow-sm"><h3 className="font-semibold">سير عمل مُحكم</h3><p className="mt-2 text-sm text-slate-600">SLA وتنبيهات ومرفقات وتعليقات على كل حالة.</p></div>
-              <div className="rounded-2xl border bg-white p-5 shadow-sm"><h3 className="font-semibold">تكامل وطني</h3><p className="mt-2 text-sm text-slate-600">نفاذ، NPHIES، نور، والدفع المحلي عند الحاجة.</p></div>
-              <div className="rounded-2xl border bg-white p-5 shadow-sm"><h3 className="font-semibold">قياس أثر</h3><p className="mt-2 text-sm text-slate-600">لوحات KPIs مرتبطة بالمحفظة والبرامج.</p></div>
-            </div>
-          </section>
+/* ====== وحدات CRUD ديناميكية ====== */
+function dynamicForm(schemaCommon, schemaRole, onSave){
+  const data={};
+  const wrap=el('div',{class:'grid',style:'gap:.75rem'});
+  const all=[...schemaCommon, ...schemaRole];
+  function set(k,v){data[k]=v; render();}
+  function render(){
+    wrap.innerHTML='';
+    all.forEach(f=>wrap.appendChild(inputField(f,data,set)));
+  }
+  render();
+  const saveBtn=el('button',{class:'btn btn-primary'},'حفظ');
+  saveBtn.addEventListener('click',()=>{
+    const missing=validateRequired(all,data);
+    if(missing){alert('الرجاء تعبئة: '+missing);return;}
+    onSave(data,()=>{for(const k in data) delete data[k]; render();});
+  });
+  return [wrap, saveBtn];
+}
 
-          <section className="container px-3 sm:px-4 pb-8">
-            <div className="grid md:grid-cols-3 gap-4">
-              {notes.map(n=>(
-                <div key={n.id} className={cn("rounded-xl border p-4 text-sm", n.level==="warn"?"bg-amber-50 border-amber-200":"bg-sky-50 border-sky-200")}>
-                  {n.text}
-                </div>
-              ))}
-            </div>
-          </section>
-        </main>
-      );
-    };
+function Referrals(){
+  const user=store.get("user",{role:"family",region:"الرياض"});
+  const list=store.get("referrals",[]);
+  let q='';
+  const root=el('div',{});
+  const header = sectionTitle('الإحالات',[
+    searchBox(v=>{q=v;renderTable();}),
+    el('button',{class:'btn btn-primary',onClick:()=>openModal()},'فتح إحالة')
+  ]);
+  const tableWrap=el('div',{class:'card p-4 mt-4',style:'overflow:auto'});
 
-    const KPIs=()=>{
-      const user=store.get("user",{});
-      const k=store.get("kpis",{});
-      const current=k.byRegion[user.region] ?? Object.values(k.byRegion)[0];
-      const [period,setPeriod]=useState(k.period||"آخر 30 يومًا");
-      useEffect(()=>{const s=store.get("kpis",{}); s.period=period; store.set("kpis",s);},[period]);
-      return (
-        <main className="container px-3 sm:px-4 py-8">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">مؤشرات الأداء — {user.region}</h2>
-            <select className="border rounded-xl px-3 py-2 text-sm" value={period} onChange={e=>setPeriod(e.target.value)}>
-              {["آخر 7 أيام","آخر 30 يومًا","آخر 90 يومًا","سنة كاملة"].map(p=><option key={p} value={p}>{p}</option>)}
-            </select>
-          </div>
-          <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Stat label="التغطية 0–6" value={current.coverage} ok={current.coverage>=80}/>
-            <Stat label="اكتمال التحصين" value={current.immunization} ok={current.immunization>=90}/>
-            <Stat label="جاهزية التعليم" value={current.readiness} ok={current.readiness>=75}/>
-            <div className="rounded-2xl p-5 border bg-sky-50 border-sky-200">
-              <div className="text-sm text-slate-600">وسيط إغلاق الإحالات</div>
-              <div className="mt-2 text-3xl font-bold">{current.referralsMedianHrs}<span className="text-xl">س</span></div>
-              <div className="mt-1 text-xs inline-block px-2 py-1 rounded-full bg-sky-100 text-sky-800">≤ 24 ساعة مستهدف</div>
-            </div>
-            <Stat label="التحاق رياض الأطفال" value={current.kgEnroll} ok={current.kgEnroll>=85}/>
-            <Stat label="اكتمال السجل الأسري" value={current.completeness} ok={current.completeness>=95}/>
-          </div>
-        </main>
-      );
-    };
+  function renderTable(){
+    const filtered=list.filter(r=>JSON.stringify(r).includes(q));
+    tableWrap.innerHTML='';
+    if(filtered.length===0){tableWrap.appendChild(el('div',{class:'text-center muted p-4'},'لا نتائج.'));return;}
+    const rows=filtered.map(r=>[
+      r.id, r.child, r.type, r.status, r.created, r.region,
+      el('div',{class:'text-xs'}, Object.entries(r.meta||{}).map(([k,v])=>el('div',{},[el('b',{},k+': '), String(v)]) )),
+      el('div',{},[
+        el('button',{class:'btn text-xs',onClick:()=>setStatus(r.id,'قيد المعالجة')},'بدء'),
+        ' ',
+        el('button',{class:'btn text-xs',onClick:()=>setStatus(r.id,'مغلقة')},'إغلاق')
+      ])
+    ]);
+    tableWrap.appendChild(table(['المعرف','الطفل','النوع','الحالة','التاريخ','المنطقة','تفاصيل',''],rows));
+  }
+  function setStatus(id,status){
+    const idx=list.findIndex(x=>x.id===id); if(idx>-1){list[idx].status=status; store.set('referrals',list); renderTable();}
+  }
 
-    const Journey=()=>{
-      const children=store.get("children",[]);
-      const screenings=store.get("screenings",[]);
-      return (
-        <main className="container px-3 sm:px-4 py-8">
-          <h2 className="text-xl font-bold">رحلة الطفل (0–6)</h2>
-          <div className="mt-4 grid lg:grid-cols-2 gap-6">
-            <div className="rounded-2xl border bg-white p-5 shadow-sm">
-              <h3 className="font-semibold">أطفال الأسرة</h3>
-              <ul className="mt-3 text-sm">
-                {children.map(c=>(
-                  <li key={c.id} className="border-t first:border-0 py-2">
-                    <div className="flex items-center justify-between">
-                      <div><b>{c.name}</b> — {c.gender==="M"?"ذكر":"أنثى"} — مولود {c.birthDate}</div>
-                      <Badge text={c.region}/>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="rounded-2xl border bg-white p-5 shadow-sm">
-              <h3 className="font-semibold">الفحوص/التقييمات</h3>
-              <ul className="mt-3 text-sm">
-                {screenings.map(s=>(
-                  <li key={s.id} className="border-t first:border-0 py-2">
-                    <div className="flex items-center justify-between">
-                      <div><b>{s.type}</b> — {s.date}</div>
-                      <Badge text={s.result==="PASS"?"سليم":"متابعة"} color={s.result==="PASS"?"bg-emerald-100 text-emerald-800":"bg-amber-100 text-amber-800"}/>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </main>
-      );
-    };
-
-    const Referrals=()=>{
-      const [list,setList]=useState(store.get("referrals",[]));
-      const [q,setQ]=useState(""); const [modal,setModal]=useState(false);
-      const user=store.get("user",{role:"family",region:"الرياض"});
-      const [data,setData]=useState({});
-      useEffect(()=>store.set("referrals",list),[list]);
-
-      const common=SCHEMAS.referral.common, roleFields=(SCHEMAS.referral.byRole[user.role]||[]);
-      const allFields=[...common,...roleFields];
-      const filtered=list.filter(r=>JSON.stringify(r).includes(q));
-      const onChange=(k,v)=>setData(prev=>({...prev,[k]:v}));
-
-      const save=()=>{
-        const missing = validateRequired(allFields, data);
-        if(missing) return alert(`الرجاء تعبئة: ${missing}`);
+  function openModal(){
+    const modal = dialog('فتح إحالة جديدة', (body,close)=>{
+      const common=SCHEMAS.referral.common;
+      const roleFields=SCHEMAS.referral.byRole[user.role]||[];
+      const [form,saveBtn]=dynamicForm(common,roleFields,(data,reset)=>{
         const id="RF-"+Math.random().toString(36).slice(2,6).toUpperCase();
-        const record={ id, child:data.childName, type:data.refType, status:"مفتوحة", created:new Date().toISOString().slice(0,10), region:data.region, notes:data.summary,
-          meta:Object.fromEntries(Object.entries(data).filter(([k])=>!["childName","refType","region","summary"].includes(k))) };
-        setList(prev=>[record,...prev]); setModal(false); setData({});
-      };
-      const setStatus=(id,status)=>setList(prev=>prev.map(r=>r.id===id?{...r,status}:r));
+        const rec={
+          id, child:data.childName, type:data.refType, status:"مفتوحة",
+          created:new Date().toISOString().slice(0,10), region:data.region, notes:data.summary,
+          meta: Object.fromEntries(Object.entries(data).filter(([k])=>!['childName','refType','region','summary'].includes(k)))
+        };
+        list.unshift(rec); store.set('referrals',list); renderTable(); reset(); close();
+      });
+      body.appendChild(form);
+      body.appendChild(el('div',{class:'row mt-2',style:'justify-content:flex-end'},[
+        el('button',{class:'btn',onClick:close},'إلغاء'), saveBtn
+      ]));
+    });
+    document.body.appendChild(modal);
+  }
 
-      return (
-        <main className="container px-3 sm:px-4 py-8">
-          <div className="flex items-center justify-between flex-wrap gap-3">
-            <h2 className="text-xl font-bold">الإحالات</h2>
-            <div className="flex items-center gap-2">
-              <input className="rounded-xl border px-3 py-2 text-sm" placeholder="بحث..." value={q} onChange={e=>setQ(e.target.value)}/>
-              <button className="rounded-xl bg-nomu-600 text-white px-3 py-2 text-sm hover:bg-nomu-700" onClick={()=>setModal(true)}>فتح إحالة</button>
-            </div>
-          </div>
+  renderTable();
+  root.appendChild(header); root.appendChild(tableWrap);
+  return sectionContainer(root);
+}
 
-          <div className="mt-4 overflow-x-auto rounded-2xl border bg-white shadow-sm">
-            <table className="w-full text-sm">
-              <thead className="bg-slate-50 text-slate-600">
-                <tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">الطفل</th><th className="p-3 text-right">النوع</th><th className="p-3 text-right">الحالة</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">المنطقة</th><th className="p-3 text-right">تفاصيل</th><th className="p-3"></th></tr>
-              </thead>
-              <tbody>
-                {filtered.map(r=>(
-                  <tr key={r.id} className="border-t align-top">
-                    <td className="p-3">{r.id}</td><td className="p-3">{r.child}</td><td className="p-3">{r.type}</td>
-                    <td className="p-3">{r.status}</td><td className="p-3">{r.created}</td><td className="p-3">{r.region}</td>
-                    <td className="p-3 text-xs">{Object.entries(r.meta||{}).map(([k,v])=><div key={k}><b>{k}:</b> {String(v)}</div>)}</td>
-                    <td className="p-3 text-left">
-                      <div className="flex gap-2">
-                        <button className="text-xs px-2 py-1 rounded border hover:bg-slate-50" onClick={()=>setStatus(r.id,"قيد المعالجة")}>بدء</button>
-                        <button className="text-xs px-2 py-1 rounded border hover:bg-slate-50" onClick={()=>setStatus(r.id,"مغلقة")}>إغلاق</button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-                {filtered.length===0 && <tr><td className="p-4 text-center text-slate-500" colSpan="8">لا نتائج.</td></tr>}
-              </tbody>
-            </table>
-          </div>
+function Health(){
+  const user=store.get("user",{role:"family"});
+  const list=store.get("screenings",[]);
+  let q='';
+  const root=el('div',{});
+  const header = sectionTitle('الصحة — الفحوص والتتبّع',[
+    searchBox(v=>{q=v;renderTable();}),
+    el('button',{class:'btn btn-primary',onClick:()=>openModal()},'تسجيل فحص')
+  ]);
+  const tableWrap=el('div',{class:'card p-4 mt-4',style:'overflow:auto'});
 
-          {modal && (
-            <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
-              <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl">
-                <div className="p-4 border-b flex items-center justify-between">
-                  <div><h3 className="font-semibold">فتح إحالة جديدة</h3><div className="text-xs text-slate-500 mt-1">الدور: <b>{ROLES.find(r=>r.id===user.role)?.label}</b></div></div>
-                  <button className="p-2 rounded hover:bg-slate-100" onClick={()=>setModal(false)}>✕</button>
-                </div>
-                <div className="p-4 grid md:grid-cols-2 gap-3">
-                  {[...common, ...roleFields].map(f=>(
-                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)} data={data}/>
-                  ))}
-                  <div className="md:col-span-2 flex items-center justify-end gap-2 mt-2">
-                    <button className="rounded-xl border px-4 py-2 hover:bg-slate-50" onClick={()=>setModal(false)}>إلغاء</button>
-                    <button className="rounded-xl bg-nomu-600 text-white px-4 py-2 hover:bg-nomu-700" onClick={save}>حفظ الإحالة</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </main>
-      );
-    };
-
-    const Health=()=>{
-      const [list,setList]=useState(store.get("screenings",[]));
-      const [q,setQ]=useState(""); const [modal,setModal]=useState(false);
-      const user=store.get("user",{role:"family"});
-      const [data,setData]=useState({});
-      useEffect(()=>store.set("screenings",list),[list]);
-
-      const common=SCHEMAS.health.common, roleFields=SCHEMAS.health.byRole[user.role]||[];
-      const allFields=[...common,...roleFields];
-      const filtered=list.filter(s=>JSON.stringify(s).includes(q));
-      const onChange=(k,v)=>setData(prev=>({...prev,[k]:v}));
-
-      const save=()=>{
-        const missing=validateRequired(allFields,data);
-        if(missing) return alert(`الرجاء تعبئة: ${missing}`);
+  function renderTable(){
+    const filtered=list.filter(s=>JSON.stringify(s).includes(q));
+    tableWrap.innerHTML='';
+    if(filtered.length===0){tableWrap.appendChild(el('div',{class:'text-center muted p-4'},'لا سجلات.'));return;}
+    const rows=filtered.map(s=>[
+      s.id,
+      (store.get('children',[]).find(c=>c.id===s.childId)?.name || s.childId),
+      s.type, s.date, s.result,
+      el('div',{class:'text-xs'}, Object.entries(s.meta||{}).map(([k,v])=>el('div',{},[el('b',{},k+': '), String(v)])))
+    ]);
+    tableWrap.appendChild(table(['المعرف','الطفل','النوع','التاريخ','النتيجة','تفاصيل'],rows));
+  }
+  function openModal(){
+    const modal = dialog('تسجيل فحص', (body,close)=>{
+      const [form,saveBtn]=dynamicForm(SCHEMAS.health.common, SCHEMAS.health.byRole[user.role]||[], (data,reset)=>{
         const id="SC-"+Math.random().toString(36).slice(2,6).toUpperCase();
-        const rec={ id, childId:data.childId, type:data.screenType, date:data.date, result:data.result,
-          meta:Object.fromEntries(Object.entries(data).filter(([k])=>!["childId","screenType","date","result"].includes(k))) };
-        setList(prev=>[rec,...prev]); setModal(false); setData({});
-      };
+        const rec={id,childId:data.childId,type:data.screenType,date:data.date,result:data.result,
+          meta:Object.fromEntries(Object.entries(data).filter(([k])=>!['childId','screenType','date','result'].includes(k)) )};
+        list.unshift(rec); store.set('screenings',list); renderTable(); reset(); close();
+      });
+      body.appendChild(form);
+      body.appendChild(el('div',{class:'row mt-2',style:'justify-content:flex-end'},[
+        el('button',{class:'btn',onClick:close},'إلغاء'), saveBtn
+      ]));
+    });
+    document.body.appendChild(modal);
+  }
+  renderTable();
+  return sectionContainer([header,tableWrap]);
+}
 
-      return (
-        <main className="container px-3 sm:px-4 py-8">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">الصحة — الفحوص والتتبّع</h2>
-            <div className="flex items-center gap-2">
-              <input className="rounded-xl border px-3 py-2 text-sm" placeholder="بحث..." value={q} onChange={e=>setQ(e.target.value)}/>
-              <button className="rounded-xl bg-nomu-600 text-white px-3 py-2 text-sm hover:bg-nomu-700" onClick={()=>setModal(true)}>تسجيل فحص</button>
-            </div>
-          </div>
+function Education(){
+  const user=store.get("user",{role:"family"});
+  let apps = store.get("edu_apps",[
+    {id:"KG-01",child:"سعود",status:"قيد المراجعة",region:"الرياض",date:"2025-09-15",meta:{}},
+    {id:"KG-02",child:"نورة",status:"مقبول",region:"الرياض",date:"2025-10-03",meta:{}}
+  ]);
+  let q='';
+  const header = sectionTitle('التعليم — طلبات رياض الأطفال/الجاهزية',[
+    searchBox(v=>{q=v;render();}),
+    el('button',{class:'btn btn-primary',onClick:()=>openModal()},'تقديم طلب')
+  ]);
+  const wrap=el('div',{class:'card p-4 mt-4',style:'overflow:auto'});
 
-          <div className="mt-4 rounded-2xl border bg-white p-4 shadow-sm overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-slate-50 text-slate-600"><tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">الطفل</th><th className="p-3 text-right">النوع</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">النتيجة</th><th className="p-3 text-right">تفاصيل</th></tr></thead>
-              <tbody>
-                {filtered.map(s=>(
-                  <tr key={s.id} className="border-t align-top">
-                    <td className="p-3">{s.id}</td>
-                    <td className="p-3">{store.get("children",[]).find(c=>c.id===s.childId)?.name || s.childId}</td>
-                    <td className="p-3">{s.type}</td><td className="p-3">{s.date}</td><td className="p-3">{s.result}</td>
-                    <td className="p-3 text-xs">{Object.entries(s.meta||{}).map(([k,v])=><div key={k}><b>{k}:</b> {String(v)}</div>)}</td>
-                  </tr>
-                ))}
-                {filtered.length===0 && <tr><td className="p-4 text-center text-slate-500" colSpan="6">لا سجلات.</td></tr>}
-              </tbody>
-            </table>
-          </div>
-
-          {modal && (
-            <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
-              <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl">
-                <div className="p-4 border-b flex items-center justify-between">
-                  <div><h3 className="font-semibold">تسجيل فحص</h3><div className="text-xs text-slate-500 mt-1">الدور: <b>{ROLES.find(r=>r.id===user.role)?.label}</b></div></div>
-                  <button className="p-2 rounded hover:bg-slate-100" onClick={()=>setModal(false)}>✕</button>
-                </div>
-                <div className="p-4 grid md:grid-cols-2 gap-3">
-                  {[...common, ...roleFields].map(f=>(
-                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)} data={data}/>
-                  ))}
-                  <div className="md:col-span-2 flex items-center justify-end gap-2 mt-2">
-                    <button className="rounded-xl border px-4 py-2 hover:bg-slate-50" onClick={()=>setModal(false)}>إلغاء</button>
-                    <button className="rounded-xl bg-nomu-600 text-white px-4 py-2 hover:bg-nomu-700" onClick={save}>حفظ</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </main>
-      );
-    };
-
-    const Education=()=>{
-      const [apps,setApps]=useState([
-        {id:"KG-01", child:"سعود", status:"قيد المراجعة", region:"الرياض", date:"2025-09-15", meta:{}},
-        {id:"KG-02", child:"نورة", status:"مقبول", region:"الرياض", date:"2025-10-03", meta:{}}
-      ]);
-      const [q,setQ]=useState(""); const [modal,setModal]=useState(false);
-      const user=store.get("user",{role:"family"});
-      const [data,setData]=useState({});
-      const filtered=apps.filter(a=>JSON.stringify(a).includes(q));
-
-      const common=SCHEMAS.education.common, roleFields=SCHEMAS.education.byRole[user.role]||[];
-      const allFields=[...common,...roleFields];
-      const onChange=(k,v)=>setData(prev=>({...prev,[k]:v}));
-
-      const save=()=>{
-        const missing=validateRequired(allFields,data);
-        if(missing) return alert(`الرجاء تعبئة: ${missing}`);
+  function render(){
+    wrap.innerHTML='';
+    const filtered=apps.filter(a=>JSON.stringify(a).includes(q));
+    if(filtered.length===0){wrap.appendChild(el('div',{class:'text-center muted p-4'},'لا سجلات.'));return;}
+    const rows=filtered.map(a=>[
+      a.id,a.child,a.status,a.date,a.region,
+      el('div',{class:'text-xs'}, Object.entries(a.meta||{}).map(([k,v])=>el('div',{},[el('b',{},k+': '), String(v)]))),
+      el('div',{}, a.status!=='مقبول' ? el('button',{class:'btn text-xs',onClick:()=>approve(a.id)},'قبول') : '')
+    ]);
+    wrap.appendChild(table(['المعرف','الطفل','الحالة','التاريخ','المنطقة','تفاصيل',''],rows));
+  }
+  function approve(id){apps=apps.map(a=>a.id===id?{...a,status:'مقبول'}:a); store.set('edu_apps',apps); render();}
+  function openModal(){
+    const modal = dialog('تقديم طلب تعليمي', (body,close)=>{
+      const [form,saveBtn]=dynamicForm(SCHEMAS.education.common, SCHEMAS.education.byRole[user.role]||[], (data,reset)=>{
         const id="KG-"+Math.random().toString(36).slice(2,6).toUpperCase();
-        const rec={ id, child:data.childName, status:"قيد المراجعة", region:data.region, date:data.date,
-          meta:Object.fromEntries(Object.entries(data).filter(([k])=>!["childName","applicationType","date","region"].includes(k))) };
-        setApps(prev=>[rec,...prev]); setModal(false); setData({});
-      };
-      const approve=id=>setApps(prev=>prev.map(a=>a.id===id?{...a,status:"مقبول"}:a));
+        const rec={id,child:data.childName,status:"قيد المراجعة",region:data.region,date:data.date,
+          meta:Object.fromEntries(Object.entries(data).filter(([k])=>!['childName','applicationType','date','region'].includes(k)))};
+        apps.unshift(rec); store.set('edu_apps',apps); render(); reset(); close();
+      });
+      body.appendChild(form);
+      body.appendChild(el('div',{class:'row mt-2',style:'justify-content:flex-end'},[
+        el('button',{class:'btn',onClick:close},'إلغاء'), saveBtn
+      ]));
+    });
+    document.body.appendChild(modal);
+  }
+  render();
+  return sectionContainer([header,wrap]);
+}
 
-      return (
-        <main className="container px-3 sm:px-4 py-8">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">التعليم — طلبات رياض الأطفال/الجاهزية</h2>
-            <div className="flex items-center gap-2">
-              <input className="rounded-xl border px-3 py-2 text-sm" placeholder="بحث..." value={q} onChange={e=>setQ(e.target.value)}/>
-              <button className="rounded-xl bg-nomu-600 text-white px-3 py-2 text-sm hover:bg-nomu-700" onClick={()=>setModal(true)}>تقديم طلب</button>
-            </div>
-          </div>
+function NGO(){
+  const user=store.get("user",{role:"ngo"});
+  let cases = store.get("ngo_cases",[
+    {id:"NGO-11",title:"جلسة إرشاد أسري",status:"مجدولة",region:"الرياض",meta:{}},
+    {id:"NGO-12",title:"دعم تدخل مبكر",status:"منفذة",region:"الرياض",meta:{}}
+  ]);
+  let q='';
+  const header = sectionTitle('الجمعيات — إدارة البرامج',[
+    searchBox(v=>{q=v;render();}),
+    el('button',{class:'btn btn-primary',onClick:()=>openModal()},'إضافة نشاط')
+  ]);
+  const grid=el('div',{class:'grid cols-2 mt-4'});
 
-          <div className="mt-4 rounded-2xl border bg-white p-4 shadow-sm overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-slate-50 text-slate-600"><tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">الطفل</th><th className="p-3 text-right">الحالة</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">المنطقة</th><th className="p-3 text-right">تفاصيل</th><th className="p-3"></th></tr></thead>
-              <tbody>
-                {filtered.map(a=>(
-                  <tr key={a.id} className="border-t align-top">
-                    <td className="p-3">{a.id}</td><td className="p-3">{a.child}</td><td className="p-3">{a.status}</td>
-                    <td className="p-3">{a.date}</td><td className="p-3">{a.region}</td>
-                    <td className="p-3 text-xs">{Object.entries(a.meta||{}).map(([k,v])=><div key={k}><b>{k}:</b> {String(v)}</div>)}</td>
-                    <td className="p-3 text-left">{a.status!=="مقبول" && <button className="text-xs px-2 py-1 rounded border hover:bg-slate-50" onClick={()=>approve(a.id)}>قبول</button>}</td>
-                  </tr>
-                ))}
-                {filtered.length===0 && <tr><td className="p-4 text-center text-slate-500" colSpan="7">لا سجلات.</td></tr>}
-              </tbody>
-            </table>
-          </div>
-
-          {modal && (
-            <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
-              <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl">
-                <div className="p-4 border-b flex items-center justify-between">
-                  <div><h3 className="font-semibold">تقديم طلب تعليمي</h3><div className="text-xs text-slate-500 mt-1">الدور: <b>{ROLES.find(r=>r.id===user.role)?.label}</b></div></div>
-                  <button className="p-2 rounded hover:bg-slate-100" onClick={()=>setModal(false)}>✕</button>
-                </div>
-                <div className="p-4 grid md:grid-cols-2 gap-3">
-                  {[...common, ...roleFields].map(f=>(
-                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)} data={data}/>
-                  ))}
-                  <div className="md:col-span-2 flex items-center justify-end gap-2 mt-2">
-                    <button className="rounded-xl border px-4 py-2 hover:bg-slate-50" onClick={()=>setModal(false)}>إلغاء</button>
-                    <button className="rounded-xl bg-nomu-600 text-white px-4 py-2 hover:bg-nomu-700" onClick={save}>حفظ الطلب</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </main>
-      );
-    };
-
-    const NGO=()=>{
-      const [cases,setCases]=useState([
-        {id:"NGO-11", title:"جلسة إرشاد أسري", status:"مجدولة", region:"الرياض", meta:{}},
-        {id:"NGO-12", title:"دعم تدخل مبكر", status:"منفذة", region:"الرياض", meta:{}}
-      ]);
-      const [q,setQ]=useState(""); const [modal,setModal]=useState(false);
-      const user=store.get("user",{role:"ngo"});
-      const [data,setData]=useState({});
-      const filtered=cases.filter(c=>JSON.stringify(c).includes(q));
-
-      const common=SCHEMAS.ngo.common, roleFields=SCHEMAS.ngo.byRole[user.role]||[];
-      const allFields=[...common,...roleFields];
-      const onChange=(k,v)=>setData(prev=>({...prev,[k]:v}));
-
-      const save=()=>{
-        const missing=validateRequired(allFields, data);
-        if(missing) return alert(`الرجاء تعبئة: ${missing}`);
+  function render(){
+    grid.innerHTML='';
+    const filtered=cases.filter(c=>JSON.stringify(c).includes(q));
+    if(filtered.length===0){grid.appendChild(el('div',{class:'muted'},'لا نتائج.'));return;}
+    filtered.forEach(c=>{
+      grid.appendChild(el('div',{class:'card p-5'},[
+        el('div',{class:'row',style:'justify-content:space-between'},[
+          el('b',{},c.title),
+          chip(c.status, c.status==='منفذة'?'chip badge-ok':'chip')
+        ]),
+        el('div',{class:'text-sm muted mt-2'},`المعرف: ${c.id} — المنطقة: ${c.region}`),
+        el('div',{class:'text-xs mt-2'}, Object.entries(c.meta||{}).map(([k,v])=>el('div',{},[el('b',{},k+': '), String(v)])))
+      ]));
+    });
+  }
+  function openModal(){
+    const modal = dialog('إنشاء نشاط/حالة', (body,close)=>{
+      const [form,saveBtn]=dynamicForm(SCHEMAS.ngo.common, SCHEMAS.ngo.byRole[user.role]||[], (data,reset)=>{
         const id="NGO-"+Math.random().toString(36).slice(2,6).toUpperCase();
-        const rec={ id, title:data.caseTitle, status:data.status, region:data.region, meta:Object.fromEntries(Object.entries(data).filter(([k])=>!["caseTitle","program","status","region"].includes(k))) };
-        setCases(prev=>[rec,...prev]); setModal(false); setData({});
-      };
+        const rec={id,title:data.caseTitle,status:data.status,region:data.region,
+          meta:Object.fromEntries(Object.entries(data).filter(([k])=>!['caseTitle','program','status','region'].includes(k)) )};
+        cases.unshift(rec); store.set('ngo_cases',cases); render(); reset(); close();
+      });
+      body.appendChild(form);
+      body.appendChild(el('div',{class:'row mt-2',style:'justify-content:flex-end'},[
+        el('button',{class:'btn',onClick:close},'إلغاء'), saveBtn
+      ]));
+    });
+    document.body.appendChild(modal);
+  }
+  render();
+  return sectionContainer([header,grid]);
+}
 
-      return (
-        <main className="container px-3 sm:px-4 py-8">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">الجمعيات — إدارة البرامج</h2>
-            <div className="flex items-center gap-2">
-              <input className="rounded-xl border px-3 py-2 text-sm" placeholder="بحث..." value={q} onChange={e=>setQ(e.target.value)}/>
-              <button className="rounded-xl bg-nomu-600 text-white px-3 py-2 text-sm hover:bg-nomu-700" onClick={()=>setModal(true)}>إضافة نشاط</button>
-            </div>
-          </div>
+function Wallet(){
+  const user=store.get("user",{role:"csr"});
+  const state=store.get("wallet",{total:0,entries:[]});
+  let q='';
+  const top=sectionTitle('سوق الرعايات/المحفظة',[
+    searchBox(v=>{q=v;render();}),
+    chip('الإجمالي: '+state.total.toLocaleString()+' ر.س','chip'),
+    el('button',{class:'btn btn-primary',onClick:()=>openModal()},'إضافة مساهمة')
+  ]);
+  const wrap=el('div',{class:'grid',style:'gap:1.5rem'});
+  const tableWrap=el('div',{class:'card p-4',style:'overflow:auto'});
+  const aside=el('div',{class:'card p-4'},[
+    el('div',{class:'title'},'ملخّص'),
+    el('ul',{class:'mt-2 text-sm muted'},[
+      el('li',{},'إدارة رعايات CSR والمنح والتبرعات وربطها بمؤشرات أثر مستهدفة.'),
+      el('li',{},'حقول العقد/مذكرة التفاهم ودورية التقارير وEscrow لشفافية التمويل.')
+    ])
+  ]);
 
-          <div className="mt-4 grid md:grid-cols-2 gap-4">
-            {filtered.map(c=>(
-              <div key={c.id} className="rounded-2xl border bg-white p-5 shadow-sm">
-                <div className="flex items-center justify-between">
-                  <b>{c.title}</b>
-                  <Badge text={c.status} color={c.status==="منفذة"?"bg-emerald-100 text-emerald-800":"bg-sky-100 text-sky-800"}/>
-                </div>
-                <div className="text-sm text-slate-600 mt-2">المعرف: {c.id} — المنطقة: {c.region}</div>
-                <div className="text-xs mt-2">{Object.entries(c.meta||{}).map(([k,v])=><div key={k}><b>{k}:</b> {String(v)}</div>)}</div>
-              </div>
-            ))}
-            {filtered.length===0 && <div className="text-sm text-slate-500">لا نتائج.</div>}
-          </div>
-
-          {modal && (
-            <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
-              <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl">
-                <div className="p-4 border-b flex items-center justify-between">
-                  <div><h3 className="font-semibold">إنشاء نشاط/حالة</h3><div className="text-xs text-slate-500 mt-1">الدور: <b>{ROLES.find(r=>r.id===user.role)?.label}</b></div></div>
-                  <button className="p-2 rounded hover:bg-slate-100" onClick={()=>setModal(false)}>✕</button>
-                </div>
-                <div className="p-4 grid md:grid-cols-2 gap-3">
-                  {[...common, ...roleFields].map(f=>(
-                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)} data={data}/>
-                  ))}
-                  <div className="md:col-span-2 flex items-center justify-end gap-2 mt-2">
-                    <button className="rounded-xl border px-4 py-2 hover:bg-slate-50" onClick={()=>setModal(false)}>إلغاء</button>
-                    <button className="rounded-xl bg-nomu-600 text-white px-4 py-2 hover:bg-nomu-700" onClick={save}>حفظ</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </main>
-      );
-    };
-
-    const Wallet=()=>{
-      const [state,setState]=useState(store.get("wallet",{total:0,entries:[]}));
-      const [q,setQ]=useState(""); const [modal,setModal]=useState(false);
-      const user=store.get("user",{role:"csr"});
-      const [data,setData]=useState({});
-      useEffect(()=>store.set("wallet",state),[state]);
-
-      const common=SCHEMAS.wallet.common, roleFields=SCHEMAS.wallet.byRole[user.role]||[];
-      const allFields=[...common,...roleFields];
-      const onChange=(k,v)=>setData(prev=>({...prev,[k]:v}));
-
-      const save=()=>{
-        const missing=validateRequired(allFields,data);
-        if(missing) return alert(`الرجاء تعبئة: ${missing}`);
+  function render(){
+    const filtered=state.entries.filter(e=>JSON.stringify(e).includes(q));
+    tableWrap.innerHTML='';
+    const rows = filtered.map(e=>[
+      e.id, e.source, chip(e.tag).outerHTML, e.amount.toLocaleString()+' ر.س', e.date,
+      el('div',{class:'text-xs'}, Object.entries(e.meta||{}).map(([k,v])=>el('div',{},[el('b',{},k+': '), String(v)])))
+    ]);
+    if(rows.length===0) tableWrap.appendChild(el('div',{class:'text-center muted p-4'},'لا توجد عمليات بعد.'));
+    else {
+      const t=table(['المعرف','المصدر','التصنيف','المبلغ','التاريخ','تفاصيل'], rows.map(r=>r.map(c=> (typeof c==='string' && c.startsWith('<')) ? html(c) : c )));
+      tableWrap.appendChild(t);
+    }
+  }
+  function html(str){const d=document.createElement('div');d.innerHTML=str;return d.firstChild}
+  function openModal(){
+    const modal = dialog('إضافة مساهمة', (body,close)=>{
+      const [form,saveBtn]=dynamicForm(SCHEMAS.wallet.common, SCHEMAS.wallet.byRole[user.role]||[], (data,reset)=>{
         const id="TRX-"+Math.random().toString(36).slice(2,6).toUpperCase();
         const entry={ id, source:data.source, amount:Number(data.amount), date:data.date, tag:data.tag,
-          meta:Object.fromEntries(Object.entries(data).filter(([k])=>!["source","amount","date","tag"].includes(k))) };
-        setState(prev=>({ total: prev.total + entry.amount, entries:[entry, ...prev.entries] }));
-        setModal(false); setData({});
-      };
+          meta:Object.fromEntries(Object.entries(data).filter(([k])=>!['source','amount','date','tag'].includes(k)))};
+        state.total+=entry.amount; state.entries.unshift(entry); store.set('wallet',state); render(); reset(); close();
+      });
+      body.appendChild(form);
+      body.appendChild(el('div',{class:'row mt-2',style:'justify-content:flex-end'},[
+        el('button',{class:'btn',onClick:close},'إلغاء'), saveBtn
+      ]));
+    });
+    document.body.appendChild(modal);
+  }
 
-      const filtered=state.entries.filter(e=>JSON.stringify(e).includes(q));
+  render();
+  wrap.appendChild(tableWrap); wrap.appendChild(aside);
+  return sectionContainer([top, wrap]);
+}
 
-      return (
-        <main className="container px-3 sm:px-4 py-8">
-          <div className="grid lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 rounded-2xl border bg-white shadow-sm">
-              <div className="p-4 border-b flex items-center justify-between">
-                <h2 className="text-lg font-semibold">سوق الرعايات/المحفظة</h2>
-                <div className="flex items-center gap-2">
-                  <input className="rounded-xl border px-3 py-2 text-sm" placeholder="بحث..." value={q} onChange={e=>setQ(e.target.value)}/>
-                  <Badge text={`الإجمالي: ${state.total.toLocaleString()} ر.س`} color="bg-nomu-100 text-nomu-900"/>
-                  <button className="rounded-xl bg-nomu-600 text-white px-3 py-2 text-sm hover:bg-nomu-700" onClick={()=>setModal(true)}>إضافة مساهمة</button>
-                </div>
-              </div>
-              <div className="p-4 overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead className="bg-slate-50 text-slate-600"><tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">المصدر</th><th className="p-3 text-right">التصنيف</th><th className="p-3 text-right">المبلغ</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">تفاصيل</th></tr></thead>
-                  <tbody>
-                    {filtered.map(e=>(
-                      <tr key={e.id} className="border-t align-top">
-                        <td className="p-3">{e.id}</td><td className="p-3">{e.source}</td><td className="p-3"><Badge text={e.tag}/></td>
-                        <td className="p-3">{e.amount.toLocaleString()} ر.س</td><td className="p-3">{e.date}</td>
-                        <td className="p-3 text-xs">{Object.entries(e.meta||{}).map(([k,v])=><div key={k}><b>{k}:</b> {String(v)}</div>)}</td>
-                      </tr>
-                    ))}
-                    {filtered.length===0 && <tr><td className="p-4 text-center text-slate-500" colSpan="6">لا توجد عمليات بعد.</td></tr>}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div className="rounded-2xl border bg-white shadow-sm p-4">
-              <h3 className="font-semibold">ملخّص</h3>
-              <ul className="mt-2 text-sm text-slate-700 list-disc pr-5 space-y-1">
-                <li>إدارة رعايات CSR والمنح والتبرعات وربطها بمؤشرات أثر مستهدفة.</li>
-                <li>حقول العقد/مذكرة التفاهم ودورية التقارير وEscrow لشفافية التمويل.</li>
-              </ul>
-            </div>
-          </div>
+function Govern(){
+  const policies=[
+    "الامتثال لنظام حماية البيانات الشخصية (PDPL).",
+    "سجل تدقيق (Audit Log) على كل العمليات.",
+    "نموذج صلاحيات RBAC حسب الدور والجهة والمنطقة.",
+    "سياسة احتفاظ بيانات ونسخ احتياطي واستعادة."
+  ];
+  return sectionWrap('الحوكمة والامتثال',[
+    el('div',{class:'grid cols-2 mt-4'}, policies.map((p,i)=>el('div',{class:'card p-5'},[
+      el('div',{class:'title'},'سياسة #'+(i+1)),
+      el('div',{class:'mt-2 text-sm muted'},p)
+    ])))
+  ]);
+}
 
-          {modal && (
-            <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
-              <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl">
-                <div className="p-4 border-b flex items-center justify-between">
-                  <h3 className="font-semibold">إضافة مساهمة</h3>
-                  <button className="p-2 rounded hover:bg-slate-100" onClick={()=>setModal(false)}>✕</button>
-                </div>
-                <div className="p-4 grid md:grid-cols-2 gap-3">
-                  {[...common, ...roleFields].map(f=>(
-                    <Field key={f.key} field={f} value={data[f.key]} onChange={v=>onChange(f.key,v)} data={data}/>
-                  ))}
-                  <div className="md:col-span-2 flex items-center justify-end gap-2 mt-2">
-                    <button className="rounded-xl border px-4 py-2 hover:bg-slate-50" onClick={()=>setModal(false)}>إلغاء</button>
-                    <button className="rounded-xl bg-nomu-600 text-white px-4 py-2 hover:bg-nomu-700" onClick={save}>حفظ</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </main>
-      );
-    };
+function Support(){
+  const name=input('الاسم*','text',true);
+  const email=input('البريد الإلكتروني*','email',true);
+  const msg=textarea('وصف الطلب/المشكلة*',true);
+  function sendMail(){
+    const s=encodeURIComponent('تواصل — منصة نمو');
+    const b=encodeURIComponent(`الاسم: ${name.el.value}\nالبريد: ${email.el.value}\n\n${msg.el.value}\n`);
+    location.href=`mailto:${CONTACT.email}?subject=${s}&body=${b}`;
+  }
+  function sendWA(){
+    const t=encodeURIComponent(`مرحبًا فريق نمو/تلبية\nاسمي: ${name.el.value}\nبريدي: ${email.el.value}\n\n${msg.el.value}`);
+    window.open(`https://wa.me/${CONTACT.whatsapp}?text=${t}`,'_blank');
+  }
+  return sectionWrap('الدعم الفني والتواصل',[
+    el('div',{class:'grid cols-2 mt-4'},[
+      el('div',{class:'card p-5'},[
+        el('div',{class:'title'},'قنوات التواصل'),
+        el('ul',{class:'mt-2 text-sm muted'},[
+          el('li',{},['البريد: ', el('a',{href:`mailto:${CONTACT.email}`,style:'text-decoration:underline;color:var(--nomu)'},CONTACT.email)]),
+          el('li',{},['واتساب: ', el('a',{href:`https://wa.me/${CONTACT.whatsapp}`,target:'_blank',style:'text-decoration:underline;color:var(--nomu)'},'+966 55 608 3172')])
+        ])
+      ]),
+      el('div',{class:'card p-5'},[
+        el('div',{class:'title'},'نموذج تواصل سريع'),
+        el('form',{class:'grid mt-3',style:'gap:.75rem'},[
+          name.wrap, email.wrap, msg.wrap,
+          el('div',{class:'row'},[
+            el('button',{type:'button',class:'btn btn-primary',onClick:sendMail},'إرسال عبر البريد'),
+            el('button',{type:'button',class:'btn',onClick:sendWA},'إرسال عبر واتساب')
+          ])
+        ])
+      ])
+    ])
+  ]);
+}
+function input(label,type='text',req=false){const elIn=el('input',{type});const w=el('div',{},[el('label',{class:'text-sm muted'},label),el('div',{class:'mt-1'},[elIn])]);return {el:elIn,wrap:w}}
+function textarea(label,req=false){const elIn=el('textarea',{rows:5});const w=el('div',{},[el('label',{class:'text-sm muted'},label),el('div',{class:'mt-1'},[elIn])]);return {el:elIn,wrap:w}}
 
-    const Govern=()=>{
-      const policies=[
-        "الامتثال لنظام حماية البيانات الشخصية (PDPL).",
-        "سجل تدقيق (Audit Log) على كل العمليات.",
-        "نموذج صلاحيات RBAC حسب الدور والجهة والمنطقة.",
-        "سياسة احتفاظ بيانات ونسخ احتياطي واستعادة.",
-      ];
-      return (
-        <main className="container px-3 sm:px-4 py-8">
-          <h2 className="text-xl font-bold">الحوكمة والامتثال</h2>
-          <div className="mt-4 grid md:grid-cols-2 gap-4">
-            {policies.map((p,i)=>(
-              <div key={i} className="rounded-2xl border bg-white p-5 shadow-sm">
-                <b>سياسة #{i+1}</b>
-                <p className="mt-2 text-sm text-slate-700">{p}</p>
-              </div>
-            ))}
-          </div>
-        </main>
-      );
-    };
+function Settings(){
+  const u=store.get("user",{role:"family",region:"الرياض",name:""});
+  const name=input('الاسم', 'text'); name.el.value=u.name||'';
+  const roleSel=el('select',{}, ROLES.map(r=>el('option',{value:r.id},r.label))); roleSel.value=u.role;
+  const regionSel=el('select',{}, REGIONS.map(r=>el('option',{value:r},r))); regionSel.value=u.region;
+  function save(){
+    const nu={role:roleSel.value,region:regionSel.value,name:name.el.value};
+    store.set('user',nu); syncHeader(); alert('تم الحفظ'); location.hash='#/home';
+  }
+  function reset(){
+    ["kpis","children","screenings","referrals","wallet","notifications","edu_apps","ngo_cases","user","nomu_initialized"].forEach(store.del);
+    seed(); location.reload();
+  }
+  return sectionWrap('الإعدادات',[
+    el('div',{class:'grid cols-3 mt-4'},[
+      el('div',{class:'card p-5'},[
+        el('div',{class:'title'},'الحساب'),
+        el('div',{class:'grid mt-3',style:'gap:.5rem'},[
+          labelWrap('الاسم', name.wrap),
+          labelWrap('الدور', el('div',{},[roleSel])),
+          labelWrap('المنطقة', el('div',{},[regionSel])),
+          el('div',{class:'row mt-2'},[
+            el('button',{class:'btn btn-primary',onClick:save},'حفظ')
+          ])
+        ])
+      ]),
+      el('div',{class:'card p-5'},[
+        el('div',{class:'title'},'البيانات'),
+        el('button',{class:'btn mt-2',onClick:reset},'تصفير جميع البيانات'),
+        el('p',{class:'text-xs muted mt-2'},'سيتم إعادة توليد بيانات تجريبية.')
+      ]),
+      el('div',{class:'card p-5'},[
+        el('div',{class:'title'},'عن النماذج الديناميكية'),
+        el('ul',{class:'mt-2 text-sm muted'},[
+          el('li',{},'النماذج تُبنى من مخططات لكل وحدة ودور.'),
+          el('li',{},'الحقول تتغير تلقائيًا عند تبديل الدور لضمان اكتمال دورة الحياة.'),
+          el('li',{},'يمكن ربط هذه المخططات لاحقًا بواجهات APIs للتخزين المركزي.')
+        ])
+      ])
+    ])
+  ]);
+}
+function labelWrap(lbl,child){return el('div',{},[el('label',{class:'text-sm muted'},lbl),el('div',{class:'mt-1'},[child])])}
 
-    const Support=()=>{
-      const [name,setName]=useState(""), [email,setEmail]=useState(""), [msg,setMsg]=useState("");
-      const mail=()=>{const s=encodeURIComponent("تواصل — منصة نمو"); const b=encodeURIComponent(`الاسم: ${name}\nالبريد: ${email}\n\n${msg}\n`); window.location.href=`mailto:${CONTACT.email}?subject=${s}&body=${b}`;};
-      const wa=()=>{const t=encodeURIComponent(`مرحبًا فريق نمو/تلبية\nاسمي: ${name}\nبريدي: ${email}\n\n${msg}`); window.open(`https://wa.me/${CONTACT.whatsapp}?text=${t}`,"_blank");};
-      return (
-        <main className="container px-3 sm:px-4 py-8">
-          <div className="grid lg:grid-cols-3 gap-6">
-            <div className="rounded-2xl border bg-white p-5 shadow-sm">
-              <h3 className="font-semibold">قنوات التواصل</h3>
-              <ul className="mt-3 space-y-2 text-sm leading-7">
-                <li>البريد: <a className="underline decoration-nomu-400 underline-offset-2" href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></li>
-                <li>واتساب: <a className="underline decoration-nomu-400 underline-offset-2" target="_blank" href={`https://wa.me/${CONTACT.whatsapp}`}>+966 55 608 3172</a></li>
-              </ul>
-            </div>
-            <div className="rounded-2xl border bg-white p-5 shadow-sm lg:col-span-2">
-              <h3 className="font-semibold">نموذج تواصل سريع</h3>
-              <form className="mt-3 grid sm:grid-cols-2 gap-3" onSubmit={(e)=>{e.preventDefault(); mail();}}>
-                <input required placeholder="الاسم*" className="rounded-xl border px-3 py-2" value={name} onChange={e=>setName(e.target.value)}/>
-                <input required type="email" placeholder="البريد الإلكتروني*" className="rounded-xl border px-3 py-2" value={email} onChange={e=>setEmail(e.target.value)}/>
-                <textarea required rows="5" className="sm:col-span-2 rounded-2xl border px-3 py-2" placeholder="وصف الطلب/المشكلة*" value={msg} onChange={e=>setMsg(e.target.value)}></textarea>
-                <div className="sm:col-span-2 flex flex-wrap gap-2">
-                  <button type="submit" className="rounded-xl bg-nomu-600 text-white px-4 py-2.5 hover:bg-nomu-700">إرسال عبر البريد</button>
-                  <button type="button" className="rounded-xl border px-4 py-2.5 hover:bg-slate-50" onClick={wa}>إرسال عبر واتساب</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </main>
-      );
-    };
+function Admin(){
+  const rows=[
+    {entity:"الإحالات", family:"R", health:"RW", edu:"RW", ngo:"RW", csr:"R", national:"R", admin:"RW"},
+    {entity:"الفحوص",  family:"R", health:"RW", edu:"R",  ngo:"R",  csr:"-", national:"R", admin:"RW"},
+    {entity:"التعليم",  family:"R", health:"-",  edu:"RW", ngo:"R",  csr:"-", national:"R", admin:"RW"},
+    {entity:"المحفظة",  family:"-", health:"-",  edu:"-",  ngo:"R",  csr:"RW", national:"R", admin:"RW"},
+    {entity:"المؤشرات", family:"R", health:"R",  edu:"R",  ngo:"R",  csr:"R",  national:"RW", admin:"RW"}
+  ];
+  const head=['الكيان',...ROLES.map(r=>r.label)];
+  const body=rows.map(r=>[r.entity, r.family, r.health, r.edu, r.ngo, r.csr, r.national, r.admin]);
+  return sectionWrap('إدارة المنصة — مصفوفة الصلاحيات (تجريبي)',[
+    el('div',{class:'card p-4 mt-4',style:'overflow:auto'},[table(head,body)])
+  ]);
+}
 
-    const Settings=()=>{
-      const [u,setU]=useState(store.get("user",{role:"family",region:"الرياض",name:""}));
-      const clear=()=>{
-        ["kpis","children","screenings","referrals","wallet","notifications","user","nomu_initialized"].forEach(store.del);
-        seed(); location.reload();
-      };
-      return (
-        <main className="container px-3 sm:px-4 py-8">
-          <h2 className="text-xl font-bold">الإعدادات</h2>
-          <div className="mt-4 grid lg:grid-cols-3 gap-6">
-            <div className="rounded-2xl border bg-white p-5 shadow-sm">
-              <h3 className="font-semibold">الحساب</h3>
-              <div className="mt-3 grid gap-2 text-sm">
-                <label>الاسم</label>
-                <input className="rounded-xl border px-3 py-2" value={u.name} onChange={e=>{const nu={...u,name:e.target.value}; setU(nu); store.set("user",nu);}}/>
-                <label>الدور</label>
-                <select className="rounded-xl border px-3 py-2" value={u.role} onChange={e=>{const nu={...u,role:e.target.value}; setU(nu); store.set("user",nu);}}>
-                  {ROLES.map(r=><option key={r.id} value={r.id}>{r.label}</option>)}
-                </select>
-                <label>المنطقة</label>
-                <select className="rounded-xl border px-3 py-2" value={u.region} onChange={e=>{const nu={...u,region:e.target.value}; setU(nu); store.set("user",nu);}}>
-                  {REGIONS.map(r=><option key={r} value={r}>{r}</option>)}
-                </select>
-              </div>
-            </div>
-            <div className="rounded-2xl border bg-white p-5 shadow-sm">
-              <h3 className="font-semibold">البيانات</h3>
-              <button className="mt-2 rounded-xl border px-3 py-2 hover:bg-slate-50" onClick={clear}>تصفير جميع البيانات</button>
-              <p className="text-xs text-slate-500 mt-2">سيتم إعادة توليد بيانات تجريبية.</p>
-            </div>
-            <div className="rounded-2xl border bg-white p-5 shadow-sm">
-              <h3 className="font-semibold">عن النماذج الديناميكية</h3>
-              <ul className="mt-2 text-sm text-slate-700 list-disc pr-5 space-y-1">
-                <li>النماذج تُبنى من **مخططات SCHEMAS** لكل وحدة ودور.</li>
-                <li>الحقول تتغير تلقائيًا عند تبديل الدور لضمان اكتمال دورة الحياة.</li>
-                <li>يمكن ربط هذه المخططات لاحقًا بــ APIs للتخزين المركزي.</li>
-              </ul>
-            </div>
-          </div>
-        </main>
-      );
-    };
+/* ====== أُطر عرض مشتركة ====== */
+function sectionTitle(title,actions=[]){
+  return el('div',{class:'row',style:'justify-content:space-between;align-items:center'},[
+    el('h2',{class:'text-xl title'},title),
+    el('div',{class:'row'},actions)
+  ]);
+}
+function sectionWrap(title,children){
+  return sectionContainer([sectionTitle(title), ...children]);
+}
+function sectionContainer(children){
+  return el('section',{},[el('div',{class:'container p-6'},Array.isArray(children)?children:[children])]);
+}
+function searchBox(on){
+  const i=el('input',{placeholder:'بحث...',class:'text-sm'});
+  i.addEventListener('input',()=>on(i.value));
+  return i;
+}
+function dialog(title, build){
+  const back=el('div',{style:'position:fixed;inset:0;background:rgba(0,0,0,.5);display:grid;place-items:center;z-index:50'});
+  const box=el('div',{class:'card',style:'width:min(720px,92vw);max-height:90vh;overflow:auto'});
+  const head=el('div',{class:'row p-3',style:'border-bottom:1px solid var(--brd);justify-content:space-between;align-items:center'},[
+    el('div',{},[el('div',{class:'title'},title)]),
+    el('button',{class:'btn',onClick:close},'✕')
+  ]);
+  const body=el('div',{class:'p-4'});
+  box.appendChild(head); box.appendChild(body); back.appendChild(box);
+  function close(){back.remove();}
+  build(body,close);
+  return back;
+}
 
-    const Admin=()=>{
-      const rolesMatrix=[
-        {entity:"الإحالات", family:"R", health:"RW", edu:"RW", ngo:"RW", csr:"R", national:"R", admin:"RW"},
-        {entity:"الفحوص",  family:"R", health:"RW", edu:"R",  ngo:"R",  csr:"-", national:"R", admin:"RW"},
-        {entity:"التعليم",  family:"R", health:"-",  edu:"RW", ngo:"R",  csr:"-", national:"R", admin:"RW"},
-        {entity:"المحفظة",  family:"-", health:"-",  edu:"-",  ngo:"R",  csr:"RW", national:"R", admin:"RW"},
-        {entity:"المؤشرات", family:"R", health:"R",  edu:"R",  ngo:"R",  csr:"R",  national:"RW", admin:"RW"},
-      ];
-      return (
-        <main className="container px-3 sm:px-4 py-8">
-          <h2 className="text-xl font-bold">إدارة المنصة — مصفوفة الصلاحيات (تجريبي)</h2>
-          <div className="mt-4 overflow-x-auto rounded-2xl border bg-white p-4 shadow-sm">
-            <table className="w-full text-sm">
-              <thead className="bg-slate-50 text-slate-600">
-                <tr><th className="p-3 text-right">الكيان</th>{ROLES.map(r=><th key={r.id} className="p-3 text-center">{r.label}</th>)}</tr>
-              </thead>
-              <tbody>
-                {rolesMatrix.map((row,i)=>(
-                  <tr key={i} className="border-t">
-                    <td className="p-3">{row.entity}</td>
-                    {ROLES.map(r=><td key={r.id} className="p-3 text-center">{row[r.id]||"-"}</td>)}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </main>
-      );
-    };
+/* ====== الراوتر ====== */
+const routes={
+  '/home': Home,
+  '/kpis': KPIs,
+  '/journey': Journey,
+  '/referrals': Referrals,
+  '/health': Health,
+  '/education': Education,
+  '/ngo': NGO,
+  '/wallet': Wallet,
+  '/govern': Govern,
+  '/support': Support,
+  '/settings': Settings,
+  '/admin': Admin
+};
+function render(){
+  try{
+    const root=$("#root"); root.innerHTML='';
+    const hash=location.hash || '#/home';
+    const path=hash.replace('#','');
+    const view = routes[path] || Home;
+    root.appendChild(view());
+  }catch(e){fatal('حدث خطأ غير متوقع أثناء العرض: '+e.message);}
+}
+window.addEventListener('hashchange',render);
 
-    /* ========== الراوتر والتطبيق ========== */
-    const Router=()=>{
-      const [hash,setHash]=useState(window.location.hash||"#/home");
-      useEffect(()=>{const on=()=>setHash(window.location.hash||"#/home");window.addEventListener("hashchange",on);return()=>window.removeEventListener("hashchange",on)},[]);
-      switch(hash.replace("#","")){
-        case "/home": return <Home/>;
-        case "/kpis": return <KPIs/>;
-        case "/journey": return <Journey/>;
-        case "/referrals": return <Referrals/>;
-        case "/health": return <Health/>;
-        case "/education": return <Education/>;
-        case "/ngo": return <NGO/>;
-        case "/wallet": return <Wallet/>;
-        case "/govern": return <Govern/>;
-        case "/support": return <Support/>;
-        case "/settings": return <Settings/>;
-        case "/admin": return <Admin/>;
-        default: return <Home/>;
-      }
-    };
+/* ====== تزامن الهيدر (الدور/المنطقة والقائمة) ====== */
+function syncHeader(){
+  const user=store.get('user',{role:'family',region:'الرياض'});
+  const role=ROLES.find(r=>r.id===user.role);
+  $('#roleChip').textContent=role?role.label:'—';
+  $('#mRoleChip').textContent=role?role.label:'—';
+  const regionSel=$('#regionSel'), mRegionSel=$('#mRegionSel');
+  regionSel.innerHTML=''; mRegionSel.innerHTML='';
+  REGIONS.forEach(r=>{regionSel.appendChild(el('option',{value:r},r)); mRegionSel.appendChild(el('option',{value:r},r));});
+  regionSel.value=user.region; mRegionSel.value=user.region;
+  regionSel.onchange = mRegionSel.onchange = (e)=>{store.set('user',{...user,region:e.target.value}); render();};
+  $('#switchRoleBtn').onclick = $('#mSwitchRoleBtn').onclick = ()=>{
+    const i = ROLES.findIndex(r=>r.id===user.role);
+    const next = ROLES[(i+1)%ROLES.length].id;
+    store.set('user',{...user,role:next}); syncHeader(); render();
+  };
+}
 
-    const App=()=>{
-      const [logged,setLogged]=useState(!!store.get("user",null));
-      useEffect(()=>{seed(); if(!window.location.hash) window.location.hash="/home";},[]);
-      if(!logged) return <Login onLogin={()=>setLogged(true)}/>;
-      return (
-        <div className="min-h-screen bg-white">
-          <TopBar onLogout={()=>{ localStorage.removeItem("user"); location.hash="#/home"; location.reload(); }}/>
-          <Router/>
-          <Footer/>
-        </div>
-      );
-    };
+/* ====== قائمة الجوال ====== */
+$('#menuBtn').addEventListener('click',()=>$('#mobileMenu').classList.toggle('hidden'));
 
-    const Login=({onLogin})=>{
-      const [role,setRole]=useState(store.get("user",{role:"family"}).role||"family");
-      const [region,setRegion]=useState(store.get("user",{region:"الرياض"}).region||"الرياض");
-      const [name,setName]=useState(store.get("user",{name:""}).name||"");
-      return (
-        <div className="min-h-screen bg-gradient-to-tr from-nomu-50 via-white to-sky-50">
-          <div className="container px-3 sm:px-4 py-16">
-            <div className="flex items-center justify-between">
-              <LogoNOMU className="h-10 w-auto"/>
-              <div className="flex items-center gap-4"><LogoVision/><LogoTelbiya/></div>
-            </div>
-            <h1 className="mt-6 text-xl sm:text-2xl font-bold text-center">مرحبًا بك في منصة نمو</h1>
-            <p className="mt-2 text-center text-slate-600">اختر الدور والمنطقة لبدء التجربة</p>
-            <div className="mt-6 bg-white border border-slate-200 rounded-2xl shadow-sm p-5 grid md:grid-cols-3 gap-4">
-              <div><label className="text-sm text-slate-600">الدور</label>
-                <select className="w-full rounded-xl border px-3 py-2 mt-1" value={role} onChange={e=>setRole(e.target.value)}>
-                  {ROLES.map(r=><option key={r.id} value={r.id}>{r.label}</option>)}
-                </select></div>
-              <div><label className="text-sm text-slate-600">المنطقة</label>
-                <select className="w-full rounded-xl border px-3 py-2 mt-1" value={region} onChange={e=>setRegion(e.target.value)}>
-                  {REGIONS.map(r=><option key={r} value={r}>{r}</option>)}
-                </select></div>
-              <div><label className="text-sm text-slate-600">الاسم (اختياري)</label>
-                <input className="w-full rounded-xl border px-3 py-2 mt-1" value={name} onChange={e=>setName(e.target.value)} placeholder="اسم المستخدم"/></div>
-              <div className="md:col-span-3 flex items-center justify-between">
-                <div className="text-xs text-slate-500">نسخة تشغيلية تجريبية — بيانات محلية.</div>
-                <button onClick={()=>{store.set("user",{role,region,name});onLogin();}} className="rounded-xl bg-nomu-600 text-white px-4 py-2.5 hover:bg-nomu-700">دخول</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    };
-
-    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
-  </script>
+/* ====== بدء التشغيل ====== */
+document.getElementById('y').textContent=new Date().getFullYear();
+seed(); syncHeader(); if(!location.hash) location.hash='/home'; render();
+</script>
 </body>
 </html>
