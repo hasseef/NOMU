@@ -4,9 +4,9 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>منصة نمو — تلبية × رؤية 2030</title>
-  <meta name="description" content="منصة نمو الوطنية: ربط الأسرة والصحة والتعليم والجمعيات والقطاع الخاص واللجنة الوطنية ضمن هوية تلبية ومواءمة رؤية 2030."/>
-  <!-- Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="منصة نمو الوطنية: ربط الأسرة والصحة والتعليم والجمعيات والقطاع الخاص واللجنة الوطنية ضمن رؤية 2030 وبدعم تلبية."/>
+  <!-- Tailwind عبر jsDelivr (أكثر استقراراً على Pages) -->
+  <script src="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.13/lib/cdn.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -25,20 +25,38 @@
     html,body{height:100%;background:#fff}
     .container{max-width:80rem;margin-inline:auto}
     .hint{font-size:.75rem;color:#64748b}
+    #fatal{display:none}
   </style>
 </head>
 <body class="font-sans text-slate-800">
+  <noscript style="display:block;padding:1rem;background:#fee2e2;color:#991b1b;text-align:center">
+    هذه الصفحة تحتاج تشغيل JavaScript.
+  </noscript>
+  <div id="fatal" class="p-3 text-sm bg-amber-100 text-amber-900"></div>
   <div id="root"></div>
 
-  <!-- React 18 + ReactDOM + Babel (JSX in browser) -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- React 18 + ReactDOM + Babel عبر jsDelivr -->
+  <script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.26.2/babel.min.js"></script>
 
+  <script>
+    // إن فشل تحميل أي مكتبة، أظهر رسالة واضحة بدل صفحة بيضاء
+    (function guard(){
+      function fail(msg){
+        var el=document.getElementById('fatal'); el.style.display='block'; el.textContent=msg;
+      }
+      if(!window.React) return fail('تعذّر تحميل React من شبكة CDN. جرّب تحديث الصفحة أو استخدم اتصالًا مختلفًا.');
+      if(!window.ReactDOM) return fail('تعذّر تحميل ReactDOM من شبكة CDN.');
+      if(!window.Babel) return fail('تعذّر تحميل Babel Standalone من شبكة CDN.');
+    })();
+  </script>
+
+  <!-- تطبيق المنصة (JSX) -->
   <script type="text/babel" data-presets="react">
     const { useState, useEffect, useMemo } = React;
 
-    /* ====================== Utilities & Seed ====================== */
+    /* ========== أدوات عامة ========== */
     const cn=(...a)=>a.filter(Boolean).join(" ");
     const store={ get:(k,f)=>{try{return JSON.parse(localStorage.getItem(k))??f}catch{return f}}, set:(k,v)=>localStorage.setItem(k,JSON.stringify(v)), del:k=>localStorage.removeItem(k) };
     const REGIONS=["الرياض","مكة المكرمة","الشرقية","المدينة","عسير","حائل","تبوك","القصيم","نجران","جازان","الجوف","الباحة","الحدود الشمالية"];
@@ -53,17 +71,17 @@
     ];
     const CONTACT={ email:"info@talbiya.sa", whatsapp:"966556083172" };
 
-    /* ====================== Logos ====================== */
+    /* ========== شعارات ========== */
     const LogoNOMU=({color="#059669",className="h-8 w-auto"})=>(
       <div className="flex items-center gap-2">
         <svg className={className} viewBox="0 0 220 60" aria-label="نمو" role="img">
           <title>نمو</title>
           <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0%" stopColor={color} stopOpacity="0.35"/><stop offset="100%" stopColor={color} stopOpacity="0.9"/></linearGradient></defs>
-        <circle cx="18" cy="16" r="6" fill="url(#g)"/>
-        <path d="M10 46 Q18 28 28 36 T48 46" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
-        <path d="M75 28 q14-10 24 0 t24 0" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
-        <path d="M73 44 q14 12 24 0 t24 0" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
-        <line x1="10" y1="52" x2="200" y2="52" stroke={color} strokeWidth="2" strokeLinecap="round" opacity="0.2"/>
+          <circle cx="18" cy="16" r="6" fill="url(#g)"/>
+          <path d="M10 46 Q18 28 28 36 T48 46" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
+          <path d="M75 28 q14-10 24 0 t24 0" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
+          <path d="M73 44 q14 12 24 0 t24 0" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
+          <line x1="10" y1="52" x2="200" y2="52" stroke={color} strokeWidth="2" strokeLinecap="round" opacity="0.2"/>
         </svg>
         <span className="text-xl font-bold" style={{color}}>منصة نمو</span>
       </div>
@@ -79,42 +97,40 @@
       </div>
     );
 
-    /* ====================== Dynamic Form Schemas (مُحسّنة) ====================== */
-    // عنصر الحقل: {key,label,type,required,options,dependsOn:{key,value},placeholder}
-    // أنواع إضافية مقترحة تدعم وضوح آلية العمل: معرفات وطنية، ترميز طبي/تعليمي، اتفاقيات، نطاق تقارير، مؤشرات، مرفقات روابط (URL)
+    /* ========== مخططات النماذج الديناميكية (محسنة) ========== */
     const SCHEMAS = {
       referral: {
         common: [
           {key:"childName", label:"اسم الطفل", type:"text", required:true},
-          {key:"childNid", label:"هوية/سجل الأسرة (اختياري)", type:"text", placeholder:"رقم الهوية الوطنية أو سجل الأسرة"},
+          {key:"childNid", label:"هوية/سجل الأسرة (اختياري)", type:"text"},
           {key:"refType", label:"نوع الإحالة", type:"select", required:true, options:["صحي","نمائي 0–3","تعليمي","دعم أسري"]},
           {key:"region", label:"المنطقة", type:"select", required:true, options:REGIONS},
-          {key:"geo", label:"الموقع التقريبي (URL خرائط)", type:"text", placeholder:"https://maps..."},
+          {key:"geo", label:"الموقع (رابط خرائط)", type:"text"},
           {key:"summary", label:"وصف مختصر", type:"textarea"},
-          {key:"attachments", label:"روابط مرفقات (URL مفصول بفواصل)", type:"text", placeholder:"https://... , https://..."}
+          {key:"attachments", label:"روابط مرفقات (URL مفصول بفواصل)", type:"text"}
         ],
         byRole: {
           family: [
             {key:"guardianPhone", label:"هاتف ولي الأمر", type:"tel", required:true},
             {key:"preferredContact", label:"طريقة التواصل", type:"select", required:true, options:["الهاتف","واتساب","البريد"]},
-            {key:"consent", label:"موافقة على مشاركة البيانات", type:"checkbox", required:true},
+            {key:"consent", label:"موافقة مشاركة البيانات", type:"checkbox", required:true},
             {key:"consentAt", label:"تاريخ/وقت الموافقة", type:"date"}
           ],
           health: [
             {key:"diagnosis", label:"تشخيص/ملاحظة أولية", type:"textarea", required:true},
-            {key:"icd10", label:"ترميز ICD-10 (اختياري)", type:"text", placeholder:"مثال: H91.9"},
+            {key:"icd10", label:"ترميز ICD-10", type:"text"},
             {key:"priority", label:"الأولوية", type:"select", required:true, options:["عاجلة","مرتفعة","عادية"]},
-            {key:"slaHours", label:"SLA مستهدف (ساعات)", type:"number", placeholder:"مثال: 24"}
+            {key:"slaHours", label:"SLA مستهدف (ساعات)", type:"number"}
           ],
           edu: [
             {key:"schoolId", label:"رقم المنشأة التعليمية", type:"text"},
-            {key:"iep", label:"حالة خطة IEP", type:"select", options:["غير مطبق","قيد الإعداد","مطبّق"], required:true},
-            {key:"eduCode", label:"رمز برنامج/مسار تعليمي", type:"text", placeholder:"كود داخلي"}
+            {key:"iep", label:"حالة IEP", type:"select", options:["غير مطبق","قيد الإعداد","مطبّق"], required:true},
+            {key:"eduCode", label:"رمز برنامج/مسار", type:"text"}
           ],
           ngo: [
             {key:"program", label:"البرنامج/المبادرة", type:"select", options:["تدخل مبكر","إرشاد أسري","دعم مجتمعي"], required:true},
-            {key:"capacity", label:"الطاقة الاستيعابية الحالية", type:"number"},
-            {key:"outcomeMetric", label:"مؤشر ناتج مستهدف", type:"select", options:["جلسات منجزة","أسر مخدومة","زيارات منزلية"]}
+            {key:"capacity", label:"طاقة استيعابية", type:"number"},
+            {key:"outcomeMetric", label:"مؤشر ناتج", type:"select", options:["جلسات منجزة","أسر مخدومة","زيارات منزلية"]}
           ],
           csr: [
             {key:"sponsor", label:"اسم الجهة الراعية", type:"text", required:true},
@@ -141,7 +157,7 @@
           {key:"screenType", label:"نوع الفحص", type:"select", required:true, options:["newborn_hearing","metabolic","developmental","vision"]},
           {key:"date", label:"تاريخ الفحص", type:"date", required:true},
           {key:"result", label:"النتيجة", type:"select", required:true, options:["PASS","Needs follow-up","FAIL"]},
-          {key:"attachments", label:"روابط تقارير/نتائج (URL)", type:"text", placeholder:"https://... , https://..."}
+          {key:"attachments", label:"روابط تقارير (URL)", type:"text"}
         ],
         byRole: {
           family: [
@@ -150,27 +166,19 @@
           health: [
             {key:"facility", label:"المنشأة الصحية", type:"text", required:true},
             {key:"practitionerId", label:"رقم الممارس", type:"text", required:true},
-            {key:"icd10", label:"ترميز ICD-10 (إن وجد)", type:"text"},
-            {key:"vitals", label:"قراءات أساسية (نص سريع)", type:"text", placeholder:"حرارة/وزن/طول..."},
+            {key:"icd10", label:"ترميز ICD-10", type:"text"},
+            {key:"vitals", label:"قراءات أساسية", type:"text", placeholder:"حرارة/وزن/طول..."},
             {key:"nextAppointment", label:"موعد المتابعة", type:"date"},
             {key:"notes", label:"ملاحظات", type:"textarea"}
           ],
-          edu: [
-            {key:"impactOnLearning", label:"أثر على التعلم", type:"select", options:["لا","محتمل","مؤكد"]}
-          ],
-          ngo: [
-            {key:"supportNeeded", label:"دعم بعد الفحص", type:"select", options:["جلسة إرشاد","زيارة منزلية","إحالة جمعية"]}
-          ],
-          csr: [
-            {key:"sponsorCovered", label:"مغطّى ضمن رعاية؟", type:"select", options:["نعم","لا"]},
-          ],
+          edu: [{key:"impactOnLearning", label:"أثر على التعلم", type:"select", options:["لا","محتمل","مؤكد"]}],
+          ngo: [{key:"supportNeeded", label:"دعم بعد الفحص", type:"select", options:["جلسة إرشاد","زيارة منزلية","إحالة جمعية"]}],
+          csr: [{key:"sponsorCovered", label:"مغطّى ضمن رعاية؟", type:"select", options:["نعم","لا"]}],
           national: [
             {key:"regionScope", label:"نطاق التقرير", type:"select", options:["وطني","منطقة","محافظة"]},
             {key:"qualityFlag", label:"مؤشر جودة بلاغ", type:"select", options:["S1","S2","S3"]}
           ],
-          admin: [
-            {key:"qaCheck", label:"جودة البيانات (QA)", type:"select", options:["S1","S2","S3"], required:true}
-          ]
+          admin: [{key:"qaCheck", label:"جودة البيانات (QA)", type:"select", options:["S1","S2","S3"], required:true}]
         }
       },
 
@@ -195,12 +203,8 @@
             {key:"placement", label:"المسار/المستوى", type:"text"},
             {key:"seatAvailability", label:"توفر مقاعد", type:"select", options:["متاح","محدود","ممتلئ"], required:true}
           ],
-          health: [
-            {key:"medicalNote", label:"ملاحظة طبية مؤثرة", type:"textarea"}
-          ],
-          ngo: [
-            {key:"supportProgram", label:"برنامج دعم مرافق", type:"select", options:["تدخل مبكر","علاج وظيفي","تخاطب"]}
-          ],
+          health: [{key:"medicalNote", label:"ملاحظة طبية مؤثرة", type:"textarea"}],
+          ngo: [{key:"supportProgram", label:"برنامج دعم مرافق", type:"select", options:["تدخل مبكر","علاج وظيفي","تخاطب"]}],
           csr: [
             {key:"scholarship", label:"منحة/رعاية للرسوم", type:"select", options:["نعم","لا"]},
             {key:"schAmount", label:"مبلغ المنحة (ر.س)", type:"number", dependsOn:{key:"scholarship",value:"نعم"}}
@@ -209,9 +213,7 @@
             {key:"policyRef", label:"مرجع سياسة القبول", type:"text"},
             {key:"reportingFreq", label:"دورية التقارير", type:"select", options:["شهري","ربع سنوي","سنوي"]}
           ],
-          admin: [
-            {key:"sla", label:"SLA لمعالجة الطلب", type:"select", options:["≤2يوم","≤5أيام"], required:true}
-          ]
+          admin: [{key:"sla", label:"SLA لمعالجة الطلب", type:"select", options:["≤2يوم","≤5أيام"], required:true}]
         }
       },
 
@@ -229,15 +231,10 @@
             {key:"beneficiaries", label:"عدد المستفيدين المتوقع", type:"number"},
             {key:"outcomeMetric", label:"مؤشر ناتج", type:"select", options:["جلسات","أسر","زيارات"]}
           ],
-          family: [
-            {key:"preferredTime", label:"الوقت المفضل", type:"select", options:["صباح","مساء"]}
-          ],
+          family: [{key:"preferredTime", label:"الوقت المفضل", type:"select", options:["صباح","مساء"]}],
           health: [{key:"clinicalCoord", label:"منسق صحي", type:"text"}],
           edu: [{key:"schoolPartner", label:"شريك تعليمي", type:"text"}],
-          csr: [
-            {key:"sponsor", label:"الراعي", type:"text"},
-            {key:"budget", label:"ميزانية مرصودة (ر.س)", type:"number"}
-          ],
+          csr: [{key:"sponsor", label:"الراعي", type:"text"},{key:"budget", label:"ميزانية مرصودة (ر.س)", type:"number"}],
           national: [{key:"policyRef", label:"مرجع توجيه", type:"text"}],
           admin: [{key:"qaCheck", label:"مراجعة جودة", type:"select", options:["S1","S2","S3"]}]
         }
@@ -260,9 +257,7 @@
             {key:"period", label:"فترة الالتزام", type:"select", options:["شهري","ربع سنوي","سنوي"], required:true},
             {key:"escrow", label:"حساب ضمان (Escrow)", type:"select", options:["نعم","لا"]}
           ],
-          ngo: [
-            {key:"program", label:"البرنامج المستفيد", type:"select", options:["تدخل مبكر","إرشاد أسري","دعم مجتمعي"], required:true}
-          ],
+          ngo: [{key:"program", label:"البرنامج المستفيد", type:"select", options:["تدخل مبكر","إرشاد أسري","دعم مجتمعي"], required:true}],
           national: [
             {key:"regionScope", label:"نطاق الصرف", type:"select", options:["وطني","منطقة","محافظة"]},
             {key:"reportingFreq", label:"دورية التقارير", type:"select", options:["شهري","ربع سنوي","سنوي"]}
@@ -272,7 +267,15 @@
       }
     };
 
-    /* ====================== Helpers ====================== */
+    /* ========== حقول UI مشتركة ========== */
+    const Badge=({text,color="bg-slate-100 text-slate-700"})=><span className={cn("text-xs px-2 py-1 rounded-full",color)}>{text}</span>;
+    const Stat=({label,value,suffix="%",ok=true})=>(
+      <div className={cn("rounded-2xl p-5 border shadow-sm",ok?"border-emerald-200 bg-emerald-50":"border-amber-200 bg-amber-50")}>
+        <div className="text-sm text-slate-600">{label}</div>
+        <div className="mt-2 text-3xl font-bold">{value}<span className="text-xl">{suffix}</span></div>
+      </div>
+    );
+
     const Field = ({field,value,onChange,data})=>{
       const base="w-full rounded-xl border px-3 py-2 mt-1";
       const label=<label className="text-xs text-slate-600">{field.label}{field.required?" *":""}</label>;
@@ -296,7 +299,7 @@
       return null;
     };
 
-    /* ====================== Seed Data ====================== */
+    /* ========== بيانات أولية ========== */
     function seed(){
       if(!store.get("nomu_initialized",false)){
         store.set("user",{ role:"family", region:"الرياض", name:"مستخدم" });
@@ -329,25 +332,19 @@
       }
     }
 
-    /* ====================== Layout: Header / Footer (Responsive) ====================== */
+    /* ========== رأس/تذييل (Responsive) ========== */
     const TopBar=({onLogout})=>{
       const user=store.get("user",{});
       const [open,setOpen]=useState(false);
       return (
         <header className="w-full bg-white/90 backdrop-blur border-b border-slate-200 sticky top-0 z-40">
           <div className="container px-3 sm:px-4 h-16 flex items-center justify-between">
-            {/* يمين: NOMU */}
             <a href="#/home" className="flex items-center gap-3"><LogoNOMU/></a>
-
-            {/* وسط: قائمة كبيرة */}
             <nav className="hidden xl:flex items-center gap-2 text-sm">
               {["home|الرئيسية","journey|رحلة الطفل","kpis|مؤشرات الأداء","referrals|الإحالات","health|الصحة","education|التعليم","ngo|الجمعيات","wallet|الرعايات/المحفظة","govern|الحوكمة","support|الدعم","settings|الإعدادات"].map(i=>{
-                const [path,label]=i.split("|");
-                return <a key={path} href={`#/${path}`} className="px-3 py-2 hover:opacity-80">{label}</a>;
+                const [path,label]=i.split("|"); return <a key={path} href={`#/${path}`} className="px-3 py-2 hover:opacity-80">{label}</a>;
               })}
             </nav>
-
-            {/* يسار: الشعارات + أدوات */}
             <div className="hidden md:flex items-center gap-3">
               <LogoVision/><LogoTelbiya/>
               <Badge text={ROLES.find(r=>r.id===user.role)?.label ?? "—"}/>
@@ -357,15 +354,11 @@
               </select>
               <button onClick={onLogout} className="text-xs px-2.5 py-1 rounded-lg border hover:bg-slate-50">تبديل الدور</button>
             </div>
-
-            {/* جوال: زر هامبرغر + شعارات يسار مصغّرة */}
             <div className="flex md:hidden items-center gap-2">
               <div className="flex items-center gap-2"><LogoVision className="h-6"/><LogoTelbiya className="h-6"/></div>
               <button aria-label="فتح القائمة" className="p-2 rounded-lg border" onClick={()=>setOpen(v=>!v)}>☰</button>
             </div>
           </div>
-
-          {/* قائمة جوال منسدلة */}
           {open && (
             <div className="xl:hidden border-t border-slate-200 bg-white">
               <div className="container px-3 py-3 grid gap-2 text-sm">
@@ -394,9 +387,7 @@
           <div className="flex items-center gap-3">
             <LogoNOMU className="h-7 w-auto"/><span>© {new Date().getFullYear()} — منصة نمو</span>
           </div>
-          <div className="text-center">
-            <span className="opacity-70">بمواءمة رؤية 2030 وبدعم تلبية</span>
-          </div>
+          <div className="text-center"><span className="opacity-70">بمواءمة رؤية 2030 وبدعم تلبية</span></div>
           <div className="flex justify-end gap-4">
             <span className="opacity-80">جميع الحقوق محفوظة لشركة تلبية للبحث والتطوير</span>
           </div>
@@ -404,42 +395,7 @@
       </footer>
     );
 
-    /* ====================== Auth / Login ====================== */
-    const Login=({onLogin})=>{
-      const [role,setRole]=useState(store.get("user",{role:"family"}).role||"family");
-      const [region,setRegion]=useState(store.get("user",{region:"الرياض"}).region||"الرياض");
-      const [name,setName]=useState(store.get("user",{name:""}).name||"");
-      return (
-        <div className="min-h-screen bg-gradient-to-tr from-nomu-50 via-white to-sky-50">
-          <div className="container px-3 sm:px-4 py-16">
-            <div className="flex items-center justify-between">
-              <LogoNOMU className="h-10 w-auto"/>
-              <div className="flex items-center gap-4"><LogoVision/><LogoTelbiya/></div>
-            </div>
-            <h1 className="mt-6 text-xl sm:text-2xl font-bold text-center">مرحبًا بك في منصة نمو</h1>
-            <p className="mt-2 text-center text-slate-600">اختر الدور والمنطقة لبدء التجربة</p>
-            <div className="mt-6 bg-white border border-slate-200 rounded-2xl shadow-sm p-5 grid md:grid-cols-3 gap-4">
-              <div><label className="text-sm text-slate-600">الدور</label>
-                <select className="w-full rounded-xl border px-3 py-2 mt-1" value={role} onChange={e=>setRole(e.target.value)}>
-                  {ROLES.map(r=><option key={r.id} value={r.id}>{r.label}</option>)}
-                </select></div>
-              <div><label className="text-sm text-slate-600">المنطقة</label>
-                <select className="w-full rounded-xl border px-3 py-2 mt-1" value={region} onChange={e=>setRegion(e.target.value)}>
-                  {REGIONS.map(r=><option key={r} value={r}>{r}</option>)}
-                </select></div>
-              <div><label className="text-sm text-slate-600">الاسم (اختياري)</label>
-                <input className="w-full rounded-xl border px-3 py-2 mt-1" value={name} onChange={e=>setName(e.target.value)} placeholder="اسم المستخدم"/></div>
-              <div className="md:col-span-3 flex items-center justify-between">
-                <div className="text-xs text-slate-500">نسخة تشغيلية تجريبية — بيانات محلية.</div>
-                <button onClick={()=>{store.set("user",{role,region,name});onLogin();}} className="rounded-xl bg-nomu-600 text-white px-4 py-2.5 hover:bg-nomu-700">دخول</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    };
-
-    /* ====================== Home ====================== */
+    /* ========== صفحات ========== */
     const Home=()=>{
       const notes=store.get("notifications",[]);
       return (
@@ -490,13 +446,6 @@
       );
     };
 
-    /* ====================== KPIs ====================== */
-    const StatBox=({label,val,ok})=>(
-      <div className={cn("rounded-2xl p-5 border shadow-sm", ok?"border-emerald-200 bg-emerald-50":"border-amber-200 bg-amber-50")}>
-        <div className="text-sm text-slate-600">{label}</div>
-        <div className="mt-2 text-3xl font-bold">{val}</div>
-      </div>
-    );
     const KPIs=()=>{
       const user=store.get("user",{});
       const k=store.get("kpis",{});
@@ -527,7 +476,6 @@
       );
     };
 
-    /* ====================== Journey ====================== */
     const Journey=()=>{
       const children=store.get("children",[]);
       const screenings=store.get("screenings",[]);
@@ -566,7 +514,6 @@
       );
     };
 
-    /* ====================== Referrals (Dynamic) ====================== */
     const Referrals=()=>{
       const [list,setList]=useState(store.get("referrals",[]));
       const [q,setQ]=useState(""); const [modal,setModal]=useState(false);
@@ -574,10 +521,8 @@
       const [data,setData]=useState({});
       useEffect(()=>store.set("referrals",list),[list]);
 
-      const common = SCHEMAS.referral.common;
-      const roleFields = (SCHEMAS.referral.byRole[user.role]||[]);
-      const allFields = [...common, ...roleFields];
-
+      const common=SCHEMAS.referral.common, roleFields=(SCHEMAS.referral.byRole[user.role]||[]);
+      const allFields=[...common,...roleFields];
       const filtered=list.filter(r=>JSON.stringify(r).includes(q));
       const onChange=(k,v)=>setData(prev=>({...prev,[k]:v}));
 
@@ -585,16 +530,8 @@
         const missing = validateRequired(allFields, data);
         if(missing) return alert(`الرجاء تعبئة: ${missing}`);
         const id="RF-"+Math.random().toString(36).slice(2,6).toUpperCase();
-        const record={
-          id,
-          child:data.childName,
-          type:data.refType,
-          status:"مفتوحة",
-          created:new Date().toISOString().slice(0,10),
-          region:data.region,
-          notes:data.summary,
-          meta:Object.fromEntries(Object.entries(data).filter(([k])=>!["childName","refType","region","summary"].includes(k)))
-        };
+        const record={ id, child:data.childName, type:data.refType, status:"مفتوحة", created:new Date().toISOString().slice(0,10), region:data.region, notes:data.summary,
+          meta:Object.fromEntries(Object.entries(data).filter(([k])=>!["childName","refType","region","summary"].includes(k))) };
         setList(prev=>[record,...prev]); setModal(false); setData({});
       };
       const setStatus=(id,status)=>setList(prev=>prev.map(r=>r.id===id?{...r,status}:r));
@@ -656,7 +593,6 @@
       );
     };
 
-    /* ====================== Health (Dynamic) ====================== */
     const Health=()=>{
       const [list,setList]=useState(store.get("screenings",[]));
       const [q,setQ]=useState(""); const [modal,setModal]=useState(false);
@@ -664,10 +600,8 @@
       const [data,setData]=useState({});
       useEffect(()=>store.set("screenings",list),[list]);
 
-      const common=SCHEMAS.health.common;
-      const roleFields=SCHEMAS.health.byRole[user.role]||[];
+      const common=SCHEMAS.health.common, roleFields=SCHEMAS.health.byRole[user.role]||[];
       const allFields=[...common,...roleFields];
-
       const filtered=list.filter(s=>JSON.stringify(s).includes(q));
       const onChange=(k,v)=>setData(prev=>({...prev,[k]:v}));
 
@@ -730,7 +664,6 @@
       );
     };
 
-    /* ====================== Education (Dynamic) ====================== */
     const Education=()=>{
       const [apps,setApps]=useState([
         {id:"KG-01", child:"سعود", status:"قيد المراجعة", region:"الرياض", date:"2025-09-15", meta:{}},
@@ -741,8 +674,7 @@
       const [data,setData]=useState({});
       const filtered=apps.filter(a=>JSON.stringify(a).includes(q));
 
-      const common=SCHEMAS.education.common;
-      const roleFields=SCHEMAS.education.byRole[user.role]||[];
+      const common=SCHEMAS.education.common, roleFields=SCHEMAS.education.byRole[user.role]||[];
       const allFields=[...common,...roleFields];
       const onChange=(k,v)=>setData(prev=>({...prev,[k]:v}));
 
@@ -754,7 +686,6 @@
           meta:Object.fromEntries(Object.entries(data).filter(([k])=>!["childName","applicationType","date","region"].includes(k))) };
         setApps(prev=>[rec,...prev]); setModal(false); setData({});
       };
-
       const approve=id=>setApps(prev=>prev.map(a=>a.id===id?{...a,status:"مقبول"}:a));
 
       return (
@@ -807,7 +738,6 @@
       );
     };
 
-    /* ====================== NGO (Dynamic) ====================== */
     const NGO=()=>{
       const [cases,setCases]=useState([
         {id:"NGO-11", title:"جلسة إرشاد أسري", status:"مجدولة", region:"الرياض", meta:{}},
@@ -818,8 +748,7 @@
       const [data,setData]=useState({});
       const filtered=cases.filter(c=>JSON.stringify(c).includes(q));
 
-      const common=SCHEMAS.ngo.common;
-      const roleFields=SCHEMAS.ngo.byRole[user.role]||[];
+      const common=SCHEMAS.ngo.common, roleFields=SCHEMAS.ngo.byRole[user.role]||[];
       const allFields=[...common,...roleFields];
       const onChange=(k,v)=>setData(prev=>({...prev,[k]:v}));
 
@@ -878,7 +807,6 @@
       );
     };
 
-    /* ====================== Wallet / CSR (Dynamic) ====================== */
     const Wallet=()=>{
       const [state,setState]=useState(store.get("wallet",{total:0,entries:[]}));
       const [q,setQ]=useState(""); const [modal,setModal]=useState(false);
@@ -886,8 +814,7 @@
       const [data,setData]=useState({});
       useEffect(()=>store.set("wallet",state),[state]);
 
-      const common=SCHEMAS.wallet.common;
-      const roleFields=SCHEMAS.wallet.byRole[user.role]||[];
+      const common=SCHEMAS.wallet.common, roleFields=SCHEMAS.wallet.byRole[user.role]||[];
       const allFields=[...common,...roleFields];
       const onChange=(k,v)=>setData(prev=>({...prev,[k]:v}));
 
@@ -963,7 +890,6 @@
       );
     };
 
-    /* ====================== Govern / Support / Settings / Admin ====================== */
     const Govern=()=>{
       const policies=[
         "الامتثال لنظام حماية البيانات الشخصية (PDPL).",
@@ -1090,7 +1016,7 @@
       );
     };
 
-    /* ====================== Router & App ====================== */
+    /* ========== الراوتر والتطبيق ========== */
     const Router=()=>{
       const [hash,setHash]=useState(window.location.hash||"#/home");
       useEffect(()=>{const on=()=>setHash(window.location.hash||"#/home");window.addEventListener("hashchange",on);return()=>window.removeEventListener("hashchange",on)},[]);
@@ -1120,6 +1046,40 @@
           <TopBar onLogout={()=>{ localStorage.removeItem("user"); location.hash="#/home"; location.reload(); }}/>
           <Router/>
           <Footer/>
+        </div>
+      );
+    };
+
+    const Login=({onLogin})=>{
+      const [role,setRole]=useState(store.get("user",{role:"family"}).role||"family");
+      const [region,setRegion]=useState(store.get("user",{region:"الرياض"}).region||"الرياض");
+      const [name,setName]=useState(store.get("user",{name:""}).name||"");
+      return (
+        <div className="min-h-screen bg-gradient-to-tr from-nomu-50 via-white to-sky-50">
+          <div className="container px-3 sm:px-4 py-16">
+            <div className="flex items-center justify-between">
+              <LogoNOMU className="h-10 w-auto"/>
+              <div className="flex items-center gap-4"><LogoVision/><LogoTelbiya/></div>
+            </div>
+            <h1 className="mt-6 text-xl sm:text-2xl font-bold text-center">مرحبًا بك في منصة نمو</h1>
+            <p className="mt-2 text-center text-slate-600">اختر الدور والمنطقة لبدء التجربة</p>
+            <div className="mt-6 bg-white border border-slate-200 rounded-2xl shadow-sm p-5 grid md:grid-cols-3 gap-4">
+              <div><label className="text-sm text-slate-600">الدور</label>
+                <select className="w-full rounded-xl border px-3 py-2 mt-1" value={role} onChange={e=>setRole(e.target.value)}>
+                  {ROLES.map(r=><option key={r.id} value={r.id}>{r.label}</option>)}
+                </select></div>
+              <div><label className="text-sm text-slate-600">المنطقة</label>
+                <select className="w-full rounded-xl border px-3 py-2 mt-1" value={region} onChange={e=>setRegion(e.target.value)}>
+                  {REGIONS.map(r=><option key={r} value={r}>{r}</option>)}
+                </select></div>
+              <div><label className="text-sm text-slate-600">الاسم (اختياري)</label>
+                <input className="w-full rounded-xl border px-3 py-2 mt-1" value={name} onChange={e=>setName(e.target.value)} placeholder="اسم المستخدم"/></div>
+              <div className="md:col-span-3 flex items-center justify-between">
+                <div className="text-xs text-slate-500">نسخة تشغيلية تجريبية — بيانات محلية.</div>
+                <button onClick={()=>{store.set("user",{role,region,name});onLogin();}} className="rounded-xl bg-nomu-600 text-white px-4 py-2.5 hover:bg-nomu-700">دخول</button>
+              </div>
+            </div>
+          </div>
         </div>
       );
     };
