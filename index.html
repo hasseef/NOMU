@@ -1,220 +1,235 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>منصة نمو — نموذج أولي</title>
-  <meta name="description" content="منصة نمو — نموذج أولي أحادي الملف يعرض الأدوار، مؤشرات الأداء، الإحالات، المحفظة، ولوحات للقطاعات." />
-  <!-- Tailwind CDN -->
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>منصة نمو — تلبية × رؤية 2030</title>
+  <meta name="description" content="منصة نمو — نموذج تشغيلي أحادي الملف بهوية تلبية ورؤية 2030 ونمو، يغطي الواجهات والخدمات اللازمة للفئات المستفيدة والجهات."/>
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: { sans: ['ui-sans-serif','system-ui','-apple-system','Segoe UI','Roboto','Noto Sans Arabic','Tahoma','Arial','sans-serif'] },
-          colors: { nomu: { 50:'#ecfdf5',100:'#d1fae5',200:'#a7f3d0',300:'#6ee7b7',400:'#34d399',500:'#10b981',600:'#059669',700:'#047857',800:'#065f46',900:'#064e3b' } }
+          colors: {
+            nomu: { 50:'#ecfdf5',100:'#d1fae5',200:'#a7f3d0',300:'#6ee7b7',400:'#34d399',500:'#10b981',600:'#059669',700:'#047857',800:'#065f46',900:'#064e3b' },
+            telbiya: { 600:'#0ea5e9', 700:'#0369a1' }, /* لون للتلبية */
+            vision: { 700:'#0f766e' } /* لون للرؤية */
+          }
         }
       }
     }
   </script>
   <style>
-    html,body { height: 100%; background:#fff }
-    [data-badge]{position:relative}
-    [data-badge]::after{content:attr(data-badge);position:absolute;top:-6px;left:-6px;font-size:10px;background:#ef4444;color:#fff;border-radius:999px;padding:2px 6px}
+    html,body{height:100%;background:#fff}
+    .container{max-width:80rem;margin-inline:auto}
   </style>
 </head>
 <body class="font-sans text-slate-800">
   <div id="root"></div>
 
-  <!-- React 18 UMD + ReactDOM + Babel (JSX in browser) -->
+  <!-- React 18 + ReactDOM + Babel (JSX in browser) -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <script type="text/babel" data-presets="react">
-    const { useState, useEffect } = React;
+    const { useState, useEffect, useMemo } = React;
 
-    /* ------------------ Utilities / Seed ------------------ */
-    const cn = (...a) => a.filter(Boolean).join(" ");
+    /* ====================== Utilities & Seed ====================== */
+    const cn = (...a)=>a.filter(Boolean).join(" ");
     const store = {
-      get: (k, fallback) => { try{ return JSON.parse(localStorage.getItem(k)) ?? fallback }catch{ return fallback } },
-      set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
-      del: (k) => localStorage.removeItem(k)
+      get:(k,f)=>{try{ return JSON.parse(localStorage.getItem(k)) ?? f }catch{return f}},
+      set:(k,v)=>localStorage.setItem(k, JSON.stringify(v)),
+      del:(k)=>localStorage.removeItem(k)
     };
-    const regions = ["الرياض","مكة المكرمة","الشرقية","المدينة","عسير","حائل","تبوك","القصيم","نجران","جازان","الجوف","الباحة","الحدود الشمالية"];
-    const roles = [
-      { id:"guest", label:"ضيف" },
-      { id:"family", label:"الأسرة/الأفراد" },
-      { id:"health", label:"الصحة" },
-      { id:"edu", label:"التعليم" },
-      { id:"ngo", label:"الجمعيات" },
-      { id:"csr", label:"القطاع الخاص (CSR)" },
-      { id:"national", label:"اللجنة الوطنية" }
+    const REGIONS = ["الرياض","مكة المكرمة","الشرقية","المدينة","عسير","حائل","تبوك","القصيم","نجران","جازان","الجوف","الباحة","الحدود الشمالية"];
+    const ROLES = [
+      {id:"family",label:"الأسرة/الأفراد"},
+      {id:"health",label:"الصحة"},
+      {id:"edu",label:"التعليم"},
+      {id:"ngo",label:"الجمعيات"},
+      {id:"csr",label:"القطاع الخاص (CSR)"},
+      {id:"national",label:"اللجنة الوطنية"},
+      {id:"admin",label:"إدارة المنصة"}
     ];
+    const CONTACT = { email:"info@talbiya.sa", whatsapp:"966556083172" };
 
     function seed(){
-      if(!store.get("nomu_proto_initialized", false)) {
-        store.set("nomu_user", { role:"guest", region:"الرياض", name:"" });
-        store.set("nomu_kpis", {
+      if(!store.get("nomu_initialized", false)){
+        store.set("user",{ role:"family", region:"الرياض", name:"مستخدم تجريبي" });
+        store.set("kpis",{
           period:"آخر 30 يومًا",
           byRegion:{
-            "الرياض":       { coverage:82, immunization:91, readiness:76, referralsMedianHrs:18, kgEnroll:88, completeness:96 },
-            "مكة المكرمة":  { coverage:78, immunization:89, readiness:72, referralsMedianHrs:22, kgEnroll:84, completeness:94 }
+            "الرياض":{coverage:82, immunization:91, readiness:76, referralsMedianHrs:18, kgEnroll:88, completeness:96},
+            "مكة المكرمة":{coverage:78, immunization:89, readiness:72, referralsMedianHrs:22, kgEnroll:84, completeness:94}
           }
         });
-        store.set("nomu_referrals", [
-          { id:"RF-1001", child:"محمد.س",  type:"صحي",         status:"مفتوحة",        created:"2025-09-20", region:"الرياض" },
-          { id:"RF-1002", child:"جود.م",   type:"تعليمي",       status:"قيد المعالجة",  created:"2025-09-22", region:"الرياض" },
-          { id:"RF-1003", child:"خالد.أ",  type:"نمائي 0–3",    status:"مغلقة",         created:"2025-09-10", region:"مكة المكرمة" }
+        store.set("children",[
+          {id:"CH-001", familyId:"F-001", name:"سعود", gender:"M", birthDate:"2021-06-10", region:"الرياض"},
+          {id:"CH-002", familyId:"F-001", name:"نورة", gender:"F", birthDate:"2023-02-02", region:"الرياض"}
         ]);
-        store.set("nomu_wallet", {
-          total: 35000,
-          entries: [
-            { id:"TRX-01", source:"شركة ألف — رعاية روضة", amount:20000, date:"2025-09-05", tag:"CSR" },
-            { id:"TRX-02", source:"منحة تعليم مبكر",       amount:10000, date:"2025-09-18", tag:"Grant" },
-            { id:"TRX-03", source:"متبرع فردي",            amount: 5000, date:"2025-10-01", tag:"Donation" }
-          ]
-        });
-        store.set("nomu_settings", { brand:"نمو", primary:"#059669", logoType:"svg" });
-        store.set("nomu_proto_initialized", true);
+        store.set("screenings",[
+          {id:"SC-100", childId:"CH-002", type:"newborn_hearing", date:"2023-02-05", result:"PASS"},
+          {id:"SC-101", childId:"CH-001", type:"developmental", date:"2024-10-01", result:"Needs follow-up"}
+        ]);
+        store.set("referrals",[
+          {id:"RF-1001", child:"سعود", type:"تعليمي", status:"قيد المعالجة", created:"2025-09-22", region:"الرياض", notes:"تقييم جاهزية"},
+          {id:"RF-1002", child:"نورة", type:"صحي", status:"مفتوحة", created:"2025-09-28", region:"الرياض", notes:"متابعة سمع"}
+        ]);
+        store.set("wallet",{ total: 35000, entries:[
+          {id:"TRX-01", source:"شركة ألف — رعاية روضة", amount:20000, date:"2025-09-05", tag:"CSR"},
+          {id:"TRX-02", source:"منحة تعليم مبكر", amount:10000, date:"2025-09-18", tag:"Grant"},
+          {id:"TRX-03", source:"متبرع فردي", amount:5000, date:"2025-10-01", tag:"Donation"}
+        ]});
+        store.set("notifications",[
+          {id:"NT-01", level:"info", text:"تذكير: موعد تقييم نمائي بعد 3 أيام."},
+          {id:"NT-02", level:"warn", text:"إحالة RF-1002 تجاوزت 48 ساعة دون تحديث."}
+        ]);
+        store.set("nomu_initialized", true);
       }
     }
 
-    /* ------------------ Logo (Arabic SVG only) ------------------ */
-    const NomuSVG = ({color="#059669", className="h-8 w-auto"}) => (
-      <svg className={className} viewBox="0 0 220 60" aria-label="نمو" role="img">
-        <title>نمو</title>
-        <defs>
-          <linearGradient id="g" x1="0" x2="1">
-            <stop offset="0%" stopColor={color} stopOpacity="0.35"/>
-            <stop offset="100%" stopColor={color} stopOpacity="0.9"/>
-          </linearGradient>
-        </defs>
-        <!-- نقطة زخرفية -->
-        <circle cx="18" cy="16" r="6" fill="url(#g)"/>
-        <!-- حرف ن مبسط -->
-        <path d="M10 46 Q18 28 28 36 T48 46" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
-        <!-- ميم و واو مبسطة -->
-        <path d="M75 28 q14-10 24 0 t24 0" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
-        <path d="M73 44 q14 12 24 0 t24 0" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
-        <!-- قاعدة -->
-        <line x1="10" y1="52" x2="200" y2="52" stroke={color} strokeWidth="2" strokeLinecap="round" opacity="0.2"/>
-      </svg>
-    );
-
-    const Logo = ({ className="h-8 w-auto" }) => {
-      const s = store.get("nomu_settings", { brand:"نمو", primary:"#059669", logoType:"svg" });
-      return (
-        <div className="inline-flex items-center gap-2">
-          <NomuSVG color={s.primary} className={className}/>
-          <span className="text-xl font-bold" style={{color:s.primary}}>منصة {s.brand}</span>
-        </div>
-      );
-    };
-
-    const Badge = ({text, color="bg-slate-100 text-slate-700"}) => (
-      <span className={cn("text-xs px-2 py-1 rounded-full", color)}>{text}</span>
-    );
-
-    const StatCard = ({ label, value, suffix="%", trend="+0%", good=true }) => (
-      <div className={cn("rounded-2xl p-5 border shadow-sm", good?"border-emerald-200 bg-emerald-50":"border-amber-200 bg-amber-50")}>
-        <div className="text-sm text-slate-600">{label}</div>
-        <div className="mt-2 flex items-baseline gap-2">
-          <div className="text-3xl font-bold text-slate-900">{value}<span className="text-xl">{suffix}</span></div>
-          <div className={cn("text-xs px-2 py-1 rounded-full", good?"bg-emerald-100 text-emerald-800":"bg-amber-100 text-amber-800")}>{trend}</div>
-        </div>
+    /* ====================== Inline Logos (SVG) ====================== */
+    const LogoNOMU = ({color="#059669", className="h-8 w-auto"}) => (
+      <div className="flex items-center gap-2">
+        <svg className={className} viewBox="0 0 220 60" aria-label="نمو" role="img">
+          <title>نمو</title>
+          <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0%" stopColor={color} stopOpacity="0.35"/><stop offset="100%" stopColor={color} stopOpacity="0.9"/></linearGradient></defs>
+          <circle cx="18" cy="16" r="6" fill="url(#g)"/>
+          <path d="M10 46 Q18 28 28 36 T48 46" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
+          <path d="M75 28 q14-10 24 0 t24 0" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
+          <path d="M73 44 q14 12 24 0 t24 0" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"/>
+          <line x1="10" y1="52" x2="200" y2="52" stroke={color} strokeWidth="2" strokeLinecap="round" opacity="0.2"/>
+        </svg>
+        <span className="text-xl font-bold" style={{color}}>منصة نمو</span>
       </div>
     );
 
-    /* ------------------ Contact Helpers ------------------ */
-    const SUPPORT_EMAIL = "info@talbiya.sa";
-    const WHATSAPP_E164 = "966556083172"; // بدون + داخل رابط wa.me
+    const LogoVision = ({className="h-8 w-auto"}) => (
+      <div className="flex items-center gap-2 text-vision-700">
+        <svg className={className} viewBox="0 0 200 60" aria-label="رؤية 2030" role="img">
+          <title>رؤية 2030</title>
+          <text x="0" y="38" fontSize="28" fontWeight="700" fill="currentColor">رؤية 2030</text>
+        </svg>
+      </div>
+    );
 
-    function openMailTo({name, email, subject, message}) {
-      const s = encodeURIComponent(subject || "تواصل — منصة نمو");
-      const b = encodeURIComponent(
-        `الاسم: ${name || "-"}\nالبريد: ${email || "-"}\n\n${message || ""}\n\n— أرسِل من واجهة منصة نمو`
-      );
-      window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${s}&body=${b}`;
-    }
-    function openWhatsApp({name, email, message}) {
-      const txt = encodeURIComponent(
-        `مرحبًا فريق نمو،\nاسمي: ${name || "-"}\nبريدي: ${email || "-"}\n\n${message || ""}`
-      );
-      window.open(`https://wa.me/${WHATSAPP_E164}?text=${txt}`, "_blank");
-    }
+    const LogoTelbiya = ({className="h-8 w-auto"}) => (
+      <div className="flex items-center gap-2 text-telbiya-700">
+        <svg className={className} viewBox="0 0 200 60" aria-label="تلبية" role="img">
+          <title>تلبية</title>
+          <text x="0" y="38" fontSize="28" fontWeight="700" fill="currentColor">تلبية</text>
+        </svg>
+      </div>
+    );
 
-    /* ------------------ Auth / Nav ------------------ */
-    const TopBar = ({ onLogout }) => {
-      const user = store.get("nomu_user", {});
+    /* ====================== Shared UI ====================== */
+    const Badge = ({text,color="bg-slate-100 text-slate-700"}) =>
+      <span className={cn("text-xs px-2 py-1 rounded-full",color)}>{text}</span>;
+
+    const Stat = ({label,value,suffix="%",ok=true}) => (
+      <div className={cn("rounded-2xl p-5 border shadow-sm", ok?"border-emerald-200 bg-emerald-50":"border-amber-200 bg-amber-50")}>
+        <div className="text-sm text-slate-600">{label}</div>
+        <div className="mt-2 text-3xl font-bold">{value}<span className="text-xl">{suffix}</span></div>
+      </div>
+    );
+
+    /* ====================== Layout: Header / Footer ====================== */
+    const TopBar = ({onLogout})=>{
+      const user = store.get("user",{});
       return (
-        <div className="w-full bg-white/90 backdrop-blur border-b border-slate-200 sticky top-0 z-40">
-          <div className="max-w-7xl mx-auto px-3 sm:px-4 h-14 flex items-center justify-between">
-            <a href="#/home" className="flex items-center gap-3"><Logo/></a>
-            <div className="hidden md:flex items-center gap-2 text-sm">
-              <a href="#/home"    className="px-3 py-2 hover:opacity-80">الرئيسية</a>
-              <a href="#/kpis"    className="px-3 py-2 hover:opacity-80">مؤشرات الأداء</a>
-              <a href="#/ref"     className="px-3 py-2 hover:opacity-80">الإحالات</a>
-              <a href="#/wallet"  className="px-3 py-2 hover:opacity-80">سوق الرعايات/المحفظة</a>
-              <a href="#/sectors" className="px-3 py-2 hover:opacity-80">لوحات القطاعات</a>
+        <header className="w-full bg-white/90 backdrop-blur border-b border-slate-200 sticky top-0 z-40">
+          <div className="container px-3 sm:px-4 h-16 flex items-center justify-between">
+            {/* Right: NOMU */}
+            <a href="#/home" className="flex items-center gap-3"><LogoNOMU/></a>
+
+            {/* Center: Nav */}
+            <nav className="hidden lg:flex items-center gap-2 text-sm">
+              <a href="#/home" className="px-3 py-2 hover:opacity-80">الرئيسية</a>
+              <a href="#/journey" className="px-3 py-2 hover:opacity-80">رحلة الطفل</a>
+              <a href="#/kpis" className="px-3 py-2 hover:opacity-80">مؤشرات الأداء</a>
+              <a href="#/referrals" className="px-3 py-2 hover:opacity-80">الإحالات</a>
+              <a href="#/health" className="px-3 py-2 hover:opacity-80">الصحة</a>
+              <a href="#/education" className="px-3 py-2 hover:opacity-80">التعليم</a>
+              <a href="#/ngo" className="px-3 py-2 hover:opacity-80">الجمعيات</a>
+              <a href="#/wallet" className="px-3 py-2 hover:opacity-80">الرعايات/المحفظة</a>
+              <a href="#/govern" className="px-3 py-2 hover:opacity-80">الحوكمة</a>
               <a href="#/support" className="px-3 py-2 hover:opacity-80">الدعم</a>
               <a href="#/settings" className="px-3 py-2 hover:opacity-80">الإعدادات</a>
-            </div>
+            </nav>
+
+            {/* Left: Vision 2030 + Telbiya + Role/Region */}
             <div className="flex items-center gap-3">
-              <Badge text={roles.find(r=>r.id===user.role)?.label ?? "ضيف"}/>
+              <div className="hidden sm:flex items-center gap-3">
+                <LogoVision/>
+                <LogoTelbiya/>
+              </div>
+              <Badge text={ROLES.find(r=>r.id===user.role)?.label ?? "—"}/>
               <select className="text-sm border rounded-lg px-2 py-1"
-                      value={user.region}
-                      onChange={e=>{ const u={...user, region:e.target.value}; store.set("nomu_user",u); window.dispatchEvent(new Event("storage")); }}>
-                {regions.map(r=> <option key={r} value={r}>{r}</option>)}
+                value={user.region}
+                onChange={e=>{const u={...user,region:e.target.value};store.set("user",u);window.dispatchEvent(new Event("storage"));}}>
+                {REGIONS.map(r=><option key={r} value={r}>{r}</option>)}
               </select>
               <button onClick={onLogout} className="text-xs px-2.5 py-1 rounded-lg border hover:bg-slate-50">تبديل الدور</button>
             </div>
           </div>
-        </div>
+        </header>
       );
     };
 
-    const Login = ({ onLogin }) => {
-      const [role, setRole] = useState(store.get("nomu_user",{role:"guest"}).role || "guest");
-      const [region, setRegion] = useState(store.get("nomu_user",{region:"الرياض"}).region || "الرياض");
-      const [name, setName] = useState(store.get("nomu_user",{name:""}).name || "");
+    const Footer = ()=>(
+      <footer className="py-8 border-t border-slate-200">
+        <div className="container px-3 sm:px-4 text-sm text-slate-600 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <LogoNOMU className="h-7 w-auto"/>
+            <span>© {new Date().getFullYear()} — منصة نمو (بدعم تلبية ومواءمة رؤية 2030)</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <a href="#/kpis" className="hover:opacity-80">مؤشرات الأداء</a>
+            <a href="#/support" className="hover:opacity-80">الدعم الفني</a>
+          </div>
+        </div>
+      </footer>
+    );
+
+    /* ====================== Auth / Login ====================== */
+    const Login = ({onLogin})=>{
+      const [role,setRole]=useState(store.get("user",{role:"family"}).role||"family");
+      const [region,setRegion]=useState(store.get("user",{region:"الرياض"}).region||"الرياض");
+      const [name,setName]=useState(store.get("user",{name:""}).name||"");
       return (
         <div className="min-h-screen bg-gradient-to-tr from-nomu-50 via-white to-sky-50">
-          <div className="max-w-3xl mx-auto px-3 sm:px-4 py-16">
-            <div className="flex items-center justify-center mb-6"><Logo className="h-10 w-auto"/></div>
-            <h1 className="text-xl sm:text-2xl font-bold text-center">مرحبًا بك في منصة نمو</h1>
+          <div className="container px-3 sm:px-4 py-16">
+            <div className="flex items-center justify-between">
+              <LogoNOMU className="h-10 w-auto"/>
+              <div className="flex items-center gap-4"><LogoVision/><LogoTelbiya/></div>
+            </div>
+            <h1 className="mt-6 text-xl sm:text-2xl font-bold text-center">مرحبًا بك في منصة نمو</h1>
             <p className="mt-2 text-center text-slate-600">اختر الدور والمنطقة لبدء التجربة</p>
             <div className="mt-6 bg-white border border-slate-200 rounded-2xl shadow-sm p-5 grid md:grid-cols-3 gap-4">
-              <div>
-                <label className="text-sm text-slate-600">الدور</label>
+              <div><label className="text-sm text-slate-600">الدور</label>
                 <select className="w-full rounded-xl border px-3 py-2 mt-1" value={role} onChange={e=>setRole(e.target.value)}>
-                  {roles.map(r=> <option key={r.id} value={r.id}>{r.label}</option>)}
+                  {ROLES.map(r=><option key={r.id} value={r.id}>{r.label}</option>)}
                 </select>
               </div>
-              <div>
-                <label className="text-sm text-slate-600">المنطقة</label>
+              <div><label className="text-sm text-slate-600">المنطقة</label>
                 <select className="w-full rounded-xl border px-3 py-2 mt-1" value={region} onChange={e=>setRegion(e.target.value)}>
-                  {regions.map(r=> <option key={r} value={r}>{r}</option>)}
+                  {REGIONS.map(r=><option key={r} value={r}>{r}</option>)}
                 </select>
               </div>
-              <div>
-                <label className="text-sm text-slate-600">الاسم (اختياري)</label>
+              <div><label className="text-sm text-slate-600">الاسم (اختياري)</label>
                 <input className="w-full rounded-xl border px-3 py-2 mt-1" value={name} onChange={e=>setName(e.target.value)} placeholder="اسم المستخدم"/>
               </div>
               <div className="md:col-span-3 flex items-center justify-between">
-                <div className="text-xs text-slate-500">البيانات تجريبية وتُحفظ محليًا.</div>
-                <button
-                  onClick={()=>{ store.set("nomu_user",{role,region,name}); onLogin(); }}
-                  className="rounded-xl bg-nomu-600 text-white px-4 py-2.5 hover:bg-nomu-700">
-                  دخول
-                </button>
+                <div className="text-xs text-slate-500">هذه نسخة تشغيلية تجريبية، تخزين محلي.</div>
+                <button onClick={()=>{store.set("user",{role,region,name});onLogin();}} className="rounded-xl bg-nomu-600 text-white px-4 py-2.5 hover:bg-nomu-700">دخول</button>
               </div>
             </div>
-
             <div className="mt-6 grid sm:grid-cols-3 gap-3">
-              {roles.map(r=>(
-                <button key={r.id} onClick={()=>{ setRole(r.id); }}
-                        className={cn("rounded-xl border px-4 py-3 hover:bg-slate-50", role===r.id && "ring-2 ring-nomu-300 border-nomu-200")}>
+              {ROLES.map(r=>(
+                <button key={r.id} onClick={()=>setRole(r.id)} className={cn("rounded-xl border px-4 py-3 hover:bg-slate-50", role===r.id && "ring-2 ring-nomu-300 border-nomu-200")}>
                   {r.label}
                 </button>
               ))}
@@ -224,80 +239,120 @@
       );
     };
 
-    /* ------------------ Pages ------------------ */
-    const Home = () => {
-      const user = store.get("nomu_user",{});
+    /* ====================== Pages ====================== */
+    const Home = ()=>{
+      const user = store.get("user",{});
+      const notes = store.get("notifications",[]);
       return (
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
+        <main className="container px-3 sm:px-4 py-8">
           <div className="rounded-2xl border p-6 bg-white shadow-sm">
-            <h2 className="text-xl font-bold">مرحبًا {user.name || roles.find(r=>r.id===user.role)?.label}</h2>
-            <p className="mt-2 text-slate-600">هذه نسخة نموذجية تستعرض الفكرة العامة لمنصة <b>نمو</b> وربطها بين الأسرة والصحة والتعليم والجمعيات والقطاع الخاص واللجنة الوطنية.</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <a href="#/kpis" className="px-4 py-2 rounded-xl bg-nomu-600 text-white hover:bg-nomu-700">مؤشرات الأداء</a>
-              <a href="#/ref" className="px-4 py-2 rounded-xl border hover:bg-slate-50">الإحالات</a>
-              <a href="#/wallet" className="px-4 py-2 rounded-xl border hover:bg-slate-50">سوق الرعايات/المحفظة</a>
-              <a href="#/sectors" className="px-4 py-2 rounded-xl border hover:bg-slate-50">لوحات القطاعات</a>
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-bold">مرحبًا {user.name || ROLES.find(r=>r.id===user.role)?.label}</h2>
+                <p className="mt-1 text-slate-600">واجهة موحّدة للأسر والجهات (الصحة/التعليم/الجمعيات/القطاع الخاص/اللجنة الوطنية) ضمن إطار رؤية 2030 وبدعم تلبية.</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <a href="#/journey" className="px-4 py-2 rounded-xl bg-nomu-600 text-white hover:bg-nomu-700">رحلة الطفل</a>
+                <a href="#/referrals" className="px-4 py-2 rounded-xl border hover:bg-slate-50">الإحالات</a>
+                <a href="#/wallet" className="px-4 py-2 rounded-xl border hover:bg-slate-50">الرعايات/المحفظة</a>
+              </div>
+            </div>
+            <div className="mt-6 grid md:grid-cols-3 gap-4">
+              {notes.map(n=>(
+                <div key={n.id} className={cn("rounded-xl border p-4 text-sm", n.level==="warn"?"bg-amber-50 border-amber-200":"bg-sky-50 border-sky-200")}>
+                  {n.text}
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+        </main>
       );
     };
 
-    const KPIs = () => {
-      const user = store.get("nomu_user", {});
-      const kpis = store.get("nomu_kpis", {});
-      const current = (kpis.byRegion[user.region] ?? Object.values(kpis.byRegion)[0]);
-      const [period, setPeriod] = useState(kpis.period || "آخر 30 يومًا");
-      useEffect(()=>{ const s = store.get("nomu_kpis", {}); s.period = period; store.set("nomu_kpis", s); },[period]);
+    const KPIs = ()=>{
+      const user = store.get("user",{});
+      const k = store.get("kpis",{});
+      const current = k.byRegion[user.region] ?? Object.values(k.byRegion)[0];
+      const [period,setPeriod]=useState(k.period||"آخر 30 يومًا");
+      useEffect(()=>{ const s=store.get("kpis",{}); s.period=period; store.set("kpis",s); },[period]);
       return (
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
-          <div className="flex items-center justify-between flex-wrap gap-3">
+        <main className="container px-3 sm:px-4 py-8">
+          <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold">مؤشرات الأداء — {user.region}</h2>
             <select className="border rounded-xl px-3 py-2 text-sm" value={period} onChange={e=>setPeriod(e.target.value)}>
               {["آخر 7 أيام","آخر 30 يومًا","آخر 90 يومًا","سنة كاملة"].map(p=><option key={p} value={p}>{p}</option>)}
             </select>
           </div>
-          <p className="mt-1 text-slate-600 text-sm">الفترة المختارة: <b>{period}</b></p>
-          <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            <StatCard label="التغطية السكانية لعُمر 0–6" value={current.coverage} trend="+1.3%" good={current.coverage>=80}/>
-            <StatCard label="اكتمال التحصين الأساسي" value={current.immunization} trend="+0.6%" good={current.immunization>=90}/>
-            <StatCard label="جاهزية المدرسة المركّبة" value={current.readiness} trend="+2.1%" good={current.readiness>=75}/>
-            <div className="rounded-2xl border p-5 shadow-sm border-sky-200 bg-sky-50">
-              <div className="text-sm text-slate-600">وسيط زمن إغلاق الإحالات (بالساعات)</div>
-              <div className="mt-2 text-3xl font-bold text-slate-900">{current.referralsMedianHrs}<span className="text-xl">س</span></div>
-              <div className="mt-1 text-xs bg-sky-100 text-sky-800 inline-block px-2 py-1 rounded-full">المستهدف ≤ 24 س</div>
+          <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Stat label="التغطية 0–6" value={current.coverage} ok={current.coverage>=80}/>
+            <Stat label="اكتمال التحصين" value={current.immunization} ok={current.immunization>=90}/>
+            <Stat label="جاهزية التعليم" value={current.readiness} ok={current.readiness>=75}/>
+            <div className="rounded-2xl p-5 border bg-sky-50 border-sky-200">
+              <div className="text-sm text-slate-600">وسيط إغلاق الإحالات</div>
+              <div className="mt-2 text-3xl font-bold">{current.referralsMedianHrs}<span className="text-xl">س</span></div>
+              <div className="mt-1 text-xs inline-block px-2 py-1 rounded-full bg-sky-100 text-sky-800">≤ 24 ساعة مستهدف</div>
             </div>
-            <StatCard label="الالتحاق برياض الأطفال (3–6)" value={current.kgEnroll} trend="+0.9%" good={current.kgEnroll>=85}/>
-            <StatCard label="اكتمال السجل الأسري" value={current.completeness} trend="+0.2%" good={current.completeness>=95}/>
+            <Stat label="التحاق رياض الأطفال" value={current.kgEnroll} ok={current.kgEnroll>=85}/>
+            <Stat label="اكتمال السجل الأسري" value={current.completeness} ok={current.completeness>=95}/>
           </div>
-          <div className="mt-8 rounded-2xl border bg-white p-5 shadow-sm">
-            <h3 className="font-semibold">التنبيهات والروابط</h3>
-            <ul className="mt-3 text-sm text-slate-700 space-y-2">
-              <li>ربط بطاقات المؤشرات بالإحالات/السجلات التفصيلية (لاحقًا).</li>
-              <li>التحديث المقترح: لحظي للإحالات، يومي لباقي المؤشرات.</li>
-              <li>المرشّحات: الدور/الفئة العمرية/المنطقة — قابلة للتوسعة.</li>
-            </ul>
-          </div>
-        </div>
+        </main>
       );
     };
 
-    const Referrals = () => {
-      const [list, setList] = useState(store.get("nomu_referrals", []));
-      const [q, setQ] = useState("");
-      const [modal, setModal] = useState(false);
-      const [form, setForm] = useState({ child:"", type:"صحي", region:store.get("nomu_user",{}).region });
-      useEffect(()=>{ store.set("nomu_referrals", list); }, [list]);
-      const filtered = list.filter(r => [r.id,r.child,r.type,r.status,r.region].join(" ").includes(q));
-      const setStatus = (id, status) => setList(prev => prev.map(r => r.id===id? {...r,status}:r));
-      const addReferral = () => {
+    const Journey = ()=>{
+      const children = store.get("children",[]);
+      const screenings = store.get("screenings",[]);
+      return (
+        <main className="container px-3 sm:px-4 py-8">
+          <h2 className="text-xl font-bold">رحلة الطفل (0–6)</h2>
+          <div className="mt-4 grid lg:grid-cols-2 gap-6">
+            <div className="rounded-2xl border bg-white p-5 shadow-sm">
+              <h3 className="font-semibold">أطفال الأسرة</h3>
+              <ul className="mt-3 text-sm">
+                {children.map(c=>(
+                  <li key={c.id} className="border-t first:border-0 py-2">
+                    <div className="flex items-center justify-between">
+                      <div><b>{c.name}</b> — {c.gender==="M"?"ذكر":"أنثى"} — مولود {c.birthDate}</div>
+                      <Badge text={c.region}/>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-2xl border bg-white p-5 shadow-sm">
+              <h3 className="font-semibold">الفحوص/التقييمات</h3>
+              <ul className="mt-3 text-sm">
+                {screenings.map(s=>(
+                  <li key={s.id} className="border-t first:border-0 py-2">
+                    <div className="flex items-center justify-between">
+                      <div><b>{s.type}</b> — {s.date}</div>
+                      <Badge text={s.result==="PASS"?"سليم":"متابعة"} color={s.result==="PASS"?"bg-emerald-100 text-emerald-800":"bg-amber-100 text-amber-800"}/>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </main>
+      );
+    };
+
+    const Referrals = ()=>{
+      const [list,setList]=useState(store.get("referrals",[]));
+      const [q,setQ]=useState("");
+      const [modal,setModal]=useState(false);
+      const [form,setForm]=useState({ child:"", type:"صحي", region:store.get("user",{}).region, notes:"" });
+      useEffect(()=>store.set("referrals",list),[list]);
+      const filtered = list.filter(r=>[r.id,r.child,r.type,r.status,r.region,r.notes].join(" ").includes(q));
+      const setStatus=(id,status)=>setList(prev=>prev.map(r=>r.id===id?{...r,status}:r));
+      const addReferral=()=>{
         if(!form.child) return;
-        const id = "RF-" + Math.random().toString(36).slice(2,6).toUpperCase();
-        setList(prev => [{ id, child:form.child, type:form.type, status:"مفتوحة", created:new Date().toISOString().slice(0,10), region:form.region }, ...prev]);
-        setModal(false); setForm({ child:"", type:"صحي", region:store.get("nomu_user",{}).region });
+        const id="RF-"+Math.random().toString(36).slice(2,6).toUpperCase();
+        setList(prev=>[{ id, child:form.child, type:form.type, status:"مفتوحة", created:new Date().toISOString().slice(0,10), region:form.region, notes:form.notes },...prev]);
+        setModal(false); setForm({ child:"", type:"صحي", region:store.get("user",{}).region, notes:"" });
       };
       return (
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
+        <main className="container px-3 sm:px-4 py-8">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <h2 className="text-xl font-bold">الإحالات</h2>
             <div className="flex items-center gap-2">
@@ -308,17 +363,13 @@
           <div className="mt-4 overflow-x-auto rounded-2xl border bg-white shadow-sm">
             <table className="w-full text-sm">
               <thead className="bg-slate-50 text-slate-600">
-                <tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">الطفل</th><th className="p-3 text-right">النوع</th><th className="p-3 text-right">الحالة</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">المنطقة</th><th className="p-3"></th></tr>
+                <tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">الطفل</th><th className="p-3 text-right">النوع</th><th className="p-3 text-right">الحالة</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">المنطقة</th><th className="p-3 text-right">ملاحظات</th><th className="p-3"></th></tr>
               </thead>
               <tbody>
                 {filtered.map(r=>(
                   <tr key={r.id} className="border-t">
-                    <td className="p-3">{r.id}</td>
-                    <td className="p-3">{r.child}</td>
-                    <td className="p-3">{r.type}</td>
-                    <td className="p-3">{r.status}</td>
-                    <td className="p-3">{r.created}</td>
-                    <td className="p-3">{r.region}</td>
+                    <td className="p-3">{r.id}</td><td className="p-3">{r.child}</td><td className="p-3">{r.type}</td>
+                    <td className="p-3">{r.status}</td><td className="p-3">{r.created}</td><td className="p-3">{r.region}</td><td className="p-3">{r.notes||"-"}</td>
                     <td className="p-3 text-left">
                       <div className="flex gap-2">
                         <button className="text-xs px-2 py-1 rounded border hover:bg-slate-50" onClick={()=>setStatus(r.id,"قيد المعالجة")}>بدء</button>
@@ -327,52 +378,141 @@
                     </td>
                   </tr>
                 ))}
-                {filtered.length===0 && <tr><td className="p-4 text-center text-slate-500" colSpan="7">لا توجد نتائج مطابقة.</td></tr>}
+                {filtered.length===0 && <tr><td className="p-4 text-center text-slate-500" colSpan="8">لا نتائج.</td></tr>}
               </tbody>
             </table>
           </div>
 
           {modal && (
             <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
-              <div className="w-full max-w-md bg-white rounded-2xl shadow-xl">
+              <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl">
                 <div className="p-4 border-b flex items-center justify-between">
                   <h3 className="font-semibold">فتح إحالة جديدة</h3>
                   <button className="p-2 rounded hover:bg-slate-100" onClick={()=>setModal(false)}>✕</button>
                 </div>
-                <div className="p-4 space-y-3">
-                  <input className="w-full rounded-xl border px-3 py-2" placeholder="اسم الطفل" value={form.child} onChange={e=>setForm({...form, child:e.target.value})}/>
-                  <select className="w-full rounded-xl border px-3 py-2" value={form.type} onChange={e=>setForm({...form, type:e.target.value})}>
+                <div className="p-4 grid gap-3">
+                  <input className="rounded-xl border px-3 py-2" placeholder="اسم الطفل" value={form.child} onChange={e=>setForm({...form,child:e.target.value})}/>
+                  <select className="rounded-xl border px-3 py-2" value={form.type} onChange={e=>setForm({...form,type:e.target.value})}>
                     {["صحي","نمائي 0–3","تعليمي","دعم أسري"].map(t=><option key={t}>{t}</option>)}
                   </select>
-                  <select className="w-full rounded-xl border px-3 py-2" value={form.region} onChange={e=>setForm({...form, region:e.target.value})}>
-                    {regions.map(r=><option key={r}>{r}</option>)}
+                  <select className="rounded-xl border px-3 py-2" value={form.region} onChange={e=>setForm({...form,region:e.target.value})}>
+                    {REGIONS.map(r=><option key={r}>{r}</option>)}
                   </select>
-                  <button className="w-full rounded-xl bg-nomu-600 text-white py-2.5 hover:bg-nomu-700" onClick={addReferral}>حفظ الإحالة</button>
+                  <textarea rows="3" className="rounded-2xl border px-3 py-2" placeholder="ملاحظات" value={form.notes} onChange={e=>setForm({...form,notes:e.target.value})}></textarea>
+                  <button className="rounded-xl bg-nomu-600 text-white py-2.5 hover:bg-nomu-700" onClick={addReferral}>حفظ الإحالة</button>
                 </div>
               </div>
             </div>
           )}
-        </div>
+        </main>
       );
     };
 
-    const Wallet = () => {
-      const [state, setState] = useState(store.get("nomu_wallet",{ total:0, entries:[] }));
-      const [form, setForm] = useState({ source:"", amount:"", tag:"CSR" });
-      useEffect(()=>{ store.set("nomu_wallet", state); }, [state]);
-      const add = () => {
+    const Health = ()=>{
+      const screenings = store.get("screenings",[]);
+      const [type,setType]=useState("all");
+      const list = useMemo(()=> type==="all"?screenings:screenings.filter(s=>s.type===type),[screenings,type]);
+      return (
+        <main className="container px-3 sm:px-4 py-8">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-bold">الصحة — الفحوص والتتبّع</h2>
+            <select className="border rounded-xl px-3 py-2 text-sm" value={type} onChange={e=>setType(e.target.value)}>
+              <option value="all">الكل</option>
+              <option value="newborn_hearing">فحص سمع المواليد</option>
+              <option value="metabolic">استقلابي</option>
+              <option value="developmental">نمائي</option>
+              <option value="vision">بصري</option>
+            </select>
+          </div>
+          <div className="mt-4 rounded-2xl border bg-white p-4 shadow-sm">
+            <table className="w-full text-sm">
+              <thead className="bg-slate-50 text-slate-600">
+                <tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">الطفل</th><th className="p-3 text-right">النوع</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">النتيجة</th></tr>
+              </thead>
+              <tbody>
+                {list.map(s=>(
+                  <tr key={s.id} className="border-t">
+                    <td className="p-3">{s.id}</td><td className="p-3">{store.get("children",[]).find(c=>c.id===s.childId)?.name || "-"}</td>
+                    <td className="p-3">{s.type}</td><td className="p-3">{s.date}</td><td className="p-3">{s.result}</td>
+                  </tr>
+                ))}
+                {list.length===0 && <tr><td className="p-4 text-center text-slate-500" colSpan="5">لا سجلات.</td></tr>}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      );
+    };
+
+    const Education = ()=>{
+      const [applications,setApps]=useState([
+        {id:"KG-01", child:"سعود", status:"قيد المراجعة", region:"الرياض", date:"2025-09-15"},
+        {id:"KG-02", child:"نورة", status:"مقبول", region:"الرياض", date:"2025-10-03"}
+      ]);
+      const approve=(id)=>setApps(prev=>prev.map(a=>a.id===id?{...a,status:"مقبول"}:a));
+      return (
+        <main className="container px-3 sm:px-4 py-8">
+          <h2 className="text-xl font-bold">التعليم — رياض الأطفال والجاهزية</h2>
+          <div className="mt-4 rounded-2xl border bg-white p-4 shadow-sm">
+            <table className="w-full text-sm">
+              <thead className="bg-slate-50 text-slate-600">
+                <tr><th className="p-3 text-right">المعرف</th><th className="p-3 text-right">الطفل</th><th className="p-3 text-right">الحالة</th><th className="p-3 text-right">التاريخ</th><th className="p-3 text-right">المنطقة</th><th className="p-3"></th></tr>
+              </thead>
+              <tbody>
+                {applications.map(a=>(
+                  <tr key={a.id} className="border-t">
+                    <td className="p-3">{a.id}</td><td className="p-3">{a.child}</td><td className="p-3">{a.status}</td>
+                    <td className="p-3">{a.date}</td><td className="p-3">{a.region}</td>
+                    <td className="p-3 text-left">{a.status!=="مقبول" && <button className="text-xs px-2 py-1 rounded border hover:bg-slate-50" onClick={()=>approve(a.id)}>قبول</button>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      );
+    };
+
+    const NGO = ()=>{
+      const [cases,setCases]=useState([
+        {id:"NGO-11", title:"جلسة إرشاد أسري", status:"مجدولة", region:"الرياض"},
+        {id:"NGO-12", title:"دعم تدخل مبكر", status:"منفذة", region:"الرياض"}
+      ]);
+      return (
+        <main className="container px-3 sm:px-4 py-8">
+          <h2 className="text-xl font-bold">الجمعيات — إدارة البرامج</h2>
+          <div className="mt-4 grid md:grid-cols-2 gap-4">
+            {cases.map(c=>(
+              <div key={c.id} className="rounded-2xl border bg-white p-5 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <b>{c.title}</b>
+                  <Badge text={c.status} color={c.status==="منفذة"?"bg-emerald-100 text-emerald-800":"bg-sky-100 text-sky-800"}/>
+                </div>
+                <div className="text-sm text-slate-600 mt-2">المعرف: {c.id} — المنطقة: {c.region}</div>
+              </div>
+            ))}
+          </div>
+        </main>
+      );
+    };
+
+    const Wallet = ()=>{
+      const [state,setState]=useState(store.get("wallet",{total:0,entries:[]}));
+      const [form,setForm]=useState({ source:"", amount:"", tag:"CSR" });
+      useEffect(()=>store.set("wallet",state),[state]);
+      const add=()=>{
         if(!form.source || !Number(form.amount)) return;
-        const id = "TRX-" + Math.random().toString(36).slice(2,6).toUpperCase();
-        const e = { id, source:form.source, amount:Number(form.amount), date:new Date().toISOString().slice(0,10), tag:form.tag };
-        setState(prev => ({ total: prev.total + e.amount, entries:[e, ...prev.entries] }));
-        setForm({ source:"", amount:"", tag:"CSR" });
+        const id="TRX-"+Math.random().toString(36).slice(2,6).toUpperCase();
+        const e={id,source:form.source,amount:Number(form.amount),date:new Date().toISOString().slice(0,10),tag:form.tag};
+        setState(prev=>({ total: prev.total+e.amount, entries:[e,...prev.entries]}));
+        setForm({source:"",amount:"",tag:"CSR"});
       };
       return (
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
+        <main className="container px-3 sm:px-4 py-8">
           <div className="grid lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 rounded-2xl border bg-white shadow-sm">
               <div className="p-4 border-b flex items-center justify-between">
-                <h2 className="text-lg font-semibold">سجل الرعايات/المحفظة</h2>
+                <h2 className="text-lg font-semibold">سوق الرعايات/المحفظة</h2>
                 <Badge text={`الإجمالي: ${state.total.toLocaleString()} ر.س`} color="bg-nomu-100 text-nomu-900"/>
               </div>
               <div className="p-4 overflow-x-auto">
@@ -383,11 +523,8 @@
                   <tbody>
                     {state.entries.map(e=>(
                       <tr key={e.id} className="border-t">
-                        <td className="p-3">{e.id}</td>
-                        <td className="p-3">{e.source}</td>
-                        <td className="p-3"><Badge text={e.tag}/></td>
-                        <td className="p-3">{e.amount.toLocaleString()} ر.س</td>
-                        <td className="p-3">{e.date}</td>
+                        <td className="p-3">{e.id}</td><td className="p-3">{e.source}</td><td className="p-3"><Badge text={e.tag}/></td>
+                        <td className="p-3">{e.amount.toLocaleString()} ر.س</td><td className="p-3">{e.date}</td>
                       </tr>
                     ))}
                     {state.entries.length===0 && <tr><td className="p-4 text-center text-slate-500" colSpan="5">لا توجد عمليات بعد.</td></tr>}
@@ -398,171 +535,185 @@
             <div className="rounded-2xl border bg-white shadow-sm p-4">
               <h3 className="font-semibold">إضافة مساهمة</h3>
               <div className="mt-3 grid gap-2">
-                <input className="rounded-xl border px-3 py-2" placeholder="المصدر (شركة/منحة/متبرع)" value={form.source} onChange={e=>setForm({...form, source:e.target.value})}/>
-                <input type="number" min="1" className="rounded-xl border px-3 py-2" placeholder="المبلغ (ر.س)" value={form.amount} onChange={e=>setForm({...form, amount:e.target.value})}/>
-                <select className="rounded-xl border px-3 py-2" value={form.tag} onChange={e=>setForm({...form, tag:e.target.value})}>
+                <input className="rounded-xl border px-3 py-2" placeholder="المصدر (شركة/منحة/متبرع)" value={form.source} onChange={e=>setForm({...form,source:e.target.value})}/>
+                <input type="number" min="1" className="rounded-xl border px-3 py-2" placeholder="المبلغ (ر.س)" value={form.amount} onChange={e=>setForm({...form,amount:e.target.value})}/>
+                <select className="rounded-xl border px-3 py-2" value={form.tag} onChange={e=>setForm({...form,tag:e.target.value})}>
                   {["CSR","Grant","Donation","Other"].map(t=><option key={t}>{t}</option>)}
                 </select>
                 <button className="rounded-xl bg-nomu-600 text-white py-2.5 hover:bg-nomu-700" onClick={add}>إضافة</button>
-                <p className="text-xs text-slate-500">ربط الأثر: لاحقًا يتم ربط كل مساهمة بمؤشرات محددة.</p>
+                <p className="text-xs text-slate-500">سيتم لاحقًا ربط كل مساهمة بحالات/مؤشرات محددة.</p>
               </div>
             </div>
           </div>
-        </div>
+        </main>
       );
     };
 
-    const Sectors = () => {
-      const SectorCard = ({title, items}) => (
-        <div className="rounded-2xl border bg-white p-5 shadow-sm">
-          <h3 className="font-semibold text-slate-900">{title}</h3>
-          <ul className="mt-3 text-sm text-slate-700 list-disc pr-5 space-y-1">
-            {items.map(i=><li key={i}>{i}</li>)}
-          </ul>
-        </div>
-      );
+    const Govern = ()=>{
+      const policies = [
+        "الامتثال لنظام حماية البيانات الشخصية (PDPL).",
+        "سجل تدقيق (Audit Log) على كل العمليات.",
+        "نموذج صلاحيات RBAC حسب الدور والجهة والمنطقة.",
+        "سياسة احتفاظ بيانات ونسخ احتياطي واستعادة.",
+      ];
       return (
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
-          <h2 className="text-xl font-bold">لوحات القطاعات</h2>
-          <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            <SectorCard title="الصحة" items={["فحوص ما قبل الزواج/الحمل","فحص المواليد (سمع/استقلاب)","تقييم نمائي 0–3","تدخل مبكر","صحة نفسية للأم"]}/>
-            <SectorCard title="التعليم" items={["رياض أطفال","دمج و IEP","تقرير الجاهزية","التواصل مع الأسرة"]}/>
-            <SectorCard title="غير الربحي" items={["برامج دعم","متطوعون","إغلاق الإحالات","قياس أثر"]}/>
-            <SectorCard title="القطاع الخاص (CSR)" items={["رعايات ومنح","تقارير أثر","التزامات زمنية","مواءمة الرؤية"]}/>
-            <SectorCard title="اللجنة الوطنية" items={["مؤشرات وطنية","حوكمة البيانات","سياسات وصلاحيات","توافق 2030"]}/>
-            <SectorCard title="الأسرة" items={["رحلتي 0–6","توصيات ومواعيد","ملف الطفل","الدعم الأسري"]}/>
+        <main className="container px-3 sm:px-4 py-8">
+          <h2 className="text-xl font-bold">الحوكمة والامتثال</h2>
+          <div className="mt-4 grid md:grid-cols-2 gap-4">
+            {policies.map((p,i)=>(
+              <div key={i} className="rounded-2xl border bg-white p-5 shadow-sm">
+                <b>سياسة #{i+1}</b>
+                <p className="mt-2 text-sm text-slate-700">{p}</p>
+              </div>
+            ))}
           </div>
-        </div>
+        </main>
       );
     };
 
-    const Support = () => {
-      const [name, setName] = useState("");
-      const [email, setEmail] = useState("");
-      const [subject, setSubject] = useState("طلب دعم/استفسار — منصة نمو");
-      const [message, setMessage] = useState("");
-      const submit = (e) => {
-        e.preventDefault();
-        if(!name || !email || !message) { alert("الرجاء تعبئة الحقول المطلوبة."); return; }
-        // فتح البريد
-        openMailTo({name, email, subject, message});
-      };
+    const Support = ()=>{
+      const [name,setName]=useState(""), [email,setEmail]=useState(""), [msg,setMsg]=useState("");
+      const mail=()=>{const s=encodeURIComponent("تواصل — منصة نمو"); const b=encodeURIComponent(`الاسم: ${name}\nالبريد: ${email}\n\n${msg}\n`); window.location.href=`mailto:${CONTACT.email}?subject=${s}&body=${b}`;};
+      const wa=()=>{const t=encodeURIComponent(`مرحبًا فريق نمو/تلبية\nاسمي: ${name}\nبريدي: ${email}\n\n${msg}`); window.open(`https://wa.me/${CONTACT.whatsapp}?text=${t}`,"_blank");};
       return (
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
+        <main className="container px-3 sm:px-4 py-8">
           <div className="grid lg:grid-cols-3 gap-6">
             <div className="rounded-2xl border bg-white p-5 shadow-sm">
               <h3 className="font-semibold">قنوات التواصل</h3>
               <ul className="mt-3 space-y-2 text-sm leading-7">
-                <li>البريد: <a className="underline decoration-nomu-400 underline-offset-2" href="mailto:info@talbiya.sa">info@talbiya.sa</a></li>
-                <li>واتساب: <a className="underline decoration-nomu-400 underline-offset-2" target="_blank" href="https://wa.me/966556083172">+966 55 608 3172</a></li>
+                <li>البريد: <a className="underline decoration-nomu-400 underline-offset-2" href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></li>
+                <li>واتساب: <a className="underline decoration-nomu-400 underline-offset-2" target="_blank" href={`https://wa.me/${CONTACT.whatsapp}`}>+966 55 608 3172</a></li>
               </ul>
-              <div className="mt-4 text-xs text-slate-500">
-                *سيتم فتح برنامج البريد لديك برسالة جاهزة، ويمكنك أيضًا استخدام زر واتساب أدناه بنفس النص.
-              </div>
             </div>
             <div className="rounded-2xl border bg-white p-5 shadow-sm lg:col-span-2">
               <h3 className="font-semibold">نموذج تواصل سريع</h3>
-              <form className="mt-3 grid sm:grid-cols-2 gap-3" onSubmit={submit}>
+              <form className="mt-3 grid sm:grid-cols-2 gap-3" onSubmit={(e)=>{e.preventDefault(); mail();}}>
                 <input required placeholder="الاسم*" className="rounded-xl border px-3 py-2" value={name} onChange={e=>setName(e.target.value)}/>
                 <input required type="email" placeholder="البريد الإلكتروني*" className="rounded-xl border px-3 py-2" value={email} onChange={e=>setEmail(e.target.value)}/>
-                <input className="sm:col-span-2 rounded-xl border px-3 py-2" placeholder="الموضوع" value={subject} onChange={e=>setSubject(e.target.value)}/>
-                <textarea required rows="5" className="sm:col-span-2 rounded-2xl border px-3 py-2" placeholder="وصف الطلب/المشكلة*" value={message} onChange={e=>setMessage(e.target.value)}></textarea>
+                <textarea required rows="5" className="sm:col-span-2 rounded-2xl border px-3 py-2" placeholder="وصف الطلب/المشكلة*" value={msg} onChange={e=>setMsg(e.target.value)}></textarea>
                 <div className="sm:col-span-2 flex flex-wrap gap-2">
                   <button type="submit" className="rounded-xl bg-nomu-600 text-white px-4 py-2.5 hover:bg-nomu-700">إرسال عبر البريد</button>
-                  <button type="button" className="rounded-xl border px-4 py-2.5 hover:bg-slate-50"
-                          onClick={()=>openWhatsApp({name,email,message})}>
-                    إرسال عبر واتساب
-                  </button>
+                  <button type="button" className="rounded-xl border px-4 py-2.5 hover:bg-slate-50" onClick={wa}>إرسال عبر واتساب</button>
                 </div>
               </form>
             </div>
           </div>
-        </div>
+        </main>
       );
     };
 
-    const Settings = () => {
-      const [s, setS] = useState(store.get("nomu_settings",{ brand:"نمو", primary:"#059669", logoType:"svg" }));
-      const [cleared, setCleared] = useState(false);
-      useEffect(()=>{ store.set("nomu_settings", s); }, [s]);
-      const doClear = () => {
-        ["nomu_kpis","nomu_referrals","nomu_wallet","nomu_settings","nomu_user","nomu_proto_initialized"].forEach(store.del);
-        seed(); setCleared(true);
+    const Settings = ()=>{
+      const [u,setU]=useState(store.get("user",{role:"family",region:"الرياض",name:""}));
+      const [color,setColor]=useState("#059669");
+      const clear=()=>{
+        ["kpis","children","screenings","referrals","wallet","notifications","user","nomu_initialized"].forEach(store.del);
+        seed(); location.reload();
       };
       return (
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8">
-          <div className="grid lg:grid-cols-3 gap-6">
+        <main className="container px-3 sm:px-4 py-8">
+          <h2 className="text-xl font-bold">الإعدادات</h2>
+          <div className="mt-4 grid lg:grid-cols-3 gap-6">
             <div className="rounded-2xl border bg-white p-5 shadow-sm">
-              <h3 className="font-semibold">العلامة والألوان</h3>
-              <div className="mt-3 grid gap-2">
-                <label className="text-sm">اسم العلامة</label>
-                <input className="rounded-xl border px-3 py-2" value={s.brand} onChange={e=>setS({...s,brand:e.target.value})}/>
-                <label className="text-sm">اللون الأساسي</label>
-                <input type="color" className="rounded-xl border px-3 py-2 h-12" value={s.primary} onChange={e=>setS({...s,primary:e.target.value})}/>
+              <h3 className="font-semibold">الحساب</h3>
+              <div className="mt-3 grid gap-2 text-sm">
+                <label>الاسم</label>
+                <input className="rounded-xl border px-3 py-2" value={u.name} onChange={e=>{const nu={...u,name:e.target.value}; setU(nu); store.set("user",nu);}}/>
+                <label>الدور</label>
+                <select className="rounded-xl border px-3 py-2" value={u.role} onChange={e=>{const nu={...u,role:e.target.value}; setU(nu); store.set("user",nu);}}>
+                  {ROLES.map(r=><option key={r.id} value={r.id}>{r.label}</option>)}
+                </select>
+                <label>المنطقة</label>
+                <select className="rounded-xl border px-3 py-2" value={u.region} onChange={e=>{const nu={...u,region:e.target.value}; setU(nu); store.set("user",nu);}}>
+                  {REGIONS.map(r=><option key={r} value={r}>{r}</option>)}
+                </select>
+              </div>
+            </div>
+            <div className="rounded-2xl border bg-white p-5 shadow-sm">
+              <h3 className="font-semibold">العلامة/الألوان</h3>
+              <div className="mt-3 grid gap-2 text-sm">
+                <label>اللون الأساسي</label>
+                <input type="color" className="h-12 rounded-xl border px-2" value={color} onChange={e=>setColor(e.target.value)}/>
+                <p className="text-xs text-slate-500">يطبّق لوجو نمو وقيم Tailwind ديناميكيًا (تأثير بصري فقط داخل هذه النسخة).</p>
               </div>
             </div>
             <div className="rounded-2xl border bg-white p-5 shadow-sm">
               <h3 className="font-semibold">البيانات</h3>
-              <p className="mt-2 text-sm text-slate-600">النسخة تجريبية وتخزن البيانات محليًا.</p>
-              <button className="mt-3 rounded-xl border px-3 py-2 hover:bg-slate-50" onClick={doClear}>تصفير جميع البيانات</button>
-              {cleared && <p className="text-xs text-emerald-700 mt-2">تم التصفير — أعد تحميل الصفحة.</p>}
-            </div>
-            <div className="rounded-2xl border bg-white p-5 shadow-sm">
-              <h3 className="font-semibold">حول النموذج</h3>
-              <ul className="mt-2 text-sm text-slate-700 list-disc pr-5 space-y-1">
-                <li>ملف واحد — HTML/JS فقط.</li>
-                <li>لا يحتاج بناء — يعمل محليًا أو عبر GitHub Pages.</li>
-                <li>قابل للتوسعة لاحقًا إلى خدمات وواجهات APIs.</li>
-              </ul>
+              <button className="mt-2 rounded-xl border px-3 py-2 hover:bg-slate-50" onClick={clear}>تصفير جميع البيانات</button>
+              <p className="text-xs text-slate-500 mt-2">سيتم إعادة توليد بيانات تجريبية.</p>
             </div>
           </div>
-        </div>
+        </main>
       );
     };
 
-    const Footer = () => (
-      <footer className="py-8 border-t border-slate-200">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 text-sm text-slate-600 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p>© {new Date().getFullYear()} منصة نمو — جميع الحقوق محفوظة.</p>
-          <div className="flex items-center gap-4">
-            <a href="#/kpis" className="hover:opacity-80">مؤشرات الأداء</a>
-            <a href="#/support" className="hover:opacity-80">الدعم</a>
+    const Admin = ()=>{
+      const rolesMatrix = [
+        {entity:"الإحالات", family:"R", health:"RW", edu:"RW", ngo:"RW", csr:"R", national:"R", admin:"RW"},
+        {entity:"الفحوص", family:"R", health:"RW", edu:"R",  ngo:"R",  csr:"-", national:"R", admin:"RW"},
+        {entity:"التعليم", family:"R", health:"-",  edu:"RW", ngo:"R",  csr:"-", national:"R", admin:"RW"},
+        {entity:"المحفظة", family:"-", health:"-",  edu:"-",  ngo:"R",  csr:"RW", national:"R", admin:"RW"},
+        {entity:"المؤشرات",family:"R", health:"R",  edu:"R",  ngo:"R",  csr:"R",  national:"RW", admin:"RW"},
+      ];
+      return (
+        <main className="container px-3 sm:px-4 py-8">
+          <h2 className="text-xl font-bold">إدارة المنصة — مصفوفة الصلاحيات (تجريبي)</h2>
+          <div className="mt-4 overflow-x-auto rounded-2xl border bg-white p-4 shadow-sm">
+            <table className="w-full text-sm">
+              <thead className="bg-slate-50 text-slate-600">
+                <tr>
+                  <th className="p-3 text-right">الكيان</th>
+                  {ROLES.map(r=><th key={r.id} className="p-3 text-center">{r.label}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {rolesMatrix.map((row,i)=>(
+                  <tr key={i} className="border-t">
+                    <td className="p-3">{row.entity}</td>
+                    {ROLES.map(r=><td key={r.id} className="p-3 text-center">{row[r.id]||"-"}</td>)}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
-      </footer>
-    );
+        </main>
+      );
+    };
 
-    /* ------------------ Router / App ------------------ */
-    const Router = () => {
-      const [hash, setHash] = useState(window.location.hash || "#/home");
-      useEffect(()=>{ const on=()=>setHash(window.location.hash || "#/home"); window.addEventListener("hashchange", on); return ()=>window.removeEventListener("hashchange", on) },[]);
-      const route = hash.replace("#","");
-      switch(route){
+    /* ====================== Router & App ====================== */
+    const Router = ()=>{
+      const [hash,setHash]=useState(window.location.hash||"#/home");
+      useEffect(()=>{const on=()=>setHash(window.location.hash||"#/home");window.addEventListener("hashchange",on);return()=>window.removeEventListener("hashchange",on)},[]);
+      switch(hash.replace("#","")){
         case "/home": return <Home/>;
         case "/kpis": return <KPIs/>;
-        case "/ref": return <Referrals/>;
+        case "/journey": return <Journey/>;
+        case "/referrals": return <Referrals/>;
+        case "/health": return <Health/>;
+        case "/education": return <Education/>;
+        case "/ngo": return <NGO/>;
         case "/wallet": return <Wallet/>;
-        case "/sectors": return <Sectors/>;
+        case "/govern": return <Govern/>;
         case "/support": return <Support/>;
         case "/settings": return <Settings/>;
+        case "/admin": return <Admin/>;
         default: return <Home/>;
       }
     };
 
-    const App = () => {
-      const [logged, setLogged] = useState(!!store.get("nomu_user", null));
+    const App = ()=>{
+      const [logged,setLogged]=useState(!!store.get("user",null));
       useEffect(()=>{ seed(); if(!window.location.hash) window.location.hash="/home"; },[]);
       if(!logged) return <Login onLogin={()=>setLogged(true)}/>;
       return (
         <div className="min-h-screen bg-white">
-          <TopBar onLogout={()=>{ store.set("nomu_user", { role:"guest", region:"الرياض", name:"" }); location.hash="#/home"; location.reload(); }}/>
+          <TopBar onLogout={()=>{ localStorage.removeItem("user"); location.hash="#/home"; location.reload(); }}/>
           <Router/>
           <Footer/>
         </div>
       );
     };
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
   </script>
 </body>
 </html>
