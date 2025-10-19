@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>منصة نمو NOMU — v3.3 (About + Policies + Help)</title>
+<title>منصة نمو NOMU — v3.4 (شعارات + تبويبات حسابات + المراكز)</title>
 <style>
   :root{
     --bg:#f7fbff; --paper:#ffffff; --brand:#16a34a; --accent:#f59e0b; --ink:#0f172a; --sub:#475569;
@@ -19,7 +19,7 @@
   .nomu-badge b{font-size:18px}
   .left-logos{margin-inline-start:auto;display:flex;align-items:center;gap:8px}
   .pill-logo{display:flex;align-items:center;gap:8px;background:var(--muted);border:1px solid var(--border);border-radius:999px;padding:6px 10px}
-  .pill-logo img{height:28px}
+  .pill-logo img{height:28px;display:block}
   .main{max-width:1240px;margin:22px auto;display:grid;grid-template-columns:280px 1fr;gap:var(--gap-lg);padding:0 var(--pad)}
   nav .side{position:sticky;top:70px;background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);padding:12px;box-shadow:var(--shadow)}
   .group h4{margin:10px 8px;color:var(--sub);font-size:13px}
@@ -36,16 +36,15 @@
   table{width:100%;border-collapse:separate;border-spacing:0 10px} th,td{text-align:right;padding:10px;background:#fcfdff} th{color:#64748b;font-size:12px}
   .pill{display:inline-flex;gap:6px;padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:#f8fafc;font-size:12px;margin:2px}
   .note{font-size:12px;color:#64748b}
-  .printable{background:#fff;padding:20px;border:1px dashed #cbd5e1;border-radius:12px}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:8px}
+  .tab{padding:8px 12px;border:1px solid var(--border);border-bottom:none;border-radius:10px 10px 0 0;background:#f8fafc;cursor:pointer}
+  .tab.active{background:#fff;border-color:#22c55e}
+  .tabpanel{border:1px solid var(--border);border-radius:0 12px 12px 12px;padding:12px;background:#fff}
+  .form label{display:block;margin:6px 0 4px}
+  .form input,.form select,.form textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;background:#fff}
+  .callout{background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:10px}
   footer{max-width:1240px;margin:24px auto 40px;color:#64748b;text-align:center;padding:0 var(--pad)}
   @media (max-width:980px){ .main{grid-template-columns:1fr} .four{grid-template-columns:1fr 1fr} }
-  .about h2{margin:0 0 8px}
-  .about section{border:1px solid var(--border);border-radius:16px;padding:14px;background:#fff;margin-bottom:12px}
-  .about .title{display:flex;align-items:center;gap:8px}
-  .chip{display:inline-block;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:999px;padding:4px 10px;font-size:12px;color:#065f46}
-  .kpi-badge{display:inline-flex;align-items:center;gap:8px;background:#fefce8;border:1px solid #fde68a;border-radius:999px;padding:6px 10px;font-size:12px;color:#7c5800}
-  code{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:2px 6px}
-  .callout{background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:10px}
 </style>
 </head>
 <body>
@@ -56,20 +55,9 @@
       <div><b>NOMU — منصة نمو</b><div style="font-size:12px;color:#0f766e">منصة وطنية للطفولة المبكرة</div></div>
     </div>
     <div class="left-logos">
-      <!-- استبدل SVG التالي بصورة شعار رؤية 2030 إن رغبت -->
-      <span class="pill-logo" title="Vision 2030">
-        <svg width="90" height="28" viewBox="0 0 90 28" xmlns="http://www.w3.org/2000/svg" aria-label="Vision 2030">
-          <rect x="1" y="4" width="88" height="20" rx="10" fill="#f1f5f9" stroke="#cbd5e1"/>
-          <text x="45" y="20" text-anchor="middle" font-size="12" fill="#0f172a" font-family="Tajawal">Vision 2030</text>
-        </svg>
-      </span>
-      <!-- استبدل SVG التالي بصورة شعار مبادرة تلبية -->
-      <span class="pill-logo" title="مبادرة تلبية">
-        <svg width="90" height="28" viewBox="0 0 90 28" xmlns="http://www.w3.org/2000/svg" aria-label="Talbiya">
-          <rect x="1" y="4" width="88" height="20" rx="10" fill="#f1f5f9" stroke="#cbd5e1"/>
-          <text x="45" y="20" text-anchor="middle" font-size="12" fill="#0f172a" font-family="Tajawal">مبادرة تلبية</text>
-        </svg>
-      </span>
+      <!-- استبدل المسارات التالية بمسارات صورك الفعلية -->
+      <span class="pill-logo" title="Vision 2030"><img src="Vision2030.png" alt="Vision 2030"/></span>
+      <span class="pill-logo" title="مبادرة تلبية"><img src="Talbiya.png" alt="مبادرة تلبية"/></span>
     </div>
   </div>
 </header>
@@ -84,8 +72,10 @@
       </div>
       <div class="group">
         <h4>الحسابات</h4>
-        <a class="link" href="#/acc/health">الصحة</a>
-        <a class="link" href="#/acc/education">التعليم</a>
+        <a class="link" href="#/acc/health">وزارة الصحة</a>
+        <a class="link" href="#/acc/clinic">المراكز الصحية</a>
+        <a class="link" href="#/acc/education">وزارة التعليم</a>
+        <a class="link" href="#/acc/neighborhood">مراكز الأحياء</a>
         <a class="link" href="#/acc/nonprofit">الجمعيات</a>
         <a class="link" href="#/acc/hr">الموارد البشرية</a>
         <a class="link" href="#/acc/csr">القطاع الخاص</a>
@@ -118,7 +108,7 @@
   <section class="content" id="view"></section>
 </main>
 
-<footer>نمو NOMU — v3.3 (About + Policies + Help + KPI + Accounts + Sponsors + SSO + RBAC + Config)</footer>
+<footer>نمو NOMU — v3.4 (شعارات + تبويبات + حساب المراكز الصحية ومراكز الأحياء)</footer>
 
 <script>
 const $=(q,root=document)=>root.querySelector(q);
@@ -126,85 +116,20 @@ const $$=(q,root=document)=>Array.from(root.querySelectorAll(q));
 function route(){ const p=location.hash.slice(1)||'/intro'; $$('a.link').forEach(a=>a.classList.toggle('active', a.getAttribute('href')===`#${p}`)); (routes[p]||intro)(); }
 window.addEventListener('hashchange',route);
 
-/* ========== 1) صفحة "عن المنصة" ========= */
-function intro(){
-  const v=$('#view');
-  v.innerHTML = `
-  <div class="card about">
-    <div class="toolbar">
-      <h2>عن منصة نمو (NOMU)</h2>
-      <span class="tag">منصة وطنية للطفولة المبكرة</span>
-    </div>
-    <section>
-      <div class="title"><span class="chip">مقدمة</span><h3>منصة وطنية رقمية متكاملة</h3></div>
-      <p><b>منصة نمو (NOMU)</b> هي منصة وطنية رقمية متكاملة تُعنى برحلة الطفل والأسرة منذ المراحل الأولى للحمل وحتى سن السادسة،
-      من خلال تنسيق الجهود بين القطاعات الحكومية والأهلية وغير الربحية تحت إشراف <b>اللجنة الوطنية للطفولة المبكرة</b>.
-      تعمل المنصة على <b>تمكين التكامل بين الصحة والتعليم والدعم الاجتماعي</b> عبر منظومة بيانات موحّدة، ونماذج تدخل مبكر، ولوحات مؤشرات وطنية تقيس جودة الخدمات وكفاءتها.
-      تم تطوير المنصة بدعم من <b>مبادرة تلبية</b> ووفقًا لمستهدفات <b>رؤية المملكة 2030</b>.</p>
-    </section>
+/* ========== 1) عن المنصة (مختصر هنا للحجم) ========= */
+function intro(){ const v=$('#view'); v.innerHTML = `
+  <div class="card">
+    <div class="toolbar"><h2>عن منصة نمو (NOMU)</h2><span class="tag">منصة وطنية للطفولة المبكرة</span></div>
+    <p>منصة وطنية رقمية متكاملة تمكّن التكامل بين الصحة والتعليم والدعم الاجتماعي عبر منظومة بيانات موحّدة، ونماذج تدخل مبكر، ولوحات مؤشرات وطنية.</p>
     <div class="grid two">
-      <section>
-        <div class="title"><span class="chip">الرؤية</span><h3>رؤية المنصة</h3></div>
-        <p><i>أن تكون منصة نمو المنصة الوطنية الأولى لتنمية الطفولة المبكرة وتعزيز جودة حياة الطفل والأسرة من خلال التكامل بين الشركاء والبيانات.</i></p>
-      </section>
-      <section>
-        <div class="title"><span class="chip">الرسالة</span><h3>رسالتنا</h3></div>
-        <p><i>تمكين منظومة وطنية شاملة تربط الجهات المعنية بالطفولة المبكرة بمنصة رقمية موحدة، تسهّل تقديم الخدمات، وتتابع مؤشرات الأداء، وتعزز الشفافية والاستدامة.</i></p>
-      </section>
+      <div class="callout"><b>الرؤية:</b> أن تكون المنصة الوطنية الأولى لتنمية الطفولة المبكرة وجودة حياة الطفل والأسرة.</div>
+      <div class="callout"><b>الرسالة:</b> تمكين منظومة مترابطة تسهّل تقديم الخدمات وتتابع المؤشرات وتعزّز الشفافية والاستدامة.</div>
     </div>
-    <section>
-      <div class="title"><span class="chip">الأهداف</span><h3>الأهداف الاستراتيجية</h3></div>
-      <ul>
-        <li>تحسين جودة الخدمات المقدمة للطفل والأسرة عبر نموذج موحّد للبيانات والتقييم والتدخل المبكر.</li>
-        <li>رفع كفاءة التنسيق بين القطاعات الصحية والتعليمية والاجتماعية والخيرية.</li>
-        <li>تعزيز الشفافية والحوكمة عبر مؤشرات KPI وطنية ولوحات متابعة.</li>
-        <li>تمكين المسؤولية الاجتماعية والاستثمار التنموي بمشاركة القطاع الخاص والرعاة.</li>
-        <li>تحقيق التكامل التقني بين الأنظمة الوطنية (نفاذ، نفيـس NPHIES، نور).</li>
-        <li>تعزيز البحث والتطوير ودعم اتخاذ القرار المبني على البيانات.</li>
-      </ul>
-    </section>
-    <section>
-      <div class="title"><span class="chip">القيمة المضافة</span><h3>القيمة المضافة لكل شريك</h3></div>
-      <table>
-        <thead><tr><th>الشريك</th><th>القيمة المضافة</th></tr></thead>
-        <tbody>
-          <tr><td><b>وزارة الصحة</b></td><td>ربط الفحوص النمائية والتدخل المبكر ومؤشرات صحة الطفل بمنصة موحدة، تسهّل الإحالات وتختصر زمن الخدمة.</td></tr>
-          <tr><td><b>وزارة التعليم</b></td><td>دعم جاهزية الطفل للمدرسة عبر تكامل بيانات الفحص وخطط التعليم الفردية، وقياس الجاهزية بشكل دوري.</td></tr>
-          <tr><td><b>وزارة الموارد البشرية والتنمية الاجتماعية</b></td><td>ربط خدمات الدعم الأسري والبرامج الاجتماعية بمؤشرات الطفولة، وتوجيه الدعم للأسر المستحقة.</td></tr>
-          <tr><td><b>القطاع غير الربحي (الجمعيات)</b></td><td>استقبال الإحالات إلكترونيًا، إدارة البرامج والمتطوعين، وقياس الأثر الاجتماعي بدقة.</td></tr>
-          <tr><td><b>القطاع الخاص (CSR)</b></td><td>بوابة رعايات بفئات (ماسي/ذهبي/فضي) مع تقارير أثر وحقوق استخدام الهوية الوطنية.</td></tr>
-          <tr><td><b>الأسرة</b></td><td>ملف موحد لمتابعة نمو الطفل، المواعيد، التوصيات، وطلب الدعم بواجهة سهلة.</td></tr>
-          <tr><td><b>اللجنة الوطنية للطفولة المبكرة</b></td><td>حوكمة ومؤشرات أداء وطنية ولوحات فورية تساعد في رسم السياسات واتخاذ القرار.</td></tr>
-        </tbody>
-      </table>
-    </section>
-    <section class="grid two">
-      <div>
-        <div class="title"><span class="chip">الاستدامة</span><h3>نموذج الاستدامة</h3></div>
-        <ul>
-          <li><b>الاشتراكات:</b> أساسي – مهني – حكومي.</li>
-          <li><b>الرعايات:</b> ماسي – ذهبي – فضي مع مزايا حصرية.</li>
-          <li><b>الشراكات البحثية:</b> مع الجامعات ومراكز الدراسات.</li>
-        </ul>
-      </div>
-      <div>
-        <div class="title"><span class="kpi-badge">KPIs</span><h3>مؤشرات الأداء الرئيسية</h3></div>
-        <ol>
-          <li>نسبة تغطية الفحص النمائي (مالك: وزارة الصحة).</li>
-          <li>نسبة الجاهزية المدرسية (مالك: وزارة التعليم).</li>
-          <li>زمن الإحالة (مالك: اللجنة الوطنية).</li>
-          <li>متوسط انتظار الخدمة (مالك: الجهة المقدّمة).</li>
-          <li>حجم تمويل CSR (مالك: القطاع الخاص).</li>
-          <li>الإحالات النشطة (مالك: اللجنة الوطنية).</li>
-        </ol>
-      </div>
-    </section>
-    <section>
-      <div class="title"><span class="chip">ختام</span><h3>منظومة وطنية للتكامل التنموي</h3></div>
-      <p>منصة <b>نمو NOMU</b> ليست مجرد نظام؛ إنها منظومة وطنية للتكامل التنموي تسعى إلى أن يكون كل طفل في المملكة مؤهلاً لبداية حياة تعليمية وصحية مثالية ضمن بيئة أسرية داعمة ومجتمع متكامل يحقق مستهدفات <b>رؤية 2030</b>.</p>
-    </section>
-  </div>`;
-}
+    <ul>
+      <li>نظام إحالات وطني، قياس أثر، تكامل نفاذ/NPHIES/نور.</li>
+      <li>بوابة رعاة، وواجهات للحكومة والجمعيات والقطاع الخاص والأسرة.</li>
+    </ul>
+  </div>`; }
 
 /* ========== 2) KPI Registry ========= */
 const KPI_REGISTRY=[
@@ -219,8 +144,7 @@ function kpiRegistryPage(){
   const v=$('#view');
   v.innerHTML=`
   <div class="card">
-    <div class="toolbar"><h2>سجل تعريفات المؤشرات الوطنية (KPI)</h2>
-      <button class="ghost" id="dl">تنزيل JSON</button></div>
+    <div class="toolbar"><h2>سجل تعريفات المؤشرات الوطنية (KPI)</h2><button class="ghost" id="dl">تنزيل JSON</button></div>
     <table>
       <thead><tr><th>المؤشر</th><th>المالك</th><th>الصيغة</th><th>الفترة</th><th>المصدر</th></tr></thead>
       <tbody>${KPI_REGISTRY.map(k=>`
@@ -232,48 +156,146 @@ function kpiRegistryPage(){
   $('#dl').onclick=()=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(KPI_REGISTRY,null,2)],{type:'application/json'})); a.download='kpi_registry.json'; a.click(); };
 }
 
-/* ========== 3) الحسابات (نماذج وحقول) ========= */
+/* ========== 3) الحسابات مع تبويبات تفاعلية ========= */
 const ACCOUNTS={
-  health:{ title:'وزارة الصحة', menus:['سجل الفحوص','التدخل المبكر','الإحالات وارد/صادر','مطالبات NPHIES','تقارير'], fields:[
-      {label:'رقم الملف الصحي (MRN)',key:'mrn'},{label:'نتيجة الفحص النمائي',key:'dev_result'},{label:'PHQ-2/9',key:'phq_score'},{label:'تشخيص ICD-10',key:'icd10'}
-    ], adapter:'/api/health/assessments' },
-  education:{ title:'وزارة التعليم', menus:['جاهزية المدرسة','IEP/دمج','إحالات واردة','تواصل الأسرة','تقارير نور'], fields:[
-      {label:'درجة الجاهزية',key:'readiness_score'},{label:'خطة IEP (JSON)',key:'iep_json'},{label:'المدرسة/المستوى',key:'school_name'}
-    ], adapter:'/api/education/plans' },
-  nonprofit:{ title:'الجمعيات', menus:['البرامج','المستفيدون','المتطوعون','الإحالات','قياس الأثر'], fields:[
-      {label:'اسم البرنامج',key:'program'},{label:'عدد الجلسات',key:'sessions'},{label:'تحسن الطفل (%)',key:'improve_pct'}
-    ], adapter:'/api/nonprofit/programs' },
-  hr:{ title:'الموارد البشرية', menus:['محفظة الدعم','التطوع الوطني','التقارير'], fields:[
-      {label:'نوع الدعم',key:'support_type'},{label:'المبلغ/الشهر',key:'amount'},{label:'الأهلية',key:'eligibility'}
-    ], adapter:'/api/hr/support' },
-  csr:{ title:'القطاع الخاص (CSR)', menus:['سوق الرعاية','تعهدات الشركة','تقارير الأثر','حوكمة CSR'], fields:[
-      {label:'اسم الشركة',key:'company'},{label:'مبلغ التعهد',key:'amount'},{label:'الغرض',key:'purpose'},{label:'المنطقة',key:'region'}
-    ], adapter:'/api/csr/commitments' },
-  family:{ title:'حساب الأسرة', menus:['ملف الحمل والطفل','المواعيد','التوصيات','الخدمات المساندة'], fields:[
-      {label:'هوية ولي الأمر',key:'guardian_id'},{label:'المنطقة',key:'region'},{label:'موافقة مشاركة البيانات',key:'consent'}
-    ], adapter:'/api/family/profile' },
-  admin:{ title:'اللجنة الوطنية', menus:['لوحة وطنية','حوكمة البيانات','التكاملات','التقارير الوطنية'], fields:[
-      {label:'قرار سياسة',key:'policy_decision'},{label:'تعريف KPI',key:'kpi_def'}
+  health:{ title:'وزارة الصحة', menus:['سجل الفحوص','التدخل المبكر','الإحالات','مطالبات NPHIES','تقارير'], fieldsByTab:{
+      'سجل الفحوص':[
+        {label:'رقم الملف الصحي (MRN)',key:'mrn'},{label:'نتيجة الفحص النمائي',key:'dev_result'},{label:'PHQ-2/9',key:'phq_score'},{label:'تشخيص ICD-10',key:'icd10'}
+      ],
+      'التدخل المبكر':[
+        {label:'نوع التدخل',key:'intervention_type'},{label:'عدد الجلسات',key:'sessions'},{label:'موعد المتابعة',key:'followup_date'}
+      ],
+      'الإحالات':[
+        {label:'جهة الإحالة',key:'ref_to'},{label:'أولوية الحالة',key:'priority'},{label:'مرفقات (رابط)',key:'attachments'}
+      ],
+      'مطالبات NPHIES':[
+        {label:'رقم المطالبة',key:'claim_id'},{label:'الحالة',key:'claim_status'}
+      ],
+      'تقارير':[]
+    ], adapter:'/api/health' },
+  clinic:{ title:'المراكز الصحية', menus:['المواعيد','الإحالات','الخدمات','التقارير'], fieldsByTab:{
+      'المواعيد':[
+        {label:'رقم السجل',key:'mrn'},{label:'التخصص',key:'specialty'},{label:'موعد (تاريخ/ساعة)',key:'appt_datetime'}
+      ],
+      'الإحالات':[
+        {label:'من جهة',key:'ref_from'},{label:'حالة الإحالة',key:'ref_status'}
+      ],
+      'الخدمات':[
+        {label:'اسم الخدمة',key:'service'},{label:'SLA أيام',key:'sla_days'}
+      ],
+      'التقارير':[]
+    ], adapter:'/api/clinic' },
+  education:{ title:'وزارة التعليم', menus:['جاهزية المدرسة','IEP/دمج','الإحالات','تواصل الأسرة','تقارير نور'], fieldsByTab:{
+      'جاهزية المدرسة':[
+        {label:'درجة الجاهزية',key:'readiness_score'},{label:'المستوى/المدرسة',key:'school_name'}
+      ],
+      'IEP/دمج':[
+        {label:'خطة IEP (JSON)',key:'iep_json'},{label:'نوع الدمج',key:'inclusion_type'}
+      ],
+      'الإحالات':[
+        {label:'إلى جهة',key:'ref_to'},{label:'مرفقات',key:'attachments'}
+      ],
+      'تواصل الأسرة':[
+        {label:'رقم ولي الأمر',key:'guardian_id'},{label:'القناة',key:'channel'}
+      ],
+      'تقارير نور':[]
+    ], adapter:'/api/education' },
+  neighborhood:{ title:'مراكز الأحياء', menus:['البرامج المجتمعية','المتطوعون','الحجوزات','الإحالات','التقارير'], fieldsByTab:{
+      'البرامج المجتمعية':[
+        {label:'اسم البرنامج',key:'program'},{label:'الفئة العمرية',key:'age_band'},{label:'الطاقة الاستيعابية',key:'capacity'}
+      ],
+      'المتطوعون':[
+        {label:'اسم المتطوع',key:'vol_name'},{label:'ساعات التطوع',key:'vol_hours'}
+      ],
+      'الحجوزات':[
+        {label:'تاريخ',key:'date'},{label:'عدد المقاعد',key:'seats'}
+      ],
+      'الإحالات':[
+        {label:'من/إلى',key:'ref_direction'},{label:'الحالة',key:'status'}
+      ],
+      'التقارير':[]
+    ], adapter:'/api/neighborhood' },
+  nonprofit:{ title:'الجمعيات', menus:['البرامج','المستفيدون','المتطوعون','الإحالات','قياس الأثر'], fieldsByTab:{
+      'البرامج':[
+        {label:'اسم البرنامج',key:'program'},{label:'عدد الجلسات',key:'sessions'}
+      ],
+      'المستفيدون':[
+        {label:'هوية ولي الأمر',key:'guardian_id'},{label:'المنطقة',key:'region'}
+      ],
+      'المتطوعون':[
+        {label:'اسم المتطوع',key:'vol_name'},{label:'ساعات التطوع',key:'hours'}
+      ],
+      'الإحالات':[
+        {label:'إلى جهة',key:'ref_to'},{label:'الحالة',key:'status'}
+      ],
+      'قياس الأثر':[
+        {label:'تحسن الطفل (%)',key:'improve_pct'}
+      ]
+    ], adapter:'/api/nonprofit' },
+  hr:{ title:'الموارد البشرية', menus:['محفظة الدعم','التطوع الوطني','التقارير'], fieldsByTab:{
+      'محفظة الدعم':[
+        {label:'نوع الدعم',key:'support_type'},{label:'المبلغ/الشهر',key:'amount'},{label:'أهلية الأسرة',key:'eligibility'}
+      ],
+      'التطوع الوطني':[
+        {label:'المبادرة',key:'initiative'},{label:'الساعات',key:'hours'}
+      ],
+      'التقارير':[]
+    ], adapter:'/api/hr' },
+  csr:{ title:'القطاع الخاص (CSR)', menus:['سوق الرعاية','تعهدات الشركة','تقارير الأثر','حوكمة CSR'], fieldsByTab:{
+      'سوق الرعاية':[
+        {label:'اسم الشركة',key:'company'},{label:'الفئة',key:'tier'},{label:'المنطقة',key:'region'}
+      ],
+      'تعهدات الشركة':[
+        {label:'قيمة التعهد',key:'amount'},{label:'الغرض',key:'purpose'}
+      ],
+      'تقارير الأثر':[], 'حوكمة CSR':[]
+    ], adapter:'/api/csr' },
+  family:{ title:'حساب الأسرة', menus:['ملف الحمل والطفل','المواعيد','التوصيات','الخدمات المساندة'], fieldsByTab:{
+      'ملف الحمل والطفل':[
+        {label:'هوية ولي الأمر',key:'guardian_id'},{label:'المنطقة',key:'region'},{label:'موافقة مشاركة البيانات',key:'consent'}
+      ],
+      'المواعيد':[
+        {label:'الخدمة',key:'service'},{label:'موعد',key:'date'}
+      ],
+      'التوصيات':[], 'الخدمات المساندة':[]
+    ], adapter:'/api/family' },
+  admin:{ title:'اللجنة الوطنية', menus:['لوحة وطنية','حوكمة البيانات','التكاملات','التقارير الوطنية'], fieldsByTab:{
+      'لوحة وطنية':[],
+      'حوكمة البيانات':[
+        {label:'قرار سياسة',key:'policy_decision'}
+      ],
+      'التكاملات':[
+        {label:'تعريف KPI',key:'kpi_def'}
+      ],
+      'التقارير الوطنية':[]
     ], adapter:'/api/admin' }
 };
+
 function accountPage(key){
-  const A=ACCOUNTS[key];
-  const v=$('#view');
-  const menuHtml=A.menus.map(m=>`<span class='pill'>${m}</span>`).join('');
-  const fieldsHtml=A.fields.map(f=>`<label>${f.label}<input data-key="${f.key}" placeholder="${f.key}"/></label>`).join('');
-  v.innerHTML=`
-  <div class="card">
-    <div class="toolbar"><h2>${A.title}</h2><span class="tag">قوائم وحقول مخصصة</span></div>
-    <h3>القوائم</h3><div>${menuHtml}</div>
-    <div class="grid two form" style="margin-top:12px">${fieldsHtml}</div>
-    <div style="margin-top:10px">
-      <button class="btn" id="save">حفظ (تجريبي)</button>
-      <button class="ghost" id="push">إرسال للواجهة البرمجية</button>
-    </div>
-    <div class="note" style="margin-top:8px">مسار الربط: <code>${A.adapter}</code></div>
-  </div>`;
+  const A=ACCOUNTS[key]; const v=$('#view');
+  const tabs = A.menus;
+  const tabButtons = tabs.map((t,i)=>`<button class="tab ${i===0?'active':''}" data-tab="${t}">${t}</button>`).join('');
+  v.innerHTML = `
+    <div class="card">
+      <div class="toolbar"><h2>${A.title}</h2><span class="tag">قوائم تبويبية تفاعلية</span></div>
+      <div class="tabs">${tabButtons}</div>
+      <div id="tabpanel" class="tabpanel"></div>
+      <div style="margin-top:10px">
+        <button class="btn" id="save">حفظ (توضيحي)</button>
+        <button class="ghost" id="push">إرسال للواجهة البرمجية</button>
+      </div>
+      <div class="note" style="margin-top:8px">مسار الربط: <code>${A.adapter}</code></div>
+    </div>`;
+  const renderTab=(name)=>{
+    const fields = A.fieldsByTab[name]||[];
+    $('#tabpanel').innerHTML = fields.length
+      ? `<div class="form grid two">${fields.map(f=>`<label>${f.label}<input data-key="${f.key}" placeholder="${f.key}"/></label>`).join('')}</div>`
+      : `<div class="note">لا توجد حقول لهذا القسم حاليًا — يمكنك ربطه بتقارير ولوحات.</div>`;
+  };
+  renderTab(tabs[0]);
+  $$('.tab',v).forEach(btn=>btn.onclick=(e)=>{ $$('.tab',v).forEach(b=>b.classList.remove('active')); e.currentTarget.classList.add('active'); renderTab(e.currentTarget.dataset.tab); });
   $('#save').onclick=()=>alert('تم الحفظ محليًا (توضيحي)');
-  $('#push').onclick=()=>{ const payload={entity:key, data:Object.fromEntries($$('.form [data-key]').map(i=>[i.dataset.key, i.value]))}; alert('POST '+A.adapter+'\\n'+JSON.stringify(payload,null,2)); };
+  $('#push').onclick=()=>{ const inputs = $$('#tabpanel [data-key]'); const payload={entity:key, section:$('.tab.active').dataset.tab, data:Object.fromEntries(inputs.map(i=>[i.dataset.key,i.value]))}; alert('POST '+A.adapter+'\\n'+JSON.stringify(payload,null,2)); };
 }
 
 /* ========== 4) بوابة الرعاة ========= */
@@ -283,15 +305,12 @@ const SPONSOR_PLANS=[
   {tier:'فضي (Silver)', price:'— ر.س / سنة', perks:['الشعار في صفحة الرعاة','شارة تقدير في التقارير']}
 ];
 function sponsorsPage(){
-  const v=$('#view');
-  v.innerHTML=`
+  const v=$('#view'); v.innerHTML=`
   <div class="card">
     <div class="toolbar"><h2>بوابة الرعاة</h2><span class="tag">التسعير وحقوق استخدام الهوية</span></div>
     <div class="three grid">
-      ${SPONSOR_PLANS.map(p=>`<div class='sponsor'><h3>${p.tier}</h3><div style='font-size:20px;font-weight:800;color:#0f766e'>${p.price}</div><ul>${p.perks.map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('')}
+      ${SPONSOR_PLANS.map(p=>`<div class='card'><h3>${p.tier}</h3><div style='font-size:20px;font-weight:800;color:#0f766e'>${p.price}</div><ul>${p.perks.map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('')}
     </div>
-  </div>
-  <div class="card">
     <h3>طلب رعاية</h3>
     <div class="grid two form">
       <label>اسم الجهة<input id="sp_org"/></label>
@@ -301,290 +320,122 @@ function sponsorsPage(){
     </div>
     <label style="display:block;margin-top:8px">ملاحظات<textarea id="sp_msg" class="form" style="width:100%;min-height:100px"></textarea></label>
     <div style="margin-top:10px"><button class="btn" id="gen">إنشاء اتفاقية رعاية قابلة للطباعة</button></div>
-  </div>
-  <div class="card printable" id="agreement" style="display:none"></div>`;
+    <div class="card" id="agreement" style="display:none;margin-top:12px"></div>
+  </div>`;
   $('#gen').onclick=()=>{ const org=$('#sp_org').value||'____'; const tier=$('#sp_tier').value; const region=$('#sp_region').value; const today=new Date().toLocaleDateString('ar-SA'); $('#agreement').style.display='block'; $('#agreement').innerHTML=`
     <h3 style='margin-top:0'>اتفاقية رعاية منصة نمو</h3>
     <p>تم في تاريخ <b>${today}</b> بين منصة <b>نمو NOMU</b> والجهة الراعية <b>${org}</b> بصفة <b>${tier}</b> لمنطقة <b>${region}</b>.</p>
-    <h4>الحقوق والالتزامات</h4>
-    <ul>
-      <li>حقوق استخدام الهوية: استخدام شعار نمو ضمن الإرشادات البصرية، ومنح المنصة حق إبراز شعار الراعي حسب الفئة.</li>
-      <li>التقارير: تزويد الراعي بتقارير أثر وفق الفئة المختارة.</li>
-      <li>الامتثال: الالتزام بسياسات الخصوصية والشفافية وعدم التأثير على استقلال القرارات المهنية.</li>
-    </ul>
-    <div style='margin-top:10px'>ممثل المنصة: ____________ • ممثل الجهة الراعية: ____________</div>
-    <div style='margin-top:10px'><button class='ghost' onclick='window.print()'>طباعة / حفظ PDF</button></div>
+    <ul><li>حقوق استخدام الهوية</li><li>التقارير الربع/نصف سنوية</li><li>الامتثال والشفافية</li></ul>
+    <button class='ghost' onclick='window.print()'>طباعة / حفظ PDF</button>
   `; };
 }
 
-/* ========== 5) SSO (نفاذ) + RBAC + Config ========= */
+/* ========== 5) SSO + RBAC + Config (مختزل) ========= */
 const DEFAULT_CONFIG={
   sso:{ issuer:'https://nafath.example.gov.sa', authorize_url:'https://nafath.example.gov.sa/authorize', token_url:'https://nafath.example.gov.sa/token', client_id:'NOMU-CLIENT-ID', redirect_uri:'https://nomu.gov.sa/callback' },
-  apis:{
-    nphies_base:'https://api.nphies.sa/v1',
-    noor_base:'https://api.noor.moe.sa/v1',
-    csr_base:'https://api.csr.sa/v1',
-    internal:{ health:'/api/health/assessments', education:'/api/education/plans', nonprofit:'/api/nonprofit/programs', hr:'/api/hr/support', csr:'/api/csr/commitments', family:'/api/family/profile', admin:'/api/admin' }
-  },
-  field_maps:{
-    health:{ mrn:'mrn', dev_result:'development_result', phq_score:'phq_total', icd10:'icd10_code' },
-    education:{ readiness_score:'readiness_score', iep_json:'iep_payload', school_name:'school_name' },
-    nonprofit:{ program:'program_name', sessions:'sessions_count', improve_pct:'improvement_pct' },
-    hr:{ support_type:'support_type', amount:'monthly_amount', eligibility:'eligibility_status' },
-    csr:{ company:'company_name', amount:'pledge_amount', purpose:'purpose', region:'region' },
-    family:{ guardian_id:'guardian_national_id', region:'region', consent:'consent_flag' },
-    admin:{ policy_decision:'policy_text', kpi_def:'kpi_definition' }
-  }
+  apis:{ nphies_base:'https://api.nphies.sa/v1', noor_base:'https://api.noor.moe.sa/v1', csr_base:'https://api.csr.sa/v1',
+    internal:{ health:'/api/health', clinic:'/api/clinic', education:'/api/education', neighborhood:'/api/neighborhood', nonprofit:'/api/nonprofit', hr:'/api/hr', csr:'/api/csr', family:'/api/family', admin:'/api/admin' } }
 };
 const loadConfig=()=>{ try{ return JSON.parse(localStorage.getItem('nomu_config')||'null') || DEFAULT_CONFIG }catch(e){ return DEFAULT_CONFIG } };
-const saveConfig=(cfg)=>{ localStorage.setItem('nomu_config', JSON.stringify(cfg)); alert('تم حفظ الإعدادات محليًا'); };
+const saveConfig=(cfg)=>{ localStorage.setItem('nomu_config', JSON.stringify(cfg)); alert('تم حفظ الإعدادات'); };
 const downloadJSON=(name,obj)=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'})); a.download=name; a.click(); };
 
-function ssoPage(){
-  const v=$('#view'); const cfg=loadConfig();
-  v.innerHTML=`
-  <div class="card">
-    <div class="toolbar"><h2>النفاذ الموحّد (SSO نفاذ)</h2><span class="tag">OIDC — تجريبي</span></div>
-    <p>ISSUER: <code>${cfg.sso.issuer}</code> • AUTHZ: <code>${cfg.sso.authorize_url}</code> • TOKEN: <code>${cfg.sso.token_url}</code></p>
-    <button class="btn" id="nafath">الدخول عبر نفاذ</button>
-    <pre id="ssoLog" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;white-space:pre-wrap;margin-top:10px"></pre>
-  </div>`;
+function ssoPage(){ const v=$('#view'); const cfg=loadConfig(); v.innerHTML=`
+  <div class="card"><div class="toolbar"><h2>النفاذ الموحّد (SSO نفاذ)</h2><span class="tag">OIDC — تجريبي</span></div>
+  <p>ISSUER: <code>${cfg.sso.issuer}</code> • AUTHZ: <code>${cfg.sso.authorize_url}</code> • TOKEN: <code>${cfg.sso.token_url}</code></p>
+  <button class="btn" id="nafath">الدخول عبر نفاذ</button>
+  <pre id="ssoLog" class="callout" style="white-space:pre-wrap;margin-top:10px"></pre></div>`;
   $('#nafath').onclick=()=>{ const mockId='USR-'+Math.random().toString(36).slice(2,8).toUpperCase();
-    $('#ssoLog').textContent = 'ISSUER: '+cfg.sso.issuer+'\nAUTHORIZE: '+cfg.sso.authorize_url+'\nTOKEN: '+cfg.sso.token_url+'\n→ تبادل الكود → id_token\nUserID: '+mockId+'\nRoles: ["health.practitioner","referral.write"]';
+    $('#ssoLog').textContent='→ تبادل الكود → id_token\\nUserID: '+mockId+'\\nRoles: ["clinic.staff","referral.write"]';
   };
 }
 
 let RBAC={ roles:{
   'health.practitioner':['child.read','health.write','referral.send','kpi.view'],
+  'clinic.staff':['child.read','appointment.manage','referral.accept','kpi.view'],
   'education.specialist':['child.read','education.write','referral.accept','kpi.view'],
+  'neighborhood.coordinator':['program.manage','booking.manage','referral.accept','kpi.view'],
   'nonprofit.worker':['child.read','service.write','referral.accept','kpi.view'],
   'admin.national':['kpi.view','kpi.define','policy.write','audit.read'],
   'family.guardian':['child.own','consent.grant','appointment.book']
 }};
-
-function rbacPage(){
-  const v=$('#view'); const allPerms=Array.from(new Set(Object.values(RBAC.roles).flat()));
-  v.innerHTML=`
-  <div class="card">
-    <div class="toolbar"><h2>صلاحيات RBAC</h2><span class="tag">تحرير وتصدير</span></div>
-    <div class="grid two">
-      <div>
-        <h3>الأدوار الحالية</h3>
-        <div id="roleList">${Object.entries(RBAC.roles).map(([r,ps])=>`<div class='pill'><b>${r}</b>: ${ps.join(', ')}</div>`).join('')}</div>
-        <div class="form" style="margin-top:10px">
-          <label>دور جديد/تحديث<input id="newRole" placeholder="entity.role"/></label>
-          <label>امتيازات (بفواصل)<input id="newPerms" placeholder="child.read, referral.send"/></label>
-          <button class="btn" id="addRole">إضافة/تحديث</button>
-          <button class="ghost" id="exportRBAC">تصدير JSON</button>
-        </div>
-      </div>
-      <div>
-        <h3>تقييم سياسة</h3>
-        <div class="form">
-          <label>الدور<select id="roleSel">${Object.keys(RBAC.roles).map(r=>`<option>${r}</option>`).join('')}</select></label>
-          <label>الامتياز<select id="permSel">${allPerms.map(p=>`<option>${p}</option>`).join('')}</select></label>
-          <label>موافقة PDPL؟ <select id="consSel"><option value="true">نعم</option><option value="false">لا</option></select></label>
-        </div>
-        <div style="margin-top:10px"><button class="btn" id="eval">تقييم</button></div>
-        <pre id="rbacOut" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;white-space:pre-wrap;margin-top:10px"></pre>
-      </div>
+function rbacPage(){ const v=$('#view'); const allPerms=Array.from(new Set(Object.values(RBAC.roles).flat()));
+  v.innerHTML=`<div class="card"><div class="toolbar"><h2>صلاحيات RBAC</h2><span class="tag">تحرير وتقييم</span></div>
+  <div class="grid two">
+    <div><h3>الأدوار</h3>${Object.entries(RBAC.roles).map(([r,ps])=>`<div class='pill'><b>${r}</b>: ${ps.join(', ')}</div>`).join('')}
+      <div class="form" style="margin-top:10px"><label>دور<input id="newRole" placeholder="entity.role"/></label>
+      <label>امتيازات (بفواصل)<input id="newPerms" placeholder="appointment.manage, referral.accept"/></label>
+      <button class="btn" id="addRole">حفظ</button><button class="ghost" id="exportRBAC">تصدير</button></div>
     </div>
-  </div>`;
-  $('#addRole').onclick=()=>{ const r=$('#newRole').value.trim(); if(!r) return; const perms=$('#newPerms').value.split(',').map(s=>s.trim()).filter(Boolean); RBAC.roles[r]=perms; alert('تم حفظ الدور'); location.hash='#/rbac'; };
+    <div><h3>تقييم</h3><div class="form">
+      <label>الدور<select id="roleSel">${Object.keys(RBAC.roles).map(r=>`<option>${r}</option>`).join('')}</select></label>
+      <label>الامتياز<select id="permSel">${allPerms.map(p=>`<option>${p}</option>`).join('')}</select></label>
+      <label>موافقة PDPL؟ <select id="consSel"><option value="true">نعم</option><option value="false">لا</option></select></label></div>
+      <button class="btn" id="eval" style="margin-top:10px">تقييم</button>
+      <pre id="rbacOut" class="callout" style="white-space:pre-wrap;margin-top:10px"></pre></div>
+  </div></div>`;
+  $('#addRole').onclick=()=>{ const r=$('#newRole').value.trim(); if(!r) return; const perms=$('#newPerms').value.split(',').map(s=>s.trim()).filter(Boolean); RBAC.roles[r]=perms; alert('تم'); location.hash='#/rbac'; };
   $('#exportRBAC').onclick=()=>downloadJSON('rbac_policy.json', RBAC);
   $('#eval').onclick=()=>{ const role=$('#roleSel').value; const perm=$('#permSel').value; const consent=$('#consSel').value==='true';
-    const allowed = (RBAC.roles[role]||[]).includes(perm) && (perm!=='child.read' || consent || role==='admin.national');
-    $('#rbacOut').textContent = (allowed?'✅ مسموح':'⛔ مرفوض') + '\nالدور: '+role+'\nالامتياز: '+perm+'\nالموافقة: '+consent;
+    const allowed=(RBAC.roles[role]||[]).includes(perm) && (perm!=='child.read' || consent || role==='admin.national');
+    $('#rbacOut').textContent=(allowed?'✅ مسموح':'⛔ مرفوض')+'\\nالدور: '+role+'\\nالامتياز: '+perm+'\\nالموافقة: '+consent;
   };
 }
 
-function configPage(){
-  const v=$('#view'); const cfg=loadConfig();
-  v.innerHTML=`
-  <div class="card">
-    <div class="toolbar"><h2>مركز الإعدادات (Config)</h2><span class="tag">Endpoints & Field Maps</span></div>
-    <div class="grid two form">
-      <label>SSO Issuer<input id="issuer" value="${cfg.sso.issuer}"/></label>
-      <label>Authorize URL<input id="authz" value="${cfg.sso.authorize_url}"/></label>
-      <label>Token URL<input id="token" value="${cfg.sso.token_url}"/></label>
-      <label>Client ID<input id="cid" value="${cfg.sso.client_id}"/></label>
-      <label>Redirect URI<input id="redir" value="${cfg.sso.redirect_uri}"/></label>
-    </div>
-    <h3>واجهات خارجية</h3>
-    <div class="grid three form">
-      <label>NPHIES Base<input id="nph" value="${cfg.apis.nphies_base}"/></label>
-      <label>NOOR Base<input id="noor" value="${cfg.apis.noor_base}"/></label>
-      <label>CSR Base<input id="csr" value="${cfg.apis.csr_base}"/></label>
-    </div>
-    <h3>مسارات داخلية (Adapters)</h3>
-    <div class="grid two form">
-      ${Object.entries(cfg.apis.internal).map(([k,v2])=>`<label>${k}<input data-int="${k}" value="${v2}"/></label>`).join('')}
-    </div>
-    <h3>خرائط الحقول (Field Maps)</h3>
-    <div class="form"><textarea id="maps" style="width:100%;min-height:220px">${JSON.stringify(cfg.field_maps,null,2)}</textarea></div>
-    <div style="margin-top:10px">
-      <button class="btn" id="saveCfg">حفظ الإعدادات</button>
-      <button class="ghost" id="dlCfg">تنزيل config.json</button>
-      <button class="ghost" id="resetCfg">استعادة القيم الافتراضية</button>
-    </div>
-  </div>`;
-  $('#saveCfg').onclick=()=>{ const next={
-    sso:{ issuer:$('#issuer').value, authorize_url:$('#authz').value, token_url:$('#token').value, client_id:$('#cid').value, redirect_uri:$('#redir').value },
-    apis:{ nphies_base:$('#nph').value, noor_base:$('#noor').value, csr_base:$('#csr').value, internal:Object.fromEntries($$('[data-int]').map(i=>[i.dataset.int,i.value])) },
-    field_maps: JSON.parse($('#maps').value||'{}')
-  }; saveConfig(next); };
+function configPage(){ const v=$('#view'); const cfg=loadConfig();
+  v.innerHTML=`<div class="card"><div class="toolbar"><h2>مركز الإعدادات (Config)</h2><span class="tag">Endpoints</span></div>
+  <div class="grid two form">
+    <label>SSO Issuer<input id="issuer" value="${cfg.sso.issuer}"/></label>
+    <label>Authorize URL<input id="authz" value="${cfg.sso.authorize_url}"/></label>
+    <label>Token URL<input id="token" value="${cfg.sso.token_url}"/></label>
+    <label>Client ID<input id="cid" value="${cfg.sso.client_id}"/></label>
+    <label>Redirect URI<input id="redir" value="${cfg.sso.redirect_uri}"/></label>
+  </div>
+  <h3>مسارات داخلية (Adapters)</h3>
+  <div class="grid two form">
+    ${Object.entries(cfg.apis.internal).map(([k,v2])=>`<label>${k}<input data-int="${k}" value="${v2}"/></label>`).join('')}
+  </div>
+  <div style="margin-top:10px"><button class="btn" id="saveCfg">حفظ</button><button class="ghost" id="dlCfg">تنزيل config.json</button></div></div>`;
+  $('#saveCfg').onclick=()=>{ const next={ sso:{ issuer:$('#issuer').value, authorize_url:$('#authz').value, token_url:$('#token').value, client_id:$('#cid').value, redirect_uri:$('#redir').value },
+    apis:{...cfg.apis, internal:Object.fromEntries($$('[data-int]').map(i=>[i.dataset.int,i.value])) } }; saveConfig(next); };
   $('#dlCfg').onclick=()=>downloadJSON('config.json', loadConfig());
-  $('#resetCfg').onclick=()=>{ localStorage.removeItem('nomu_config'); alert('تمت الاستعادة'); location.hash='#/config'; };
 }
 
-/* ========== 6) السياسات ========= */
-/* 6.1 سياسة الخصوصية وحماية البيانات (PDPL) */
-function privacyPage(){
-  const v=$('#view');
-  v.innerHTML=`
-  <div class="card">
-    <div class="toolbar"><h2>سياسة الخصوصية وحماية البيانات (PDPL)</h2><span class="tag">نسخة تنفيذية</span></div>
-    <div class="callout">تهدف هذه السياسة إلى حماية خصوصية الأطفال وأولياء الأمور وفق نظام حماية البيانات الشخصية السعودي (PDPL). هذه النسخة لأغراض التوعية التشغيلية، ولا تغني عن الاستشارة القانونية.</div>
-    <h3>نطاق البيانات</h3>
-    <ul>
-      <li>بيانات تعريفية: هوية ولي الأمر، بيانات التواصل، المنطقة.</li>
-      <li>بيانات الطفل النمائية والتعليمية والصحية (عند وجود موافقات سارية).</li>
-      <li>بيانات تقنية: سجلات الدخول، الجهاز، العناوين العامة.</li>
-    </ul>
-    <h3>أساس المعالجة</h3>
-    <ul>
-      <li>موافقة صريحة من ولي الأمر أو من ينوب عنه قانونيًا.</li>
-      <li>مقتضيات مصلحة الطفل الفضلى أو التزام نظامي/سياساتي.</li>
-    </ul>
-    <h3>أغراض الاستخدام</h3>
-    <ul>
-      <li>تقديم الخدمات النمائية والتعليمية والتدخل المبكر.</li>
-      <li>إدارة الإحالات والتنسيق بين الشركاء.</li>
-      <li>التقارير الوطنية ومؤشرات الأداء بعد التحويل لإحصاءات مجمّعة.</li>
-    </ul>
-    <h3>حقوق أصحاب البيانات</h3>
-    <ul>
-      <li>الاطلاع والتصحيح والتحديث.</li>
-      <li>سحب الموافقة (دون أن يؤثر على المعالجة السابقة للسحب).</li>
-      <li>طلب الحذف في الحالات المنصوص عليها نظامًا.</li>
-    </ul>
-    <h3>الأمن وحفظ السجلات</h3>
-    <ul>
-      <li>تشفير أثناء النقل والتخزين حيثما أمكن.</li>
-      <li>التحكم بالصلاحيات وفق RBAC وتسجيل الأثر監audit.</li>
-      <li>تحديد مدد الاحتفاظ والحد الأدنى للنفاذ.</li>
-    </ul>
-    <h3>مشاركة البيانات</h3>
-    <ul>
-      <li>فقط مع الشركاء المخولين ووفق اتفاقيات المعالجة والسرية.</li>
-      <li>حظر مشاركة بيانات التعريف خارج المملكة إلا وفق المتطلبات النظامية.</li>
-    </ul>
-    <div style="margin-top:10px"><button class="ghost" onclick="window.print()">طباعة السياسة</button></div>
-  </div>`;
-}
+/* ========== 6) سياسات + مساعدة ========= */
+function privacyPage(){ const v=$('#view'); v.innerHTML=`<div class="card">
+  <div class="toolbar"><h2>سياسة الخصوصية وحماية البيانات (PDPL)</h2><span class="tag">نسخة تنفيذية</span></div>
+  <ul><li>الموافقة الصريحة لولي الأمر</li><li>الحد الأدنى من النفاذ</li><li>تشفير وحوكمة وصول</li><li>حقوق الاطلاع/التصحيح/السحب/الحذف</li></ul>
+  <button class="ghost" onclick="window.print()">طباعة</button></div>`; }
+function childProtectPage(){ const v=$('#view'); v.innerHTML=`<div class="card">
+  <div class="toolbar"><h2>سياسة حماية الطفل والإبلاغ</h2><span class="tag">سلامة الطفل أولًا</span></div>
+  <ol><li>توثيق الواقعة</li><li>تقييم المخاطر</li><li>إحالة للجهة المختصة ومتابعة الحالة</li></ol>
+  <div class="callout">قناة الإبلاغ الداخلية متاحة لحسابات الممارسين المخولين.</div>
+  <button class="ghost" onclick="window.print()">طباعة النموذج</button></div>`; }
+function helpCenterPage(){ const v=$('#view'); v.innerHTML=`<div class="card">
+  <div class="toolbar"><h2>مركز المساعدة</h2><span class="tag">الدعم والإرشاد</span></div>
+  <details open><summary><b>التبويبات كيف تعمل؟</b></summary><p>انقر اسم القسم لعرض حقوله وإرسال بياناته لمسار الواجهة البرمجية الخاص بالحساب.</p></details>
+  <details><summary><b>كيف أخصص الحقول؟</b></summary><p>من "مركز الإعدادات" حدّث خرائط الحقول ومسارات الـ API ثم جرّب الإرسال من التبويب.</p></details>
+</div>`; }
 
-/* 6.2 سياسة حماية الطفل والإبلاغ */
-function childProtectPage(){
-  const v=$('#view');
-  v.innerHTML=`
-  <div class="card">
-    <div class="toolbar"><h2>سياسة حماية الطفل والإبلاغ</h2><span class="tag">سلامة الطفل أولًا</span></div>
-    <div class="callout">تلتزم منصة نمو بضمان سلامة الطفل ورفاهيته. أي اشتباه بإساءة أو إهمال يُدار وفق إجراءات واضحة وتوثيق دقيق وإحالة للجهات المختصة.</div>
-    <h3>مبادئ عامة</h3>
-    <ul>
-      <li>مصلحة الطفل الفضلى مقدمة على أي اعتبار.</li>
-      <li>سرية المعلومات مع الحد الأدنى من الوصول.</li>
-      <li>عدم التسامح مع أي شكل من أشكال الإساءة أو الاستغلال.</li>
-    </ul>
-    <h3>قنوات الإبلاغ</h3>
-    <ul>
-      <li>نموذج الإبلاغ داخل المنصة (للممارسين المخولين).</li>
-      <li>الاتصال بالجهات الحكومية المختصة وفق المتبع نظامًا.</li>
-    </ul>
-    <h3>خطوات التعامل</h3>
-    <ol>
-      <li>توثيق الواقعة والمؤشرات الداعمة بدقة.</li>
-      <li>تقييم فوري للمخاطر واتخاذ تدابير حماية عاجلة عند اللزوم.</li>
-      <li>إحالة رسمية للجهة المختصة ومتابعة الحالة حتى الإغلاق.</li>
-    </ol>
-    <h3>مسؤوليات الأدوار</h3>
-    <ul>
-      <li><b>الممارس</b>: رصد وإبلاغ وتوثيق.</li>
-      <li><b>المشرف</b>: مراجعة وتفعيل الإحالة وضمان سلامة الإجراءات.</li>
-      <li><b>اللجنة الوطنية</b>: المتابعة والحوكمة ومراجعة المؤشرات ذات الصلة.</li>
-    </ul>
-    <div class="printable">
-      <h4>نموذج إبلاغ مختصر (قابل للطباعة)</h4>
-      <p>بيانات المبلغ: ____________ • الجهة: ____________ • التاريخ: ____________</p>
-      <p>وصف الواقعة/المؤشرات: ________________________________________________</p>
-      <p>إجراءات فورية متخذة: _________________________________________________</p>
-      <p>جهة الإحالة: ______________________ • رقم البلاغ: ______________________</p>
-      <button class="ghost" onclick="window.print()">طباعة النموذج</button>
-    </div>
-  </div>`;
-}
-
-/* ========== 7) مركز المساعدة ========= */
-function helpCenterPage(){
-  const v=$('#view');
-  v.innerHTML=`
-  <div class="card">
-    <div class="toolbar"><h2>مركز المساعدة</h2><span class="tag">الدعم والإرشاد</span></div>
-    <h3>الأسئلة الشائعة</h3>
-    <details open><summary><b>كيف أسجل دخول عبر نفاذ؟</b></summary><p>من القائمة: الأمن والربط ← SSO نفاذ ثم اضغط "الدخول عبر نفاذ". في الإنتاج سيتم توجيهك لموفّر الهوية والتحقق بخطوتين.</p></details>
-    <details><summary><b>كيف أرسل إحالة بين الجهات؟</b></summary><p>من حسابك القطاعي (الصحة/التعليم/الجمعية)، اختر "الإحالات"، املأ البيانات الأساسية وأرفق المرفقات ثم أرسل. ستُتابَع الحالة عبر لوحة الإحالات.</p></details>
-    <details><summary><b>أين أجد تعريفات المؤشرات (KPI)؟</b></summary><p>من "سجل تعريفات KPI" ويمكن تنزيل JSON الرسمي للاعتماد.</p></details>
-    <details><summary><b>كيف أقدّم طلب رعاية؟</b></summary><p>اذهب إلى "بوابة الرعاة" واختر الفئة وأكمل نموذج الطلب، ثم أنشئ اتفاقية قابلة للطباعة.</p></details>
-
-    <h3>طلب دعم فني</h3>
-    <div class="grid two form">
-      <label>الاسم <input id="hc_name" placeholder="اسمك الكامل"/></label>
-      <label>البريد الإلكتروني <input id="hc_mail" placeholder="example@domain.sa"/></label>
-      <label>الجهة/الحساب <input id="hc_org" placeholder="وزارة/جمعية/شركة"/></label>
-      <label>نوع المشكلة
-        <select id="hc_type">
-          <option>تسجيل الدخول/نفاذ</option>
-          <option>صلاحيات/أدوار</option>
-          <option>الإحالات</option>
-          <option>التكاملات (NPHIES/نور)</option>
-          <option>أخرى</option>
-        </select>
-      </label>
-    </div>
-    <label>وصف مختصر <textarea id="hc_desc" style="width:100%;min-height:120px" placeholder="صف المشكلة بالتفصيل…"></textarea></label>
-    <div style="margin-top:10px">
-      <button class="btn" id="hc_submit">إرسال الطلب (تجريبي)</button>
-      <button class="ghost" id="hc_print">طباعة</button>
-    </div>
-    <pre id="hc_out" class="callout" style="margin-top:10px;white-space:pre-wrap"></pre>
-  </div>`;
-  $('#hc_submit').onclick=()=>{ const payload={
-      name:$('#hc_name').value, email:$('#hc_mail').value, org:$('#hc_org').value, type:$('#hc_type').value, desc:$('#hc_desc').value, ts:new Date().toISOString()
-    }; $('#hc_out').textContent='تم استلام طلبك (توضيحي). البيانات:\\n'+JSON.stringify(payload,null,2); };
-  $('#hc_print').onclick=()=>window.print();
-}
-
-/* ========== 8) Export ========= */
+/* ========== 7) Export ========= */
 function exportPage(){ const v=$('#view'); v.innerHTML=`
-  <div class="card">
-    <h2>تصدير</h2>
-    <button class="btn" id="kjson">KPI Registry (JSON)</button>
-    <button class="ghost" id="rjson">RBAC (JSON)</button>
-    <button class="ghost" id="cfg">Config (JSON)</button>
-  </div>`;
+  <div class="card"><h2>تصدير</h2>
+  <button class="btn" id="kjson">KPI Registry</button>
+  <button class="ghost" id="rjson">RBAC</button>
+  <button class="ghost" id="cfg">Config</button></div>`;
   $('#kjson').onclick=()=>downloadJSON('kpi_registry.json', KPI_REGISTRY);
   $('#rjson').onclick=()=>downloadJSON('rbac_policy.json', RBAC);
   $('#cfg').onclick=()=>downloadJSON('config.json', loadConfig());
 }
 
-/* ========== 9) الراوتر ========= */
+/* ========== 8) Router ========= */
 const routes={
   '/intro':intro,'/kpi-registry':kpiRegistryPage,'/sponsors':sponsorsPage,'/sso':ssoPage,'/rbac':rbacPage,'/config':configPage,'/export':exportPage,
   '/privacy':privacyPage,'/child-protect':childProtectPage,'/help':helpCenterPage,
-  '/acc/health':()=>accountPage('health'),'/acc/education':()=>accountPage('education'),'/acc/nonprofit':()=>accountPage('nonprofit'),
+  '/acc/health':()=>accountPage('health'),'/acc/clinic':()=>accountPage('clinic'),'/acc/education':()=>accountPage('education'),
+  '/acc/neighborhood':()=>accountPage('neighborhood'),'/acc/nonprofit':()=>accountPage('nonprofit'),
   '/acc/hr':()=>accountPage('hr'),'/acc/csr':()=>accountPage('csr'),'/acc/family':()=>accountPage('family'),'/acc/admin':()=>accountPage('admin')
 };
-
 if(!location.hash) location.hash = '#/intro';
 route();
 </script>
