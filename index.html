@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>منصة نمو NOMU — النسخة الوطنية (v3.2 — About Integrated)</title>
+<title>منصة نمو NOMU — v3.3 (About + Policies + Help)</title>
 <style>
   :root{
     --bg:#f7fbff; --paper:#ffffff; --brand:#16a34a; --accent:#f59e0b; --ink:#0f172a; --sub:#475569;
@@ -32,12 +32,8 @@
   .tag{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#f0fdf4;color:#14532d;padding:6px 10px;border-radius:999px;font-size:12px}
   button,.btn{background:var(--brand);color:#052e1d;border:none;padding:10px 14px;border-radius:12px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(34,197,94,.25)}
   .ghost{background:transparent;color:var(--ink);border:1px solid var(--border)}
-  .grid{display:grid;gap:var(--gap)}
-  .two{grid-template-columns:1fr 1fr}
-  .three{grid-template-columns:repeat(3,1fr)}
-  .four{grid-template-columns:repeat(4,1fr)}
-  table{width:100%;border-collapse:separate;border-spacing:0 10px}
-  th,td{text-align:right;padding:10px;background:#fcfdff} th{color:#64748b;font-size:12px}
+  .grid{display:grid;gap:var(--gap)} .two{grid-template-columns:1fr 1fr} .three{grid-template-columns:repeat(3,1fr)} .four{grid-template-columns:repeat(4,1fr)}
+  table{width:100%;border-collapse:separate;border-spacing:0 10px} th,td{text-align:right;padding:10px;background:#fcfdff} th{color:#64748b;font-size:12px}
   .pill{display:inline-flex;gap:6px;padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:#f8fafc;font-size:12px;margin:2px}
   .note{font-size:12px;color:#64748b}
   .printable{background:#fff;padding:20px;border:1px dashed #cbd5e1;border-radius:12px}
@@ -49,6 +45,7 @@
   .chip{display:inline-block;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:999px;padding:4px 10px;font-size:12px;color:#065f46}
   .kpi-badge{display:inline-flex;align-items:center;gap:8px;background:#fefce8;border:1px solid #fde68a;border-radius:999px;padding:6px 10px;font-size:12px;color:#7c5800}
   code{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:2px 6px}
+  .callout{background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:10px}
 </style>
 </head>
 <body>
@@ -59,14 +56,14 @@
       <div><b>NOMU — منصة نمو</b><div style="font-size:12px;color:#0f766e">منصة وطنية للطفولة المبكرة</div></div>
     </div>
     <div class="left-logos">
-      <!-- استبدل SVG التالي بصورة شعار رؤية 2030 إن رغبت: <img src="PATH/vision2030.png"> -->
+      <!-- استبدل SVG التالي بصورة شعار رؤية 2030 إن رغبت -->
       <span class="pill-logo" title="Vision 2030">
         <svg width="90" height="28" viewBox="0 0 90 28" xmlns="http://www.w3.org/2000/svg" aria-label="Vision 2030">
           <rect x="1" y="4" width="88" height="20" rx="10" fill="#f1f5f9" stroke="#cbd5e1"/>
           <text x="45" y="20" text-anchor="middle" font-size="12" fill="#0f172a" font-family="Tajawal">Vision 2030</text>
         </svg>
       </span>
-      <!-- استبدل SVG التالي بصورة شعار مبادرة تلبية: <img src="PATH/talbiya.png"> -->
+      <!-- استبدل SVG التالي بصورة شعار مبادرة تلبية -->
       <span class="pill-logo" title="مبادرة تلبية">
         <svg width="90" height="28" viewBox="0 0 90 28" xmlns="http://www.w3.org/2000/svg" aria-label="Talbiya">
           <rect x="1" y="4" width="88" height="20" rx="10" fill="#f1f5f9" stroke="#cbd5e1"/>
@@ -106,6 +103,12 @@
         <a class="link" href="#/config">مركز الإعدادات (Config)</a>
       </div>
       <div class="group">
+        <h4>السياسات والمساعدة</h4>
+        <a class="link" href="#/privacy">سياسة الخصوصية</a>
+        <a class="link" href="#/child-protect">حماية الطفل والإبلاغ</a>
+        <a class="link" href="#/help">مركز المساعدة</a>
+      </div>
+      <div class="group">
         <h4>أدوات</h4>
         <a class="link" href="#/export">تصدير</a>
       </div>
@@ -115,7 +118,7 @@
   <section class="content" id="view"></section>
 </main>
 
-<footer>نمو NOMU — v3.2 (تعريف مدمج، KPI، حسابات، رعايات، SSO، RBAC، Config).</footer>
+<footer>نمو NOMU — v3.3 (About + Policies + Help + KPI + Accounts + Sponsors + SSO + RBAC + Config)</footer>
 
 <script>
 const $=(q,root=document)=>root.querySelector(q);
@@ -123,7 +126,7 @@ const $$=(q,root=document)=>Array.from(root.querySelectorAll(q));
 function route(){ const p=location.hash.slice(1)||'/intro'; $$('a.link').forEach(a=>a.classList.toggle('active', a.getAttribute('href')===`#${p}`)); (routes[p]||intro)(); }
 window.addEventListener('hashchange',route);
 
-/* ===== (أ) صفحة "عن المنصة" — الصياغة الاحترافية كاملة ===== */
+/* ========== 1) صفحة "عن المنصة" ========= */
 function intro(){
   const v=$('#view');
   v.innerHTML = `
@@ -132,15 +135,13 @@ function intro(){
       <h2>عن منصة نمو (NOMU)</h2>
       <span class="tag">منصة وطنية للطفولة المبكرة</span>
     </div>
-
     <section>
       <div class="title"><span class="chip">مقدمة</span><h3>منصة وطنية رقمية متكاملة</h3></div>
       <p><b>منصة نمو (NOMU)</b> هي منصة وطنية رقمية متكاملة تُعنى برحلة الطفل والأسرة منذ المراحل الأولى للحمل وحتى سن السادسة،
       من خلال تنسيق الجهود بين القطاعات الحكومية والأهلية وغير الربحية تحت إشراف <b>اللجنة الوطنية للطفولة المبكرة</b>.
       تعمل المنصة على <b>تمكين التكامل بين الصحة والتعليم والدعم الاجتماعي</b> عبر منظومة بيانات موحّدة، ونماذج تدخل مبكر، ولوحات مؤشرات وطنية تقيس جودة الخدمات وكفاءتها.
-      تم تطوير المنصة بدعم من <b>مبادرة تلبية</b> ووفقًا لمستهدفات <b>رؤية المملكة 2030</b> في بناء إنسان طموح، ومجتمع حيوي، واقتصاد مزدهر.</p>
+      تم تطوير المنصة بدعم من <b>مبادرة تلبية</b> ووفقًا لمستهدفات <b>رؤية المملكة 2030</b>.</p>
     </section>
-
     <div class="grid two">
       <section>
         <div class="title"><span class="chip">الرؤية</span><h3>رؤية المنصة</h3></div>
@@ -151,7 +152,6 @@ function intro(){
         <p><i>تمكين منظومة وطنية شاملة تربط الجهات المعنية بالطفولة المبكرة بمنصة رقمية موحدة، تسهّل تقديم الخدمات، وتتابع مؤشرات الأداء، وتعزز الشفافية والاستدامة.</i></p>
       </section>
     </div>
-
     <section>
       <div class="title"><span class="chip">الأهداف</span><h3>الأهداف الاستراتيجية</h3></div>
       <ul>
@@ -163,7 +163,6 @@ function intro(){
         <li>تعزيز البحث والتطوير ودعم اتخاذ القرار المبني على البيانات.</li>
       </ul>
     </section>
-
     <section>
       <div class="title"><span class="chip">القيمة المضافة</span><h3>القيمة المضافة لكل شريك</h3></div>
       <table>
@@ -179,24 +178,6 @@ function intro(){
         </tbody>
       </table>
     </section>
-
-    <section>
-      <div class="title"><span class="chip">الخدمات</span><h3>حزمة الخدمات عبر المنصة</h3></div>
-      <h4>1) للجهات الحكومية</h4>
-      <ul><li>نظام الإحالات الوطني الموحّد (الصحة ⇄ التعليم ⇄ الجمعيات).</li>
-          <li>لوحات مؤشرات KPI وطنية متصلة بالأنظمة الوزارية.</li>
-          <li>تكامل نفاذ/NPHIES/نور.</li>
-          <li>متابعة خطة الطفل (Child Plan Tracker).</li></ul>
-      <h4>2) للجمعيات</h4>
-      <ul><li>إدارة البرامج والمستفيدين والمتطوعين.</li><li>استقبال الإحالات والتقارير الإلكترونية.</li><li>قياس الأثر الاجتماعي للبرامج.</li></ul>
-      <h4>3) للقطاع الخاص</h4>
-      <ul><li>بوابة الرعاة الوطنية (ماسي/ذهبي/فضي) مع عقود إلكترونية قابلة للطباعة.</li><li>تقارير أثر اجتماعي مخصصة.</li></ul>
-      <h4>4) للأسرة</h4>
-      <ul><li>ملف الطفل الإلكتروني: الفحوص، المواعيد، التوصيات.</li><li>تنبيهات ذكية للمواعيد والبرامج.</li><li>استشارات مبكرة مع المتخصصين.</li></ul>
-      <h4>5) للمنصة الوطنية والباحثين</h4>
-      <ul><li>لوحات بيانات وطنية (صحة/تعليم/حماية/أسرة).</li><li>مؤشرات قابلة للتخصيص والتصدير.</li><li>واجهات API للاستخدام البحثي.</li></ul>
-    </section>
-
     <section class="grid two">
       <div>
         <div class="title"><span class="chip">الاستدامة</span><h3>نموذج الاستدامة</h3></div>
@@ -218,16 +199,14 @@ function intro(){
         </ol>
       </div>
     </section>
-
     <section>
       <div class="title"><span class="chip">ختام</span><h3>منظومة وطنية للتكامل التنموي</h3></div>
-      <p>منصة <b>نمو NOMU</b> ليست مجرد نظام؛ إنها منظومة وطنية للتكامل التنموي تسعى إلى أن يكون كل طفل في المملكة مؤهلاً لبداية حياة تعليمية وصحية مثالية،
-      ضمن بيئة أسرية داعمة ومجتمع متكامل يحقق مستهدفات <b>رؤية 2030</b>.</p>
+      <p>منصة <b>نمو NOMU</b> ليست مجرد نظام؛ إنها منظومة وطنية للتكامل التنموي تسعى إلى أن يكون كل طفل في المملكة مؤهلاً لبداية حياة تعليمية وصحية مثالية ضمن بيئة أسرية داعمة ومجتمع متكامل يحقق مستهدفات <b>رؤية 2030</b>.</p>
     </section>
   </div>`;
 }
 
-/* ===== (ب) سجل تعريفات KPI (تبسيط) ===== */
+/* ========== 2) KPI Registry ========= */
 const KPI_REGISTRY=[
   { id:'DEV_SCREEN', name:'نسبة تغطية الفحص النمائي', owner:'وزارة الصحة — الإدارة العامة لصحة الأم والطفل', formula:'المفحوصون ÷ المستهدفون (0–6) × 100', period:'شهري', source:'HealthAssessment' },
   { id:'SCHOOL_READY', name:'نسبة الجاهزية المدرسية', owner:'وزارة التعليم — الإدارة العامة للطفولة المبكرة', formula:'جاهزون ÷ إجمالي 5–6 × 100', period:'فصلي', source:'EducationPlan' },
@@ -236,7 +215,6 @@ const KPI_REGISTRY=[
   { id:'CSR_FUNDS', name:'تمويل CSR (ر.س)', owner:'القطاع الخاص + إشراف المنصة', formula:'التعهدات المؤكدة + المحوّلة', period:'ربع سنوي', source:'CSRCommitment' },
   { id:'ACTIVE_REF', name:'الإحالات النشطة', owner:'اللجنة الوطنية — وحدة البيانات', formula:'الحالات المفتوحة − المغلقة', period:'يومي', source:'Referral' }
 ];
-
 function kpiRegistryPage(){
   const v=$('#view');
   v.innerHTML=`
@@ -254,7 +232,7 @@ function kpiRegistryPage(){
   $('#dl').onclick=()=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(KPI_REGISTRY,null,2)],{type:'application/json'})); a.download='kpi_registry.json'; a.click(); };
 }
 
-/* ===== (ج) الحسابات — قوائم وحقول (توضيحي) ===== */
+/* ========== 3) الحسابات (نماذج وحقول) ========= */
 const ACCOUNTS={
   health:{ title:'وزارة الصحة', menus:['سجل الفحوص','التدخل المبكر','الإحالات وارد/صادر','مطالبات NPHIES','تقارير'], fields:[
       {label:'رقم الملف الصحي (MRN)',key:'mrn'},{label:'نتيجة الفحص النمائي',key:'dev_result'},{label:'PHQ-2/9',key:'phq_score'},{label:'تشخيص ICD-10',key:'icd10'}
@@ -278,7 +256,6 @@ const ACCOUNTS={
       {label:'قرار سياسة',key:'policy_decision'},{label:'تعريف KPI',key:'kpi_def'}
     ], adapter:'/api/admin' }
 };
-
 function accountPage(key){
   const A=ACCOUNTS[key];
   const v=$('#view');
@@ -299,7 +276,7 @@ function accountPage(key){
   $('#push').onclick=()=>{ const payload={entity:key, data:Object.fromEntries($$('.form [data-key]').map(i=>[i.dataset.key, i.value]))}; alert('POST '+A.adapter+'\\n'+JSON.stringify(payload,null,2)); };
 }
 
-/* ===== (د) بوابة الرعاة + اتفاقية قابلة للطباعة ===== */
+/* ========== 4) بوابة الرعاة ========= */
 const SPONSOR_PLANS=[
   {tier:'ماسي (Diamond)', price:'— ر.س / سنة', perks:['الشعار في كل صفحات المنصة','تقرير أثر ربع سنوي','أولوية تسمية مبادرات','مقعد مجلس الرعاة']},
   {tier:'ذهبي (Gold)', price:'— ر.س / سنة', perks:['الشعار في الصفحات الرئيسية','تقارير نصف سنوية','دعوات الفعاليات']},
@@ -340,7 +317,7 @@ function sponsorsPage(){
   `; };
 }
 
-/* ===== (هـ) SSO (نفاذ) — محاكاة OIDC + مركز إعدادات + RBAC ===== */
+/* ========== 5) SSO (نفاذ) + RBAC + Config ========= */
 const DEFAULT_CONFIG={
   sso:{ issuer:'https://nafath.example.gov.sa', authorize_url:'https://nafath.example.gov.sa/authorize', token_url:'https://nafath.example.gov.sa/token', client_id:'NOMU-CLIENT-ID', redirect_uri:'https://nomu.gov.sa/callback' },
   apis:{
@@ -460,7 +437,134 @@ function configPage(){
   $('#resetCfg').onclick=()=>{ localStorage.removeItem('nomu_config'); alert('تمت الاستعادة'); location.hash='#/config'; };
 }
 
-/* ===== (و) التصدير ===== */
+/* ========== 6) السياسات ========= */
+/* 6.1 سياسة الخصوصية وحماية البيانات (PDPL) */
+function privacyPage(){
+  const v=$('#view');
+  v.innerHTML=`
+  <div class="card">
+    <div class="toolbar"><h2>سياسة الخصوصية وحماية البيانات (PDPL)</h2><span class="tag">نسخة تنفيذية</span></div>
+    <div class="callout">تهدف هذه السياسة إلى حماية خصوصية الأطفال وأولياء الأمور وفق نظام حماية البيانات الشخصية السعودي (PDPL). هذه النسخة لأغراض التوعية التشغيلية، ولا تغني عن الاستشارة القانونية.</div>
+    <h3>نطاق البيانات</h3>
+    <ul>
+      <li>بيانات تعريفية: هوية ولي الأمر، بيانات التواصل، المنطقة.</li>
+      <li>بيانات الطفل النمائية والتعليمية والصحية (عند وجود موافقات سارية).</li>
+      <li>بيانات تقنية: سجلات الدخول، الجهاز، العناوين العامة.</li>
+    </ul>
+    <h3>أساس المعالجة</h3>
+    <ul>
+      <li>موافقة صريحة من ولي الأمر أو من ينوب عنه قانونيًا.</li>
+      <li>مقتضيات مصلحة الطفل الفضلى أو التزام نظامي/سياساتي.</li>
+    </ul>
+    <h3>أغراض الاستخدام</h3>
+    <ul>
+      <li>تقديم الخدمات النمائية والتعليمية والتدخل المبكر.</li>
+      <li>إدارة الإحالات والتنسيق بين الشركاء.</li>
+      <li>التقارير الوطنية ومؤشرات الأداء بعد التحويل لإحصاءات مجمّعة.</li>
+    </ul>
+    <h3>حقوق أصحاب البيانات</h3>
+    <ul>
+      <li>الاطلاع والتصحيح والتحديث.</li>
+      <li>سحب الموافقة (دون أن يؤثر على المعالجة السابقة للسحب).</li>
+      <li>طلب الحذف في الحالات المنصوص عليها نظامًا.</li>
+    </ul>
+    <h3>الأمن وحفظ السجلات</h3>
+    <ul>
+      <li>تشفير أثناء النقل والتخزين حيثما أمكن.</li>
+      <li>التحكم بالصلاحيات وفق RBAC وتسجيل الأثر監audit.</li>
+      <li>تحديد مدد الاحتفاظ والحد الأدنى للنفاذ.</li>
+    </ul>
+    <h3>مشاركة البيانات</h3>
+    <ul>
+      <li>فقط مع الشركاء المخولين ووفق اتفاقيات المعالجة والسرية.</li>
+      <li>حظر مشاركة بيانات التعريف خارج المملكة إلا وفق المتطلبات النظامية.</li>
+    </ul>
+    <div style="margin-top:10px"><button class="ghost" onclick="window.print()">طباعة السياسة</button></div>
+  </div>`;
+}
+
+/* 6.2 سياسة حماية الطفل والإبلاغ */
+function childProtectPage(){
+  const v=$('#view');
+  v.innerHTML=`
+  <div class="card">
+    <div class="toolbar"><h2>سياسة حماية الطفل والإبلاغ</h2><span class="tag">سلامة الطفل أولًا</span></div>
+    <div class="callout">تلتزم منصة نمو بضمان سلامة الطفل ورفاهيته. أي اشتباه بإساءة أو إهمال يُدار وفق إجراءات واضحة وتوثيق دقيق وإحالة للجهات المختصة.</div>
+    <h3>مبادئ عامة</h3>
+    <ul>
+      <li>مصلحة الطفل الفضلى مقدمة على أي اعتبار.</li>
+      <li>سرية المعلومات مع الحد الأدنى من الوصول.</li>
+      <li>عدم التسامح مع أي شكل من أشكال الإساءة أو الاستغلال.</li>
+    </ul>
+    <h3>قنوات الإبلاغ</h3>
+    <ul>
+      <li>نموذج الإبلاغ داخل المنصة (للممارسين المخولين).</li>
+      <li>الاتصال بالجهات الحكومية المختصة وفق المتبع نظامًا.</li>
+    </ul>
+    <h3>خطوات التعامل</h3>
+    <ol>
+      <li>توثيق الواقعة والمؤشرات الداعمة بدقة.</li>
+      <li>تقييم فوري للمخاطر واتخاذ تدابير حماية عاجلة عند اللزوم.</li>
+      <li>إحالة رسمية للجهة المختصة ومتابعة الحالة حتى الإغلاق.</li>
+    </ol>
+    <h3>مسؤوليات الأدوار</h3>
+    <ul>
+      <li><b>الممارس</b>: رصد وإبلاغ وتوثيق.</li>
+      <li><b>المشرف</b>: مراجعة وتفعيل الإحالة وضمان سلامة الإجراءات.</li>
+      <li><b>اللجنة الوطنية</b>: المتابعة والحوكمة ومراجعة المؤشرات ذات الصلة.</li>
+    </ul>
+    <div class="printable">
+      <h4>نموذج إبلاغ مختصر (قابل للطباعة)</h4>
+      <p>بيانات المبلغ: ____________ • الجهة: ____________ • التاريخ: ____________</p>
+      <p>وصف الواقعة/المؤشرات: ________________________________________________</p>
+      <p>إجراءات فورية متخذة: _________________________________________________</p>
+      <p>جهة الإحالة: ______________________ • رقم البلاغ: ______________________</p>
+      <button class="ghost" onclick="window.print()">طباعة النموذج</button>
+    </div>
+  </div>`;
+}
+
+/* ========== 7) مركز المساعدة ========= */
+function helpCenterPage(){
+  const v=$('#view');
+  v.innerHTML=`
+  <div class="card">
+    <div class="toolbar"><h2>مركز المساعدة</h2><span class="tag">الدعم والإرشاد</span></div>
+    <h3>الأسئلة الشائعة</h3>
+    <details open><summary><b>كيف أسجل دخول عبر نفاذ؟</b></summary><p>من القائمة: الأمن والربط ← SSO نفاذ ثم اضغط "الدخول عبر نفاذ". في الإنتاج سيتم توجيهك لموفّر الهوية والتحقق بخطوتين.</p></details>
+    <details><summary><b>كيف أرسل إحالة بين الجهات؟</b></summary><p>من حسابك القطاعي (الصحة/التعليم/الجمعية)، اختر "الإحالات"، املأ البيانات الأساسية وأرفق المرفقات ثم أرسل. ستُتابَع الحالة عبر لوحة الإحالات.</p></details>
+    <details><summary><b>أين أجد تعريفات المؤشرات (KPI)؟</b></summary><p>من "سجل تعريفات KPI" ويمكن تنزيل JSON الرسمي للاعتماد.</p></details>
+    <details><summary><b>كيف أقدّم طلب رعاية؟</b></summary><p>اذهب إلى "بوابة الرعاة" واختر الفئة وأكمل نموذج الطلب، ثم أنشئ اتفاقية قابلة للطباعة.</p></details>
+
+    <h3>طلب دعم فني</h3>
+    <div class="grid two form">
+      <label>الاسم <input id="hc_name" placeholder="اسمك الكامل"/></label>
+      <label>البريد الإلكتروني <input id="hc_mail" placeholder="example@domain.sa"/></label>
+      <label>الجهة/الحساب <input id="hc_org" placeholder="وزارة/جمعية/شركة"/></label>
+      <label>نوع المشكلة
+        <select id="hc_type">
+          <option>تسجيل الدخول/نفاذ</option>
+          <option>صلاحيات/أدوار</option>
+          <option>الإحالات</option>
+          <option>التكاملات (NPHIES/نور)</option>
+          <option>أخرى</option>
+        </select>
+      </label>
+    </div>
+    <label>وصف مختصر <textarea id="hc_desc" style="width:100%;min-height:120px" placeholder="صف المشكلة بالتفصيل…"></textarea></label>
+    <div style="margin-top:10px">
+      <button class="btn" id="hc_submit">إرسال الطلب (تجريبي)</button>
+      <button class="ghost" id="hc_print">طباعة</button>
+    </div>
+    <pre id="hc_out" class="callout" style="margin-top:10px;white-space:pre-wrap"></pre>
+  </div>`;
+  $('#hc_submit').onclick=()=>{ const payload={
+      name:$('#hc_name').value, email:$('#hc_mail').value, org:$('#hc_org').value, type:$('#hc_type').value, desc:$('#hc_desc').value, ts:new Date().toISOString()
+    }; $('#hc_out').textContent='تم استلام طلبك (توضيحي). البيانات:\\n'+JSON.stringify(payload,null,2); };
+  $('#hc_print').onclick=()=>window.print();
+}
+
+/* ========== 8) Export ========= */
 function exportPage(){ const v=$('#view'); v.innerHTML=`
   <div class="card">
     <h2>تصدير</h2>
@@ -473,9 +577,10 @@ function exportPage(){ const v=$('#view'); v.innerHTML=`
   $('#cfg').onclick=()=>downloadJSON('config.json', loadConfig());
 }
 
-/* ===== (ز) الراوتر ===== */
+/* ========== 9) الراوتر ========= */
 const routes={
   '/intro':intro,'/kpi-registry':kpiRegistryPage,'/sponsors':sponsorsPage,'/sso':ssoPage,'/rbac':rbacPage,'/config':configPage,'/export':exportPage,
+  '/privacy':privacyPage,'/child-protect':childProtectPage,'/help':helpCenterPage,
   '/acc/health':()=>accountPage('health'),'/acc/education':()=>accountPage('education'),'/acc/nonprofit':()=>accountPage('nonprofit'),
   '/acc/hr':()=>accountPage('hr'),'/acc/csr':()=>accountPage('csr'),'/acc/family':()=>accountPage('family'),'/acc/admin':()=>accountPage('admin')
 };
