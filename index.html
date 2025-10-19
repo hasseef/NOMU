@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>منصة نمو NOMU — النسخة الوطنية (v3)</title>
+<title>منصة نمو NOMU — النسخة الوطنية (v3.1)</title>
 <style>
   :root{ --bg:#f7fbff; --paper:#ffffff; --brand:#16a34a; --accent:#f59e0b; --ink:#0f172a; --sub:#475569; --muted:#f1f5f9; --border:#e2e8f0; --radius:18px; --pad:18px; --gap:14px; --gap-lg:22px; --shadow:0 10px 30px rgba(2,12,27,.06); --font:"Tajawal","Noto Kufi Arabic",system-ui,-apple-system,"Segoe UI",Arial; }
   *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--font)}
@@ -89,7 +89,7 @@
   <section class="content" id="view"></section>
 </main>
 
-<footer>نمو NOMU — النسخة الوطنية v3. تشمل: سجل KPI الرسمي، تخصيص الحسابات، بوابة الرعاة (تسعير/اتفاقية قابلة للطباعة)، وواجهة SSO نفاذ + RBAC.</footer>
+<footer>نمو NOMU — النسخة الوطنية v3.1 (KPI رسمية، حسابات مخصصة، بوابة الرعاة، SSO+RBAC).</footer>
 
 <script>
 const $=(q,root=document)=>root.querySelector(q);
@@ -97,45 +97,45 @@ const $$=(q,root=document)=>Array.from(root.querySelectorAll(q));
 function route(){ const p=location.hash.slice(1)||'/intro'; $$('a.link').forEach(a=>a.classList.toggle('active', a.getAttribute('href')===`#${p}`)); (routes[p]||intro)(); }
 window.addEventListener('hashchange',route);
 
-/* ===== 1) KPI Registry ===== */
+/* ===== سجل تعريفات KPI (بملاك رسميين) ===== */
 const KPI_REGISTRY=[
-  { id:'DEV_SCREEN', name:'نسبة تغطية الفحص النمائي', owner:'وزارة الصحة', formula:'المفحوصون ÷ المستهدفون (0–6) × 100', period:'شهري', source:'HealthAssessment', quality:'Completeness/Timeliness/Accuracy', note:'يُحتسب للأطفال السعوديين والمقيمين حسب المنطقة.' },
-  { id:'SCHOOL_READY', name:'نسبة الجاهزية المدرسية', owner:'وزارة التعليم', formula:'جاهزون ÷ إجمالي 5–6 × 100', period:'فصلي', source:'EducationPlan', quality:'Completeness/Validity', note:'اعتماد مقياس جاهزية موحّد وطنياً.' },
-  { id:'REF_TTR', name:'زمن الإحالة (يوم)', owner:'اللجنة الوطنية', formula:'متوسط (تاريخ القبول − تاريخ الفتح)', period:'شهري', source:'Referral', quality:'Timeliness', note:'يشمل الإحالات بين كل الجهات.' },
-  { id:'WAIT', name:'متوسط انتظار الخدمة (يوم)', owner:'الجهة المقدِّمة للخدمة', formula:'متوسط (أول جلسة − قبول الإحالة)', period:'شهري', source:'ServiceSession', quality:'Accuracy', note:'لكل قطاع تعريف فرعي حسب نوع الخدمة.' },
-  { id:'CSR_FUNDS', name:'تمويل CSR (ر.س)', owner:'القطاع الخاص', formula:'مجموع التعهدات المؤكدة + المحوّلة', period:'ربع سنوي', source:'CSRCommitment', quality:'Reconciled', note:'تُستبعد التعهدات غير المؤكدة.' },
-  { id:'ACTIVE_REF', name:'الإحالات النشطة', owner:'اللجنة الوطنية', formula:'الحالات المفتوحة − المغلقة', period:'يومي', source:'Referral', quality:'Completeness', note:'يُعرض حسب المنطقة والجهة.' }
+  { id:'DEV_SCREEN', name:'نسبة تغطية الفحص النمائي', owner:'وزارة الصحة — الإدارة العامة لصحة الأم والطفل', formula:'المفحوصون ÷ المستهدفون (0–6) × 100', period:'شهري', source:'HealthAssessment', quality:'Completeness/Timeliness/Accuracy', note:'يشمل القطاعين الحكومي والخاص المرتبطين بــ NPHIES.' },
+  { id:'SCHOOL_READY', name:'نسبة الجاهزية المدرسية', owner:'وزارة التعليم — وكالة التعليم العام/الإدارة العامة للطفولة المبكرة', formula:'جاهزون ÷ إجمالي 5–6 × 100', period:'فصلي', source:'EducationPlan', quality:'Completeness/Validity', note:'اعتماد مقياس جاهزية وطني موحد، ونشر دليل القياس سنويًا.' },
+  { id:'REF_TTR', name:'زمن الإحالة (يوم)', owner:'اللجنة الوطنية للطفولة المبكرة — الأمانة العامة', formula:'متوسط (تاريخ القبول − تاريخ الفتح)', period:'شهري', source:'Referral', quality:'Timeliness', note:'يتتبع الإحالات بين (الصحة↔التعليم↔الجمعيات).' },
+  { id:'WAIT', name:'متوسط انتظار الخدمة (يوم)', owner:'الجهة المقدِّمة للخدمة (الصحة/التعليم/الجمعيات) بإشراف اللجنة', formula:'متوسط (أول جلسة − قبول الإحالة)', period:'شهري', source:'ServiceSession', quality:'Accuracy', note:'يُفرّع حسب نوع الخدمة (تدخل مبكر/برنامج نمائي/جلسة علاجية).' },
+  { id:'CSR_FUNDS', name:'تمويل المسؤولية الاجتماعية (ر.س)', owner:'القطاع الخاص — إدارة المسؤولية الاجتماعية بالشركة + إشراف المنصة', formula:'مجموع التعهدات المؤكدة + المبالغ المحوّلة داخل المنصة', period:'ربع سنوي', source:'CSRCommitment', quality:'Reconciled', note:'يستبعد التعهد غير المؤكد أو خارج نطاق المبادرات المعتمدة.' },
+  { id:'ACTIVE_REF', name:'الإحالات النشطة', owner:'اللجنة الوطنية — وحدة البيانات والمؤشرات', formula:'الحالات المفتوحة − المغلقة خلال الفترة', period:'يومي', source:'Referral', quality:'Completeness', note:'تعرض حسب المنطقة والجهة مع تنبيهات تجاوز SLA.' }
 ];
 
 function kpiRegistryPage(){ const v=$('#view'); v.innerHTML=`
   <div class="card">
     <div class="toolbar"><h2>سجل تعريفات المؤشرات الوطنية (KPI Registry)</h2><button class="ghost" id="dl">تنزيل JSON</button></div>
-    <table><thead><tr><th>المؤشر</th><th>المالك</th><th>الصيغة</th><th>فترة التحديث</th><th>المصدر</th><th>جودة البيانات</th><th>ملاحظات</th></tr></thead>
+    <table><thead><tr><th>المؤشر</th><th>المالك الرسمي</th><th>الصيغة</th><th>فترة التحديث</th><th>المصدر</th><th>جودة البيانات</th><th>ملاحظات</th></tr></thead>
       <tbody>${KPI_REGISTRY.map(k=>`<tr><td><b>${k.name}</b><div class='note'>${k.id}</div></td><td>${k.owner}</td><td>${k.formula}</td><td>${k.period}</td><td>${k.source}</td><td>${k.quality}</td><td>${k.note}</td></tr>`).join('')}</tbody>
     </table>
   </div>`;
-  $('#dl').onclick=()=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(KPI_REGISTRY,null,2)],{type:'application/json'})); a.download='kpi_registry.json'; a.click(); };
+  $('#dl').onclick=()=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(KPI_REGISTRY,null,2)],{type:'application/json'})); a.download='kpi_registry_official.json'; a.click(); };
 }
 
-/* ===== 2) Accounts ===== */
+/* ===== الحسابات المخصصة (حقول + مسارات ربط) ===== */
 const ACCOUNTS={
   health:{ title:'وزارة الصحة', menus:['سجل الفحوص','التدخل المبكر','الإحالات وارد/صادر','مطالبات NPHIES','تقارير'], fields:[
-      {label:'رقم الملف الصحي',key:'mrn'},{label:'نتيجة الفحص النمائي',key:'dev_result'},{label:'مقياس اكتئاب ما بعد الولادة',key:'phq2'},{label:'تشخيص ICD-10',key:'icd10'}
+      {label:'رقم الملف الصحي (MRN)',key:'mrn'},{label:'نتيجة الفحص النمائي',key:'dev_result'},{label:'مقياس اكتئاب ما بعد الولادة (PHQ-2/9)',key:'phq_score'},{label:'تشخيص ICD-10',key:'icd10'}
     ], adapter:'/api/health/assessments' },
   education:{ title:'وزارة التعليم', menus:['جاهزية المدرسة','IEP/دمج','إحالات واردة','تواصل الأسرة','تقارير نور'], fields:[
-      {label:'درجة الجاهزية',key:'readiness_score'},{label:'خطة IEP JSON',key:'iep_json'},{label:'بيانات المدرسة',key:'school_name'}
+      {label:'درجة الجاهزية',key:'readiness_score'},{label:'خطة فردية IEP (JSON)',key:'iep_json'},{label:'المدرسة/المستوى',key:'school_name'}
     ], adapter:'/api/education/plans' },
   nonprofit:{ title:'الجمعيات', menus:['البرامج','المستفيدون','المتطوعون','الإحالات','قياس الأثر'], fields:[
-      {label:'اسم البرنامج',key:'program'},{label:'عدد الجلسات',key:'sessions'},{label:'مؤشر تحسين الطفل %',key:'improve_pct'}
+      {label:'اسم البرنامج',key:'program'},{label:'عدد الجلسات',key:'sessions'},{label:'تحسن الطفل (%)',key:'improve_pct'}
     ], adapter:'/api/nonprofit/programs' },
   hr:{ title:'الموارد البشرية', menus:['محفظة الدعم','التطوع الوطني','التقارير'], fields:[
-      {label:'نوع الدعم',key:'support_type'},{label:'المبلغ/الشهر',key:'amount'},{label:'حالة الأهلية',key:'eligibility'}
+      {label:'نوع الدعم',key:'support_type'},{label:'المبلغ/الشهر',key:'amount'},{label:'أهلية الأسرة',key:'eligibility'}
     ], adapter:'/api/hr/support' },
   csr:{ title:'القطاع الخاص (CSR)', menus:['سوق الرعاية','تعهدات الشركة','تقارير الأثر','حوكمة CSR'], fields:[
       {label:'اسم الشركة',key:'company'},{label:'مبلغ التعهد',key:'amount'},{label:'الغرض',key:'purpose'},{label:'المنطقة',key:'region'}
     ], adapter:'/api/csr/commitments' },
   family:{ title:'حساب الأسرة', menus:['ملف الحمل والطفل','المواعيد','التوصيات','الخدمات المساندة'], fields:[
-      {label:'هوية ولي الأمر',key:'guardian_id'},{label:'المنطقة',key:'region'},{label:'موافقة مشاركة البيانات',key:'consent'}
+      {label:'هوية ولي الأمر',key:'guardian_id'},{label:'المنطقة',key:'region'},{label:'موافقة مشاركة البيانات (PDPL)',key:'consent'}
     ], adapter:'/api/family/profile' },
   admin:{ title:'اللجنة الوطنية', menus:['لوحة وطنية','حوكمة البيانات','التكاملات','التقارير الوطنية'], fields:[
       {label:'قرار سياسة',key:'policy_decision'},{label:'تعريف KPI',key:'kpi_def'}
@@ -149,18 +149,18 @@ function accountPage(key){ const A=ACCOUNTS[key]; const v=$('#view'); const menu
     <div class="toolbar"><h2>${A.title}</h2><span class="tag">قوائم وحقول مخصصة</span></div>
     <h3>القوائم</h3><div>${menuHtml}</div>
     <div class="grid two form" style="margin-top:12px">${fieldsHtml}</div>
-    <div style="margin-top:10px"><button class="btn" id="save">حفظ (تجريبي)</button> <button class="ghost" id="push">إرسال للواجهة البرمجية</button></div>
-    <div class="note" style="margin-top:8px">المسار البرمجي للربط: <code>${A.adapter}</code></div>
+    <div style="margin-top:10px"><button class="btn" id="save">حفظ (توضيحي)</button> <button class="ghost" id="push">إرسال للواجهة البرمجية</button></div>
+    <div class="note" style="margin-top:8px">مسار الربط: <code>${A.adapter}</code></div>
   </div>`;
-  $('#save').onclick=()=>alert('تم الحفظ محليًا (تجريبي)');
+  $('#save').onclick=()=>alert('تم الحفظ محليًا (توضيحي)');
   $('#push').onclick=()=>{ const payload={entity:key, data:Object.fromEntries($$('.form [data-key]').map(i=>[i.dataset.key, i.value]))}; alert('POST '+A.adapter+'\n'+JSON.stringify(payload,null,2)); };
 }
 
-/* ===== 3) Sponsors Portal ===== */
+/* ===== بوابة الرعاة + اتفاقية قابلة للطباعة ===== */
 const SPONSOR_PLANS=[
-  {tier:'Diamond', price:'— ر.س / سنة', perks:['الشعار في كل صفحات المنصة','تقرير أثر ربع سنوي','تسمية مبادرات وطنية','مقعد مجلس الرعاة']}, 
-  {tier:'Gold', price:'— ر.س / سنة', perks:['الشعار في الصفحات الرئيسية','تقارير نصف سنوية','دعوات الفعاليات']},
-  {tier:'Silver', price:'— ر.س / سنة', perks:['الشعار في صفحة الرعاة','شارة تقدير في التقارير']}
+  {tier:'ماسي (Diamond)', price:'— ر.س / سنة', perks:['الشعار في كل صفحات المنصة','تقرير أثر ربع سنوي','أولوية تسمية مبادرات','مقعد مجلس الرعاة']}, 
+  {tier:'ذهبي (Gold)', price:'— ر.س / سنة', perks:['الشعار في الصفحات الرئيسية','تقارير نصف سنوية','دعوات الفعاليات']},
+  {tier:'فضي (Silver)', price:'— ر.س / سنة', perks:['الشعار في صفحة الرعاة','شارة تقدير في التقارير']}
 ];
 function sponsorsPage(){ const v=$('#view'); v.innerHTML=`
   <div class="card">
@@ -195,11 +195,11 @@ function sponsorsPage(){ const v=$('#view'); v.innerHTML=`
   `; };
 }
 
-/* ===== 4) SSO & RBAC ===== */
+/* ===== SSO نفاذ (محاكاة) + RBAC ===== */
 function ssoPage(){ const v=$('#view'); v.innerHTML=`
   <div class="card">
     <div class="toolbar"><h2>النفاذ الموحّد (SSO نفاذ)</h2><span class="tag">واجهة ربط — تجريبية</span></div>
-    <p>زر الدخول التالي يحاكي تدفّق <b>Nafath</b> عبر OIDC. في الإنتاج: تبادل الكود للحصول على id_token ثم تحميل الدور من الدليل الوطني.</p>
+    <p>زر الدخول التالي يحاكي تدفّق OIDC مع نفاذ. في الإنتاج: استبدال الكود بـ id_token وإسناد الدور من الدليل الوطني.</p>
     <button class="btn" id="nafath">الدخول عبر نفاذ</button>
     <pre id="ssoLog" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;white-space:pre-wrap;margin-top:10px"></pre>
   </div>`;
@@ -242,8 +242,8 @@ function rbacPage(){ const v=$('#view'); const allPerms=Array.from(new Set(Objec
 /* ===== Intro & Export ===== */
 function intro(){ const v=$('#view'); v.innerHTML=`
   <div class="card">
-    <div class="toolbar"><h2>عن منصة نمو NOMU</h2><span class="tag">نسخة تنفيذية v3</span></div>
-    <p>هذه النسخة تضمنت: سجل KPI الرسمي بأسماء الملاك والتعاريف، تخصيص القوائم والحقول لكل حساب مع مسارات ربط APIs، بوابة الرعاة (التسعير + اتفاقية قابلة للطباعة)، ونموذج ربط SSO نفاذ وصلاحيات RBAC.</p>
+    <div class="toolbar"><h2>عن منصة نمو NOMU</h2><span class="tag">نسخة تنفيذية v3.1</span></div>
+    <p>تم إدراج <b>مالكي المؤشرات الرسميين</b> وأقسامهم داخل سجل KPI، وتخصيص الحسابات وحقولها ومسارات الربط، مع بوابة رعاة واتفاقية قابلة للطباعة، ومحاكاة نفاذ وRBAC.</p>
   </div>`;}
 
 function exportPage(){ const v=$('#view'); v.innerHTML=`
@@ -252,11 +252,11 @@ function exportPage(){ const v=$('#view'); v.innerHTML=`
     <button class="btn" id="kjson">KPI Registry (JSON)</button>
     <button class="ghost" id="rjson">RBAC (JSON)</button>
   </div>`;
-  $('#kjson').onclick=()=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(KPI_REGISTRY,null,2)],{type:'application/json'})); a.download='kpi_registry.json'; a.click(); };
+  $('#kjson').onclick=()=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(KPI_REGISTRY,null,2)],{type:'application/json'})); a.download='kpi_registry_official.json'; a.click(); };
   $('#rjson').onclick=()=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(RBAC,null,2)],{type:'application/json'})); a.download='rbac_policy.json'; a.click(); };
 }
 
-/* ===== Router table ===== */
+/* ===== Router ===== */
 const routes={'/intro':intro,'/kpi-registry':kpiRegistryPage,'/sponsors':sponsorsPage,'/sso':ssoPage,'/rbac':rbacPage,'/export':exportPage,
 '/acc/health':()=>accountPage('health'),'/acc/education':()=>accountPage('education'),'/acc/nonprofit':()=>accountPage('nonprofit'),'/acc/hr':()=>accountPage('hr'),'/acc/csr':()=>accountPage('csr'),'/acc/family':()=>accountPage('family'),'/acc/admin':()=>accountPage('admin')};
 
