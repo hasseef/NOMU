@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>منصة نمو NOMU — ملف واحد كامل</title>
+<title>منصة نمو NOMU — ملف واحد كامل (Patch: شعارات يسار التوب بار)</title>
 <style>
 :root{
   --bg:#f7fbff; --paper:#fff; --ink:#0f172a; --sub:#475569; --muted:#f1f5f9; --border:#e2e8f0;
@@ -70,14 +70,18 @@ footer{max-width:1240px;margin:22px auto 36px;color:#64748b;text-align:center;pa
       </div>
     </div>
 
-    <!-- الجهة اليسرى: شعارا رؤية 2030 وتلبية + اختيار الدور + الإشعارات -->
+    <!-- الجهة اليسرى: إضافة الشعارين فقط (Patch) + بقية العناصر كما هي -->
     <div class="left-logos">
+      <!-- ▼▼ الإضافة الجديدة: شعاري رؤية 2030 وتلبية ▼▼ -->
       <span class="pill-logo" title="Vision 2030">
         <img src="Vision 2030.png" alt="شعار رؤية 2030">
       </span>
       <span class="pill-logo" title="مبادرة تلبية">
         <img src="talbiya.png" alt="شعار مبادرة تلبية">
       </span>
+      <!-- ▲▲ نهاية الإضافة ▲▲ -->
+
+      <!-- إبقاء بقية العناصر كما هي دون تغيير -->
       <div class="rolebox">
         <span>الدور:</span>
         <select id="currentRole" class="select">
@@ -291,7 +295,7 @@ function renderPolicies(){
       </div>
       <div class="col card" style="padding:12px">
         <h3>الاستخدام العادل</h3>
-        <p>تُستخدم البيانات لأغراض تشغيل \"نمو\" فقط مع تفعيل إخفاء الهوية للتحليلات.</p>
+        <p>تُستخدم البيانات لأغراض تشغيل "نمو" فقط مع تفعيل إخفاء الهوية للتحليلات.</p>
       </div>
     </div>
   `;
