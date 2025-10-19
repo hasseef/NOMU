@@ -52,8 +52,6 @@ footer{max-width:1240px;margin:22px auto 36px;color:#64748b;text-align:center;pa
 @media (max-width:980px){ .main{grid-template-columns:1fr} .four{grid-template-columns:1fr 1fr} }
 
 .plain-logo{height:32px;display:block;margin-inline-start:8px}
-.left-logos{margin-inline-start:auto;display:flex;gap:8px;align-items:center}
-.pill-logo{background:transparent !important;border:none !important;padding:0 !important;margin:0 !important}
 </style>
 </head>
 <body>
@@ -65,9 +63,23 @@ footer{max-width:1240px;margin:22px auto 36px;color:#64748b;text-align:center;pa
     </div>
 
     <div class="left-logos">
-  <img class="plain-logo" src="vision2030.png" alt=""/>
-  <img class="plain-logo" src="talbiya.png" alt=""/>
-</div>
+      <img class="plain-logo" src="vision2030.png" alt="">
+      <img class="plain-logo" src="talbiya.png" alt="">
+
+      <!-- شعارا  +  (SVG Data URI تعمل مباشرة) -->
+      <!-- اختيار الدور الحالي + جرس الإشعارات -->
+      <div class="rolebox">
+        <span>الدور:</span>
+        <select id="currentRole">
+          <option>clinic.staff</option>
+          <option>health.practitioner</option>
+          <option>education.specialist</option>
+          <option>neighborhood.coordinator</option>
+          <option>nonprofit.worker</option>
+          <option>admin.national</option>
+          <option>family.guardian</option>
+        </select>
+      </div>
       <div style="position:relative">
         <button id="bell" class="bell">🔔<span id="bellBadge" class="badge" style="display:none">0</span></button>
         <div id="npanel" class="npanel"></div>
